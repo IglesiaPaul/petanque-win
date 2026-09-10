@@ -146,6 +146,17 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 #q-gerer[aria-pressed=true]{color:var(--red)}
 .basqui .retour{margin:0;width:100%;min-height:72px;background:var(--navy);color:var(--cream);
   box-shadow:none;font-weight:600}
+
+/* Arrêter une partie en cours ne se fait pas d'un appui : la sortie sûre est en premier,
+   plus grande, et c'est elle qu'un pouce trouve. */
+.deuxvoies{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;
+  padding:0 14px calc(20px + env(safe-area-inset-bottom))}
+.deuxvoies .gros{min-height:132px}
+.deuxvoies .pale{background:var(--cream);color:var(--navy);box-shadow:inset 0 0 0 3px var(--rule);
+  min-height:104px;flex-direction:column;gap:5px;font-size:1.25rem}
+.deuxvoies .pale small{font-family:"Libre Franklin","Jost",sans-serif;font-weight:400;
+  font-size:.86rem;letter-spacing:0;text-transform:none;color:var(--ink-2);line-height:1.35;
+  max-width:24rem}
 .jour{width:100%;display:flex;flex-direction:column;gap:1px;background:var(--rule);
   border-radius:10px;overflow:hidden}
 .jour div{background:var(--ground);padding:11px 13px;display:flex;justify-content:space-between;
@@ -387,6 +398,19 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   </div>
 </section>
 
+<!-- ============ arrêter ============ -->
+<section class="vue" id="arreter">
+  <div class="entete">
+    <div class="qui">Arrêter la partie&nbsp;?</div>
+    <div class="quoi" id="a-score"></div>
+  </div>
+  <div class="deuxvoies">
+    <button class="gros" id="a-non">Reprendre la partie</button>
+    <button class="gros pale" id="a-oui">Arrêter là<small>Personne ne gagne : elle sera
+      inscrite comme arrêtée</small></button>
+  </div>
+</section>
+
 <!-- ============ qui joue ============ -->
 <section class="vue" id="qui">
   <div class="entete">
@@ -540,10 +564,10 @@ function peindreFin(partie) {
   const n = total(partie, "nous"), e = total(partie, "eux");
   const gagnant = nomCamp(n >= e ? "nous" : "eux", partie);
   const perdant = Math.min(n, e);
-  $("#verdict").innerHTML = n === e ? "Partie arrêtée"
+  $("#verdict").innerHTML = (partie.arretee || n === e) ? "Partie arrêtée"
     : `<em class="${n > e ? "nous" : "eux"}">${echap(gagnant)}</em> gagne`;
   $("#score-final").textContent = Math.max(n, e) + " à " + perdant;
-  $("#fanny").hidden = !(Math.max(n, e) === BUT && perdant === 0);
+  $("#fanny").hidden = partie.arretee || !(Math.max(n, e) === BUT && perdant === 0);
   let html = "<tr><th>Mène</th><th>Les boules</th><th>Points</th><th>Score</th></tr>";
   let cn = 0, ce = 0;
   partie.menes.forEach(m => {
@@ -575,7 +599,8 @@ function peindreAccueil() {
   $("#jour").innerHTML = parties.map(p => {
     const n = total(p, "nous"), e = total(p, "eux");
     const h = new Date(p.debut).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
-    const q = n === e ? "Égalité" : echap(nomCamp(n > e ? "nous" : "eux", p));
+    const q = p.arretee ? "Arrêtée"
+            : n === e ? "Égalité" : echap(nomCamp(n > e ? "nous" : "eux", p));
     return `<div><span>${q}</span><b>${n} – ${e}</b><i>${h}</i></div>`;
   }).join("");
   peindreChoix();
@@ -708,9 +733,17 @@ $("#camp-eux").onclick = () => designer("eux");
 $("#retour").onclick = () => { camp = null; montrer("partie"); };
 $("#corriger").onclick = corriger;
 $("#quitter").onclick = () => {
+  // Rien de joué : il n'y a rien à perdre, on sort tout de suite.
   if (!etat.menes.filter(m => !m.nulle).length) { etat = null; ecrire({ ...lire(), courante: null });
     veille(false); peindreAccueil(); montrer("accueil"); return; }
-  etat.fini = true; archiver(etat); peindreFin(etat); montrer("fin"); veille(false);
+  $("#a-score").textContent = `${nomCamp("nous", etat)} ${total(etat, "nous")}`
+    + ` — ${total(etat, "eux")} ${nomCamp("eux", etat)}`;
+  montrer("arreter");
+};
+$("#a-non").onclick = () => { peindrePartie(); montrer("partie"); };
+$("#a-oui").onclick = () => {
+  etat.fini = true; etat.arretee = true;      // arrêtée n'est pas gagnée, et l'histoire le dira
+  archiver(etat); peindreFin(etat); montrer("fin"); veille(false);
 };
 $("#rejouer").onclick = () => demarrer(nouvelle());
 
