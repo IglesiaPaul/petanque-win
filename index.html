@@ -174,6 +174,8 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   border-radius:50%;background:var(--paper,#FBF6EC);transition:transform .15s}
 .bascule[aria-pressed=true] i{background:var(--red)}
 .bascule[aria-pressed=true] i::after{transform:translateX(22px)}
+.prose .alerte{background:var(--cream);box-shadow:inset 0 0 0 2px var(--red);border-radius:10px;
+  padding:10px 14px;color:var(--navy)}
 .wrap{width:100%;max-width:460px;padding:0 16px 28px;margin:0 auto;display:flex;
   flex-direction:column;align-items:center;gap:18px;flex:1}
 .jour{margin:0 14px 4px}
@@ -525,6 +527,14 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
     <p class="fin">Le code est ouvert —
       <a href="https://github.com/IglesiaPaul/petanque-win">github.com/IglesiaPaul/petanque-win</a></p>
   </div>
+</section>
+
+<!-- ============ l'espace du club ============ -->
+<!-- Aucune entrée de menu n'y mène : on l'ouvre par petanque.win/#admin. -->
+<section class="vue page" id="admin">
+  <div class="pagebar"><button class="retourpage" data-va="accueil">Retour</button>
+    <span>Le club</span></div>
+  <div class="prose" id="admin-corps"></div>
 </section>
 
 <!-- ============ les chiffres ============ -->
@@ -895,6 +905,103 @@ function compter(evenement, format) {
   } catch (e) { /* rien à faire : un compte perdu n'est pas une panne */ }
 }
 
+/* ---------- l'espace du club ----------
+   Les compteurs de tous les téléphones, contre une phrase de passe. La phrase n'est pas dans
+   ce fichier : elle est posée une fois dans la base par le propriétaire, comparée côté serveur
+   à son empreinte, et retenue ici seulement après avoir été acceptée. */
+async function demanderChiffres(cle) {
+  const r = await fetch(BASE + "/rest/v1/rpc/chiffres", {
+    method: "POST",
+    headers: { "Content-Type": "application/json",
+               apikey: CLE_PUBLIABLE, Authorization: "Bearer " + CLE_PUBLIABLE },
+    body: JSON.stringify({ p_cle: cle }),
+  });
+  if (!r.ok) throw new Error(r.status === 400 || r.status === 404 ? "cle" : "reseau");
+  return r.json();
+}
+
+function porteAdmin(message) {
+  $("#admin-corps").innerHTML = `<p class="chapo">Les chiffres du club.</p>
+    <p>Combien de parties ont été comptées, tous téléphones confondus. Aucune donnée de joueur
+      n'existe ici : il n'y a que des compteurs.</p>
+    ${message ? `<p class="alerte">${echap(message)}</p>` : ""}
+    <div class="ajout" style="padding:0;margin-top:12px">
+      <input id="admin-cle" type="password" autocomplete="current-password"
+             placeholder="Phrase de passe" aria-label="Phrase de passe">
+      <button id="admin-ouvrir">Ouvrir</button>
+    </div>`;
+  $("#admin-ouvrir").onclick = () => ouvrirAdmin($("#admin-cle").value.trim());
+  $("#admin-cle").addEventListener("keydown", e => {
+    if (e.key === "Enter") ouvrirAdmin($("#admin-cle").value.trim());
+  });
+}
+
+async function ouvrirAdmin(cle) {
+  if (!cle) return;
+  $("#admin-corps").innerHTML = `<p class="chapo">Un instant…</p>`;
+  let lignes;
+  try {
+    lignes = await demanderChiffres(cle);
+  } catch (e) {
+    ecrire({ ...lire(), cleClub: null });
+    porteAdmin(e.message === "cle" ? "Phrase de passe refusée."
+      : "Le serveur n'a pas répondu. Réessayez avec du réseau.");
+    return;
+  }
+  ecrire({ ...lire(), cleClub: cle });
+  peindreAdmin(lignes);
+}
+
+function peindreAdmin(lignes) {
+  const finies = lignes.filter(l => l.evenement === "partie_finie");
+  const arretees = lignes.filter(l => l.evenement === "partie_arretee");
+  const somme = t => t.reduce((s, l) => s + l.n, 0);
+  const jours = [...new Set(lignes.map(l => l.jour))].sort().reverse();
+  const parJour = j => somme(lignes.filter(l => l.jour === j));
+  const nomFormat = { 1: "Tête-à-tête", 2: "Doublette", 3: "Triplette", 0: "Format inconnu" };
+  const parFormat = [1, 2, 3, 0]
+    .map(k => ({ k, n: somme(finies.filter(l => l.format === k)) })).filter(x => x.n);
+  const tuile = (n, quoi, note) =>
+    `<div class="tuile"><b>${n}</b><span>${quoi}</span>${note ? `<i>${note}</i>` : ""}</div>`;
+
+  const total = somme(finies) + somme(arretees);
+  let html = `<p class="chapo">Les chiffres du club.</p>
+    <p>Soixante derniers jours, tous téléphones confondus.</p>
+    <div class="tuiles">`
+    + tuile(somme(finies), "parties finies")
+    + tuile(somme(arretees), "arrêtées",
+            total ? Math.round(somme(arretees) / total * 100) + " % du total" : "")
+    + tuile(jours.length, jours.length > 1 ? "jours avec au moins une partie" : "jour avec des parties")
+    + tuile(jours.length ? (total / jours.length).toFixed(1) : "—", "parties par jour actif")
+    + `</div>`;
+
+  if (parFormat.length) {
+    html += `<h3>Les formats</h3><div class="rangees">` + parFormat.map(x =>
+      `<div class="rangee"><span>${nomFormat[x.k]}</span><b>${x.n}</b></div>`).join("") + `</div>`;
+  }
+
+  html += `<h3>Jour par jour</h3>`;
+  html += jours.length
+    ? `<div class="rangees">` + jours.map(j =>
+        `<div class="rangee"><span>${echap(nomDuJour(j))}</span><b>${parJour(j)}</b></div>`)
+        .join("") + `</div>`
+    : `<p>Aucune partie comptée pour l'instant. Le premier signal partira à la fin de la
+       prochaine partie jouée sur un téléphone qui n'a pas coupé le comptage.</p>`;
+
+  html += `<p class="fin">Ces compteurs ne contiennent ni prénom, ni score, ni identifiant
+    d'appareil : la base n'a aucune colonne pour en porter un.
+    <button class="lien" id="admin-fermer" style="min-height:44px;padding:0">Oublier la phrase
+    de passe sur ce téléphone</button></p>`;
+  $("#admin-corps").innerHTML = html;
+  $("#admin-fermer").onclick = () => { ecrire({ ...lire(), cleClub: null }); porteAdmin(""); };
+}
+
+function entrerAdmin() {
+  montrer("admin");
+  const cle = lire().cleClub;
+  if (cle) ouvrirAdmin(cle); else porteAdmin("");
+}
+
 /* ---------- les chiffres, tirés du seul contenu de ce téléphone ----------
    Rien n'est envoyé nulle part : ce sont les sept jours déjà stockés, relus autrement. */
 function peindreChiffres() {
@@ -1170,7 +1277,9 @@ $("#splash-passer").onclick = quitterSplash;
   choisirFormat(Number.isInteger(d.formatIdx) ? d.formatIdx : 1);   // doublette par défaut
   peindreAccueil();
   peindreFormats();
-  setTimeout(quitterSplash, 3000);
+  if (location.hash === "#admin") { splashFait = true; $("#splash").classList.remove("on");
+    entrerAdmin(); } else { setTimeout(quitterSplash, 3000); }
+  addEventListener("hashchange", () => { if (location.hash === "#admin") entrerAdmin(); });
   if ("serviceWorker" in navigator
       && (location.protocol === "https:" || location.hostname === "localhost"))
     navigator.serviceWorker.register("sw.js").catch(() => {});
