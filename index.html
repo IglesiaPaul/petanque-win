@@ -42,8 +42,44 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .vue.on{display:flex}
 
-/* ---------- accueil ---------- */
-#accueil{overflow-y:auto;align-items:center;text-align:center;padding-top:env(safe-area-inset-top)}
+/* ---------- l'ouverture ---------- */
+/* Le splash tient une seconde et demie et se passe d'un appui : assez pour poser la marque,
+   trop court pour agacer au vingtième lancement. */
+#splash{background:var(--navy)}
+.splashtap{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:14px;color:var(--cream)}
+.sblason{width:150px;height:150px;animation:poser .7s cubic-bezier(.16,1,.3,1) both}
+.stitre{font-family:"Jost",sans-serif;font-weight:600;font-size:2rem;letter-spacing:.02em;
+  animation:monter .5s .28s cubic-bezier(.16,1,.3,1) both}
+.ssous{font-size:.82rem;letter-spacing:.28em;text-transform:uppercase;color:var(--sand);
+  animation:monter .5s .4s cubic-bezier(.16,1,.3,1) both}
+#splash.sort{animation:disparaitre .34s ease-in forwards}
+@keyframes poser{from{opacity:0;transform:scale(.72) rotate(-14deg)}
+  to{opacity:1;transform:none}}
+@keyframes monter{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+@keyframes disparaitre{to{opacity:0}}
+
+/* ---------- accueil : il tient l'écran, il ne se déroule pas ---------- */
+#accueil{align-items:center;text-align:center;padding-top:env(safe-area-inset-top)}
+.centre{flex:1;min-height:0;width:100%;max-width:460px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:14px;padding:0 16px}
+.bas{flex:none;width:100%;max-width:460px;display:flex;flex-direction:column;gap:10px;
+  padding:0 16px calc(16px + env(safe-area-inset-bottom));margin:0 auto}
+.lien{min-height:52px;font-size:.92rem;letter-spacing:.06em;color:var(--ink-2);
+  text-decoration:underline;text-underline-offset:4px}
+
+/* les trois formats, et les deux camps : un choix par écran */
+.voies{flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;
+  padding:0 14px calc(16px + env(safe-area-inset-bottom));min-height:0}
+.voies button{min-height:112px;border-radius:14px;background:var(--cream);
+  box-shadow:inset 0 0 0 2px var(--rule);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:4px;padding:12px}
+.voies button b{font-family:"Jost",sans-serif;font-weight:600;font-size:1.5rem}
+.voies button span{font-size:.88rem;color:var(--ink-2)}
+.voies button:active{background:#fff}
+#equipes .choix{padding:0 14px;margin-top:4px}
+#equipes .note{margin:12px 18px 0;text-align:left;align-self:auto}
+#equipes .bas{margin-top:auto}
 .topbar{width:100%;max-width:460px;display:flex;align-items:center;justify-content:space-between;
   padding:8px 14px 2px;flex:none}
 .topbar .marque{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
@@ -51,6 +87,11 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   justify-content:center;gap:5px;border-radius:11px}
 #burger i{display:block;width:24px;height:2.5px;background:var(--navy);border-radius:2px}
 #burger:active{background:var(--cream)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;
+    transition-duration:.001ms!important}
+}
 
 /* ---------- le menu et les pages ---------- */
 .pagebar{flex:none;display:flex;align-items:center;gap:10px;padding:6px 10px;
@@ -82,6 +123,7 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   font-size:.92rem;color:var(--ink-2)}
 .wrap{width:100%;max-width:460px;padding:0 16px 28px;margin:0 auto;display:flex;
   flex-direction:column;align-items:center;gap:18px;flex:1}
+.jour{margin:14px}
 .blason{width:118px;height:118px;flex:none}
 .titre{font-weight:600;font-size:2rem;letter-spacing:.02em;line-height:1;margin:0}
 .sous{margin:0;color:var(--ink-2);font-size:.95rem;letter-spacing:.03em;text-transform:uppercase}
@@ -168,10 +210,6 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   align-self:flex-start}
 .pied{font-size:.82rem;color:var(--ink-2);line-height:1.6;margin:auto 0 0;padding-top:14px}
 .pied a{color:var(--ink-2)}
-#poser{width:100%;background:var(--cream);box-shadow:inset 0 0 0 2px var(--sand);border-radius:11px;
-  padding:12px 14px;font-size:.9rem;line-height:1.45;text-align:left;display:flex;gap:10px;
-  align-items:center}
-#poser button{font-weight:600;text-decoration:underline;white-space:nowrap}
 
 /* ---------- la partie ---------- */
 .barre{display:flex;justify-content:space-between;align-items:center;gap:12px;
@@ -223,6 +261,17 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 
 /* ---------- fin ---------- */
 #fin{overflow-y:auto;align-items:center;text-align:center;padding-top:calc(env(safe-area-inset-top) + 22px)}
+/* La fin de partie est le seul endroit où l'application se permet une fanfare : le blason
+   roule, le verdict monte, la feuille se remplit ligne à ligne. */
+.fanfare{animation:rouler .8s cubic-bezier(.16,1,.3,1) both}
+@keyframes rouler{from{opacity:0;transform:scale(.5) rotate(-160deg)}to{opacity:1;transform:none}}
+#fin .verdict{animation:monter .45s .34s cubic-bezier(.16,1,.3,1) both}
+#fin .chiffre{animation:monter .45s .44s cubic-bezier(.16,1,.3,1) both}
+#fin .fanny{animation:frapper .5s .62s cubic-bezier(.16,1,.3,1) both}
+@keyframes frapper{0%{opacity:0;transform:scale(.5)}60%{opacity:1;transform:scale(1.12)}
+  100%{opacity:1;transform:none}}
+#fin .feuille tr{animation:monter .34s both;animation-delay:calc(.56s + var(--i, 0) * .05s)}
+#fin .tr-in .b{animation:poser .34s both;animation-delay:calc(.7s + var(--i, 0) * .05s)}
 .verdict{font-weight:600;font-size:2.1rem;line-height:1.15;margin:0}
 .verdict em{font-style:normal;padding:1px 12px;border-radius:8px;color:var(--cream)}
 .verdict em.nous{background:var(--navy)}
@@ -256,51 +305,60 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 <body>
 
 <!-- ============ accueil ============ -->
-<section class="vue on" id="accueil">
+<section class="vue on" id="splash" aria-label="Ouverture">
+  <button class="splashtap" id="splash-passer" aria-label="Passer">
+    <img class="sblason" src="icons/blason.svg" alt="" width="150" height="150">
+    <span class="stitre">Le compteur</span>
+    <span class="ssous">Pétanquistes</span>
+  </button>
+</section>
+
+<section class="vue" id="accueil">
   <div class="topbar">
     <span class="marque">Pétanquistes</span>
     <button id="burger" aria-label="Ouvrir le menu"><i></i><i></i><i></i></button>
   </div>
-  <div class="wrap">
+  <div class="centre">
     <img class="blason" src="icons/blason.svg" alt="" width="118" height="118">
     <h1 class="titre">Le compteur</h1>
-    <p class="sous">Pétanquistes</p>
-
+    <p class="sous">Le score, en deux gestes par mène</p>
+  </div>
+  <div class="bas">
     <button class="gros reprise" id="reprendre" hidden></button>
     <button class="gros" id="commencer">Commencer une partie</button>
+    <button class="lien" id="voir-jour" hidden></button>
+  </div>
+</section>
 
-    <p class="legende">Le format de la partie</p>
-    <div class="format" id="format" role="group" aria-label="Format de la partie">
-      <button data-max="3" data-joueurs="1" aria-pressed="false"><b>Tête-à-tête</b><span>1 contre 1</span></button>
-      <button data-max="6" data-joueurs="2" aria-pressed="true"><b>Doublette</b><span>2 contre 2</span></button>
-      <button data-max="6" data-joueurs="3" aria-pressed="false"><b>Triplette</b><span>3 contre 3</span></button>
-    </div>
-    <p class="note">Le clavier suit : une équipe joue trois boules en tête-à-tête, six sinon —
-      c'est le maximum qu'une mène peut rapporter.</p>
+<!-- ============ le format ============ -->
+<section class="vue" id="format">
+  <div class="pagebar"><button class="retourpage" data-va="accueil">Retour</button>
+    <span>1 sur 2</span></div>
+  <div class="entete"><div class="qui">Combien de joueurs&nbsp;?</div>
+    <div class="quoi">Le clavier s'y ajuste</div></div>
+  <div class="voies" id="formats" role="group" aria-label="Format de la partie">
+    <button data-max="3" data-joueurs="1"><b>Tête-à-tête</b><span>1 contre 1 · trois boules par équipe</span></button>
+    <button data-max="6" data-joueurs="2"><b>Doublette</b><span>2 contre 2 · six boules par équipe</span></button>
+    <button data-max="6" data-joueurs="3"><b>Triplette</b><span>3 contre 3 · six boules par équipe</span></button>
+  </div>
+</section>
 
-    <p class="legende">Les joueurs <em>facultatif</em></p>
-    <div class="choix">
-      <button class="eqc nous" data-camp="nous"><span class="tag">Nous</span>
-        <span class="liste" id="l-nous">Ajouter des prénoms</span></button>
-      <button class="eqc eux" data-camp="eux"><span class="tag">Eux</span>
-        <span class="liste" id="l-eux">Ajouter des prénoms</span></button>
-    </div>
-    <p class="note">Les prénoms restent sur ce téléphone. Écrits une fois, ils se touchent
-      ensuite — personne ne retape un clavier au bord du terrain.</p>
-
-    <div id="poser" hidden>
-      <span id="poser-txt"></span>
-      <button id="poser-go" hidden>Installer</button>
-    </div>
-
-    <div id="bloc-jour" hidden style="width:100%">
-      <p class="legende">Les parties du jour</p>
-      <div class="jour" id="jour"></div>
-    </div>
-
-    <p class="pied">Rien ne quitte ce téléphone : ni compte, ni adresse, ni suivi.
-      Le compteur fonctionne sans réseau.<br>
-      Un outil des <b>Pétanquistes</b> — <a href="https://github.com/IglesiaPaul/Petanquistes">le projet</a>.</p>
+<!-- ============ les équipes ============ -->
+<section class="vue" id="equipes">
+  <div class="pagebar"><button class="retourpage" data-va="format">Retour</button>
+    <span>2 sur 2</span></div>
+  <div class="entete"><div class="qui">Qui joue&nbsp;?</div>
+    <div class="quoi" id="e-quoi">Facultatif — on peut compter sans les noms</div></div>
+  <div class="choix">
+    <button class="eqc nous" data-camp="nous"><span class="tag">Nous</span>
+      <span class="liste" id="l-nous">Ajouter des prénoms</span></button>
+    <button class="eqc eux" data-camp="eux"><span class="tag">Eux</span>
+      <span class="liste" id="l-eux">Ajouter des prénoms</span></button>
+  </div>
+  <p class="note">Les prénoms restent sur ce téléphone. Écrits une fois, ils se touchent
+    ensuite — personne ne retape un clavier au bord du terrain.</p>
+  <div class="bas">
+    <button class="gros" id="lancer">Commencer</button>
   </div>
 </section>
 
@@ -342,6 +400,7 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
     <button data-va="accueil"><b>Le compteur</b><span>Tenir le score d'une partie</span></button>
     <button data-va="installer"><b>Installer sur le téléphone</b>
       <span>Pour l'ouvrir sans navigateur, et sans réseau</span></button>
+    <button data-va="journee"><b>Les parties du jour</b><span>Ce qui s'est joué depuis ce matin</span></button>
     <button data-va="apropos"><b>À propos</b><span>Ce que c'est, et qui le fait</span></button>
   </nav>
   <p class="bientot">L'histoire du club, la marque et les règles viendront ici, quand
@@ -398,6 +457,15 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   </div>
 </section>
 
+<!-- ============ les parties du jour ============ -->
+<section class="vue page" id="journee">
+  <div class="pagebar"><button class="retourpage" data-va="accueil">Retour</button>
+    <span>Les parties du jour</span></div>
+  <div class="jour" id="jour"></div>
+  <p class="bientot" id="jour-vide" hidden>Aucune partie aujourd'hui. Les parties restent sur ce
+    téléphone et la liste repart à zéro chaque jour.</p>
+</section>
+
 <!-- ============ arrêter ============ -->
 <section class="vue" id="arreter">
   <div class="entete">
@@ -432,6 +500,7 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 <!-- ============ fin ============ -->
 <section class="vue" id="fin">
   <div class="wrap">
+    <img class="blason fanfare" id="blason-fin" src="icons/blason.svg" alt="" width="86" height="86">
     <p class="verdict" id="verdict"></p>
     <p class="chiffre" id="score-final"></p>
     <span class="fanny" id="fanny" hidden>Fanny</span>
@@ -582,6 +651,13 @@ function peindreFin(partie) {
           + `<td class="gain ${m.camp}">+${m.pts}</td><td>${cn} – ${ce}</td></tr>`;
   });
   $("#feuille").innerHTML = html;
+  // chaque ligne, puis chaque boule, entre à son tour : l'index nourrit le retard CSS
+  [...$("#feuille").rows].forEach((tr, i) => tr.style.setProperty("--i", i));
+  [...$("#feuille").querySelectorAll(".tr-in")].forEach((sp, i) =>
+    [...sp.children].forEach((b, k) => b.style.setProperty("--i", i + k * .4)));
+  // la fanfare rejoue à chaque fin de partie, pas seulement à la première
+  const bl = $("#blason-fin");
+  bl.classList.remove("fanfare"); void bl.offsetWidth; bl.classList.add("fanfare");
 }
 
 function peindreAccueil() {
@@ -595,7 +671,11 @@ function peindreAccueil() {
   } else { bouton.hidden = true; }
 
   const parties = (d.parties || []).filter(p => p.jour === jour()).reverse();
-  $("#bloc-jour").hidden = !parties.length;
+  const voir = $("#voir-jour");
+  voir.hidden = !parties.length;
+  voir.textContent = parties.length === 1 ? "1 partie aujourd'hui"
+                                          : `${parties.length} parties aujourd'hui`;
+  $("#jour-vide").hidden = parties.length > 0;
   $("#jour").innerHTML = parties.map(p => {
     const n = total(p, "nous"), e = total(p, "eux");
     const h = new Date(p.debut).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
@@ -726,8 +806,17 @@ document.addEventListener("visibilitychange", () => {
 });
 
 /* ---------- branchements ---------- */
-$("#commencer").onclick = () => demarrer(nouvelle());
+$("#commencer").onclick = () => { peindreFormats(); montrer("format"); };
+$("#lancer").onclick = () => demarrer(nouvelle());
+$("#voir-jour").onclick = () => montrer("journee");
 $("#reprendre").onclick = () => { const c = lire().courante; if (c) demarrer(c); };
+
+$("#formats").onclick = ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  choisirFormat([...$("#formats").children].indexOf(b));
+  peindreEquipes();
+  montrer("equipes");
+};
 $("#camp-nous").onclick = () => designer("nous");
 $("#camp-eux").onclick = () => designer("eux");
 $("#retour").onclick = () => { camp = null; montrer("partie"); };
@@ -765,11 +854,27 @@ $("#roster").onclick = ev => {
 $("#q-add").onclick = ajouterJoueur;
 $("#q-nom").addEventListener("keydown", e => { if (e.key === "Enter") ajouterJoueur(); });
 $("#q-gerer").onclick = () => { gerer = !gerer; peindreQui(); };
-$("#q-ok").onclick = () => { peindreAccueil(); montrer("accueil"); };
+$("#q-ok").onclick = () => { peindreEquipes(); montrer("equipes"); };
 $("#au-debut").onclick = () => { peindreAccueil(); montrer("accueil"); };
 
-const formats = () => [...$("#format").children];
+const formats = () => [...$("#formats").children];
+
+function peindreFormats() {
+  formats().forEach((x, k) => x.setAttribute("aria-pressed", String(k === formatIdx)));
+}
+
+function peindreEquipes() {
+  peindreChoix();
+  const n = equipes.nous.length + equipes.eux.length;
+  $("#e-quoi").textContent = n
+    ? `${n} joueur${n > 1 ? "s" : ""} nommé${n > 1 ? "s" : ""} — on peut commencer`
+    : "Facultatif — on peut compter sans les noms";
+  $("#lancer").textContent = n ? "Commencer" : "Commencer sans les noms";
+}
+let formatIdx = 1;
+
 function choisirFormat(i) {
+  formatIdx = i;
   formats().forEach((x, k) => x.setAttribute("aria-pressed", String(k === i)));
   maxBoules = Number(formats()[i].dataset.max);
   nbJoueurs = Number(formats()[i].dataset.joueurs);
@@ -778,30 +883,20 @@ function choisirFormat(i) {
   ecrire({ ...lire(), formatIdx: i, equipes });
   peindreChoix();
 }
-$("#format").onclick = ev => {
-  const b = ev.target.closest("button"); if (!b) return;
-  choisirFormat(formats().indexOf(b));
-};
 
-/* ---------- installation ---------- */
-let invite = null;
-addEventListener("beforeinstallprompt", e => {
-  e.preventDefault(); invite = e;
-  $("#poser").hidden = false;
-  $("#poser-txt").textContent = "Posez le compteur sur l'écran d'accueil : il s'ouvre plus vite et marche sans réseau.";
-  $("#poser-go").hidden = false;
-});
-$("#poser-go").onclick = async () => { if (invite) { invite.prompt(); invite = null; $("#poser").hidden = true; } };
 
-function conseilInstall() {
-  const stand = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
-  const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  if (!stand && ios) {
-    $("#poser").hidden = false;
-    $("#poser-txt").innerHTML = "Sur iPhone : <b>Partager</b> puis <b>Sur l'écran d'accueil</b>."
-      + " Le compteur s'ouvre alors sans navigateur, et sans réseau.";
-  }
+/* ---------- le splash ---------- */
+/* Il pose la marque et couvre le chargement des polices. Un appui le passe, et il ne
+   reparaît pas ensuite : c'est une ouverture, pas un péage. */
+let splashFait = false;
+function quitterSplash() {
+  if (splashFait) return;
+  splashFait = true;
+  const sp = $("#splash");
+  sp.classList.add("sort");
+  setTimeout(() => { peindreAccueil(); montrer("accueil"); sp.classList.remove("sort"); }, 320);
 }
+$("#splash-passer").onclick = quitterSplash;
 
 /* ---------- départ ---------- */
 (function () {
@@ -810,7 +905,8 @@ function conseilInstall() {
   equipes = { nous: (d.equipes && d.equipes.nous) || [], eux: (d.equipes && d.equipes.eux) || [] };
   choisirFormat(Number.isInteger(d.formatIdx) ? d.formatIdx : 1);   // doublette par défaut
   peindreAccueil();
-  conseilInstall();
+  peindreFormats();
+  setTimeout(quitterSplash, 1500);
   if ("serviceWorker" in navigator
       && (location.protocol === "https:" || location.hostname === "localhost"))
     navigator.serviceWorker.register("sw.js").catch(() => {});
