@@ -8,7 +8,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#092C64">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Le compteur">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" href="icons/icon-192.png">
@@ -839,6 +839,10 @@ $("#rejouer").onclick = () => demarrer(nouvelle());
 /* Le menu n'existe que sur l'accueil : la note interdit le menu à trois traits sur l'écran
    de jeu, et cette interdiction tient. */
 $("#burger").onclick = () => montrer("menu");
+
+// Posée sur l'écran d'accueil, elle n'a plus rien à expliquer sur ce point.
+if (matchMedia("(display-mode: standalone)").matches || navigator.standalone)
+  document.querySelector('[data-va="installer"]').hidden = true;
 document.querySelectorAll("[data-va]").forEach(b => {
   b.onclick = () => { if (b.dataset.va === "accueil") peindreAccueil(); montrer(b.dataset.va); };
 });
@@ -886,8 +890,8 @@ function choisirFormat(i) {
 
 
 /* ---------- le splash ---------- */
-/* Il pose la marque et couvre le chargement des polices. Un appui le passe, et il ne
-   reparaît pas ensuite : c'est une ouverture, pas un péage. */
+/* Il pose la marque et couvre le chargement des polices. Trois secondes, et un appui le
+   passe : c'est une ouverture, pas un péage. */
 let splashFait = false;
 function quitterSplash() {
   if (splashFait) return;
@@ -906,7 +910,7 @@ $("#splash-passer").onclick = quitterSplash;
   choisirFormat(Number.isInteger(d.formatIdx) ? d.formatIdx : 1);   // doublette par défaut
   peindreAccueil();
   peindreFormats();
-  setTimeout(quitterSplash, 1500);
+  setTimeout(quitterSplash, 3000);
   if ("serviceWorker" in navigator
       && (location.protocol === "https:" || location.hostname === "localhost"))
     navigator.serviceWorker.register("sw.js").catch(() => {});
