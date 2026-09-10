@@ -149,7 +149,8 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   font-size:.92rem;color:var(--ink-2)}
 .wrap{width:100%;max-width:460px;padding:0 16px 28px;margin:0 auto;display:flex;
   flex-direction:column;align-items:center;gap:18px;flex:1}
-.jour{margin:14px}
+.jour{margin:0 14px 4px}
+.jourtitre{margin:16px 14px 6px;align-self:auto}
 .blason{width:118px;height:118px;flex:none}
 .titre{font-weight:600;font-size:2rem;letter-spacing:.02em;line-height:1;margin:0}
 .sous{margin:0;color:var(--ink-2);font-size:.95rem;letter-spacing:.03em;text-transform:uppercase}
@@ -491,9 +492,9 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 <section class="vue page" id="journee">
   <div class="pagebar"><button class="retourpage" data-va="accueil">Retour</button>
     <span>Les parties du jour</span></div>
-  <div class="jour" id="jour"></div>
-  <p class="bientot" id="jour-vide" hidden>Aucune partie aujourd'hui. Les parties restent sur ce
-    téléphone et la liste repart à zéro chaque jour.</p>
+  <div id="jour"></div>
+  <p class="bientot" id="jour-vide" hidden>Aucune partie cette semaine. Les parties restent sur ce
+    téléphone et s'effacent au bout de sept jours.</p>
 </section>
 
 <!-- ============ arrêter ============ -->
@@ -576,14 +577,35 @@ function sauver() {
   ecrire({ ...lire(), courante: etat });
 }
 
+/* Sept jours et deux cents parties. L'ancienne version ne gardait que le jour courant et
+   plafonnait à quarante : seize doublettes en poules puis en tableau dépassent quarante, donc
+   une journée de concours détruisait sa propre matière — par un effet de bord d'une fonction
+   dont le nom promet l'inverse. */
 function archiver(partie) {
   const d = lire();
-  d.parties = (d.parties || []).filter(p => p.jour === jour()).concat([partie]).slice(-40);
+  const garde = fenetre();
+  d.parties = (d.parties || []).filter(p => garde.includes(p.jour))
+                               .concat([partie]).slice(-200);
   d.courante = null;
   ecrire(d);
 }
 
-const jour = () => new Date().toISOString().slice(0, 10);
+/* La date du téléphone, pas celle de Greenwich. « toISOString » découpe en UTC : une partie
+   commencée à une heure du matin en France était classée à la veille, donc dans le mauvais lot
+   un soir de concours. « sv-SE » est le format ISO au fuseau local. */
+const jour = (d) => (d || new Date()).toLocaleDateString("sv-SE");
+const JOURS_GARDES = 7;
+
+/* Les dates encore gardées, de la plus récente à la plus ancienne. */
+function fenetre() {
+  const out = [];
+  for (let i = 0; i < JOURS_GARDES; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    out.push(jour(d));
+  }
+  return out;
+}
 const autre = c => (c === "nous" ? "eux" : "nous");
 const echap = t => String(t).replace(/[&<>"]/g,
   c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -642,8 +664,10 @@ function peindreCombien() {
     const arrivee = acquis + pts;
     const bouton = document.createElement("button");
     bouton.className = "boule" + (arrivee === BUT ? " gagne" : "");
+    // le prénom vient du clavier : il est échappé avant d'entrer dans du HTML
     bouton.innerHTML = `<span class="n">${b}</span>`
-      + `<span class="vers">${arrivee === BUT ? nom + " gagne " : nom + " à "}<b>${arrivee}</b></span>`;
+      + `<span class="vers">${echap(arrivee === BUT ? nom + " gagne " : nom + " à ")}`
+      + `<b>${arrivee}</b></span>`;
     bouton.setAttribute("aria-label",
       `${b} boule${b > 1 ? "s" : ""} : ${nom} passe à ${arrivee}${arrivee === BUT ? ", et gagne" : ""}`);
     bouton.onclick = () => marquer(b, pts);
@@ -701,20 +725,40 @@ function peindreAccueil() {
       + ` · mène ${c.menes.filter(m => !m.nulle).length + 1}</small>`;
   } else { bouton.hidden = true; }
 
-  const parties = (d.parties || []).filter(p => p.jour === jour()).reverse();
+  const garde = fenetre();
+  const gardees = (d.parties || []).filter(p => garde.includes(p.jour));
+  const aujourdhui = gardees.filter(p => p.jour === jour());
   const voir = $("#voir-jour");
-  voir.hidden = !parties.length;
-  voir.textContent = parties.length === 1 ? "1 partie aujourd'hui"
-                                          : `${parties.length} parties aujourd'hui`;
-  $("#jour-vide").hidden = parties.length > 0;
-  $("#jour").innerHTML = parties.map(p => {
+  voir.hidden = !gardees.length;
+  voir.textContent = aujourdhui.length
+    ? (aujourdhui.length === 1 ? "1 partie aujourd'hui" : `${aujourdhui.length} parties aujourd'hui`)
+    : "Les parties de la semaine";
+  $("#jour-vide").hidden = gardees.length > 0;
+
+  const ligne = p => {
     const n = total(p, "nous"), e = total(p, "eux");
     const h = new Date(p.debut).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
     const q = p.arretee ? "Arrêtée"
             : n === e ? "Égalité" : echap(nomCamp(n > e ? "nous" : "eux", p));
     return `<div><span>${q}</span><b>${n} – ${e}</b><i>${h}</i></div>`;
+  };
+  $("#jour").innerHTML = garde.map(j => {
+    const duJour = gardees.filter(p => p.jour === j).reverse();
+    if (!duJour.length) return "";
+    return `<p class="legende jourtitre">${echap(nomDuJour(j))}</p>`
+         + `<div class="jour">${duJour.map(ligne).join("")}</div>`;
   }).join("");
   peindreChoix();
+}
+
+/* « Aujourd'hui », « Hier », puis la date écrite. */
+function nomDuJour(j) {
+  const garde = fenetre();
+  if (j === garde[0]) return "Aujourd'hui";
+  if (j === garde[1]) return "Hier";
+  const [a, m, d] = j.split("-");
+  return new Date(Number(a), Number(m) - 1, Number(d))
+    .toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
 }
 
 /* ---------- les joueurs ---------- */
