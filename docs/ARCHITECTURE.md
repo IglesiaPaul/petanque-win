@@ -66,6 +66,21 @@ y tenir).
 
 Tout fichier ajouté à la coquille doit être ajouté à `COQUILLE`, sinon il manquera hors connexion.
 
+## Ce qu'un lien montre
+
+Collé dans un groupe WhatsApp ou sur un réseau, `petanque.win` affiche une vignette plutôt qu'une
+adresse nue : le blason, *Le compteur*, une phrase, l'adresse. Les balises Open Graph sont dans
+l'en-tête de `index.html` et l'image est `og.png`, 1200 × 630 — le format qu'attendent les aperçus
+larges.
+
+Deux points qui font échouer ces vignettes quand on les oublie : **l'adresse de l'image doit être
+absolue** (les robots d'aperçu ne résolvent pas le relatif), et **elle doit rester légère**, sinon
+l'aperçu retombe sur une petite vignette carrée. `tools/build_og.py`, dans le dépôt de travail,
+régénère la carte.
+
+L'image ne fait pas partie de la coquille hors-connexion : elle ne sert qu'aux robots, et il n'y a
+aucune raison de la télécharger sur le téléphone de quelqu'un qui joue.
+
 ## Les planchers de conception
 
 Ils viennent de la note de concept et ne se négocient pas à la légère.
