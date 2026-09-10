@@ -475,8 +475,7 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   <div class="entete">
     <div class="qui">Arrêter la partie&nbsp;?</div>
     <div class="quoi" id="a-score"></div>
-    <p class="rare">Une partie va presque toujours jusqu'à 13. Si vous n'avez rien demandé,
-      c'est un appui de trop&nbsp;: reprenez.</p>
+    <p class="rare" id="a-rare"></p>
   </div>
   <div class="deuxvoies">
     <button class="gros" id="a-non">Reprendre la partie</button>
@@ -827,18 +826,27 @@ $("#camp-nous").onclick = () => designer("nous");
 $("#camp-eux").onclick = () => designer("eux");
 $("#retour").onclick = () => { camp = null; montrer("partie"); };
 $("#corriger").onclick = corriger;
+/* Aucun appui n'arrête une partie sans passer par cet écran, y compris avant la première
+   mène : c'est même là que l'appui involontaire est le plus probable. */
 $("#quitter").onclick = () => {
-  // Rien de joué : il n'y a rien à perdre, on sort tout de suite.
-  if (!etat.menes.filter(m => !m.nulle).length) { etat = null; ecrire({ ...lire(), courante: null });
-    veille(false); peindreAccueil(); montrer("accueil"); return; }
-  $("#a-score").textContent = `${nomCamp("nous", etat)} ${total(etat, "nous")}`
-    + ` — ${total(etat, "eux")} ${nomCamp("eux", etat)}`;
+  const jouee = etat.menes.filter(m => !m.nulle).length;
+  $("#a-score").textContent = jouee
+    ? `${nomCamp("nous", etat)} ${total(etat, "nous")} — ${total(etat, "eux")} ${nomCamp("eux", etat)}`
+    : "Aucune mène jouée pour l'instant";
+  $("#a-rare").textContent = jouee
+    ? "Une partie va presque toujours jusqu'à 13. Si vous n'avez rien demandé, c'est un appui de trop : reprenez."
+    : "La partie vient de commencer. Si vous n'avez rien demandé, c'est un appui de trop : reprenez.";
   montrer("arreter");
 };
 $("#a-non").onclick = () => { peindrePartie(); montrer("partie"); };
 $("#a-oui").onclick = () => {
+  veille(false);
+  if (!etat.menes.filter(m => !m.nulle).length) {   // rien joué : pas de feuille à écrire
+    etat = null; ecrire({ ...lire(), courante: null });
+    peindreAccueil(); montrer("accueil"); return;
+  }
   etat.fini = true; etat.arretee = true;      // arrêtée n'est pas gagnée, et l'histoire le dira
-  archiver(etat); peindreFin(etat); montrer("fin"); veille(false);
+  archiver(etat); peindreFin(etat); montrer("fin");
 };
 $("#rejouer").onclick = () => demarrer(nouvelle());
 

@@ -52,8 +52,13 @@ y tenir).
 
 ## Le hors-connexion
 
-`sw.js` met en cache la coquille entière à l'installation et sert le cache d'abord : sur un
-terrain sans réseau, une page qui attend le réseau est une page qui ne s'ouvre pas.
+`sw.js` met en cache la coquille entière à l'installation, puis sépare deux cas :
+
+- **la page elle-même — le réseau d'abord**, le cache si le réseau manque. Sans quoi un téléphone
+  garde l'ancienne version tant que le service worker n'a pas repris la main, et une correction
+  poussée le matin n'arrive pas sur le terrain l'après-midi ;
+- **le reste — polices, icônes — le cache d'abord.** Sur un terrain sans réseau, une ressource qui
+  attend le réseau est une ressource qui manque.
 
 > **À chaque mise en ligne, changer `VERSION` dans `sw.js`.** Sans quoi les téléphones déjà
 > installés gardent l'ancienne version indéfiniment. C'est l'erreur la plus facile à commettre
