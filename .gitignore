@@ -6,3 +6,7 @@ __pycache__/
 _*.html
 .env
 .env.*
+
+# Supabase : artefacts locaux de la CLI, jamais de clés dans le dépôt
+supabase/.branches/
+supabase/.temp/
