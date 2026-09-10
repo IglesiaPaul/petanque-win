@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Le compteur — Pétanquistes</title>
+<meta name="description" content="Le score d'une partie de pétanque, en deux gestes par mène. Sans compte, sans réseau, sans publicité.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#092C64">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Le compteur">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+@font-face{font-family:"Jost";src:url(type/jost-400.woff2) format("woff2");
+  font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Jost";src:url(type/jost-600.woff2) format("woff2");
+  font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"Libre Franklin";src:url(type/franklin-400.woff2) format("woff2");
+  font-weight:400;font-style:normal;font-display:swap}
+
+:root{
+  --navy:#092C64; --red:#DD142E; --cream:#FBF6EC; --sand:#C9A66B;
+  --ground:#F2EADA; --rule:#D6C7A8; --ink-2:#3F4D68;
+  --pad: max(12px, env(safe-area-inset-left)) ;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--navy);
+  font-family:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.45;
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;
+  overscroll-behavior:none}
+button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:pointer;
+  touch-action:manipulation}
+[hidden]{display:none!important}
+
+/* une vue tient l'écran entier, jamais deux à la fois */
+.vue{display:none;flex-direction:column;height:100dvh;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.vue.on{display:flex}
+
+/* ---------- accueil ---------- */
+#accueil{overflow-y:auto;align-items:center;text-align:center;padding-top:env(safe-area-inset-top)}
+.topbar{width:100%;max-width:460px;display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px 2px;flex:none}
+.topbar .marque{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+#burger{width:52px;height:52px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;border-radius:11px}
+#burger i{display:block;width:24px;height:2.5px;background:var(--navy);border-radius:2px}
+#burger:active{background:var(--cream)}
+
+/* ---------- le menu et les pages ---------- */
+.pagebar{flex:none;display:flex;align-items:center;gap:10px;padding:6px 10px;
+  border-bottom:1px solid var(--rule)}
+.pagebar span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.retourpage{min-height:52px;padding:0 14px;font-size:.86rem;letter-spacing:.09em;
+  text-transform:uppercase;font-weight:600;display:flex;align-items:center}
+.menu{flex:none;display:flex;flex-direction:column;gap:8px;padding:14px}
+.menu button{min-height:84px;border-radius:13px;background:var(--cream);padding:14px 18px;
+  text-align:left;display:flex;flex-direction:column;gap:3px;
+  box-shadow:inset 0 0 0 2px var(--rule)}
+.menu button b{font-family:"Jost",sans-serif;font-weight:600;font-size:1.2rem}
+.menu button span{font-size:.92rem;color:var(--ink-2);line-height:1.35}
+.menu button:active{background:#fff}
+.bientot{margin:0 18px;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
+.page{overflow-y:auto}
+.prose{padding:16px 18px calc(28px + env(safe-area-inset-bottom));max-width:34rem;
+  margin:0 auto;font-family:"Libre Franklin","Jost",system-ui,sans-serif;font-size:1rem;
+  line-height:1.6;text-align:left}
+.prose .chapo{font-family:"Jost",sans-serif;font-size:1.15rem;line-height:1.45;margin:0 0 4px}
+.prose h3{font-family:"Jost",sans-serif;font-weight:600;font-size:.82rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--terre);margin:26px 0 6px}
+.prose p{margin:0 0 10px}
+.prose ul,.prose ol{margin:0 0 10px;padding-left:1.3em}
+.prose li{margin-bottom:7px}
+.prose b{font-weight:600}
+.prose a{color:var(--navy)}
+.prose .fin{margin-top:24px;padding-top:14px;border-top:1px solid var(--rule);
+  font-size:.92rem;color:var(--ink-2)}
+.wrap{width:100%;max-width:460px;padding:0 16px 28px;margin:0 auto;display:flex;
+  flex-direction:column;align-items:center;gap:18px;flex:1}
+.blason{width:118px;height:118px;flex:none}
+.titre{font-weight:600;font-size:2rem;letter-spacing:.02em;line-height:1;margin:0}
+.sous{margin:0;color:var(--ink-2);font-size:.95rem;letter-spacing:.03em;text-transform:uppercase}
+.gros{width:100%;min-height:104px;border-radius:14px;background:var(--navy);color:var(--cream);
+  font-weight:600;font-size:1.45rem;letter-spacing:.02em;display:flex;align-items:center;
+  justify-content:center;padding:14px}
+.gros.reprise{background:var(--cream);color:var(--navy);box-shadow:inset 0 0 0 3px var(--navy);
+  min-height:88px;font-size:1.2rem;flex-direction:column;gap:2px}
+.gros.reprise small{font-weight:400;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-2)}
+.gros:active{transform:translateY(1px)}
+
+.format{display:flex;width:100%;gap:8px}
+.format button{flex:1;min-height:64px;border-radius:11px;background:var(--cream);
+  box-shadow:inset 0 0 0 2px var(--rule);font-size:.98rem;line-height:1.15;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.format button b{font-weight:600}
+.format button span{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.format button[aria-pressed=true]{background:var(--navy);color:var(--cream);box-shadow:none}
+.format button[aria-pressed=true] span{color:var(--sand)}
+
+.legende{font-size:.8rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);
+  margin:0;align-self:flex-start}
+.legende em{font-style:normal;color:var(--terre);letter-spacing:.06em}
+
+/* les deux camps, à composer avant de commencer */
+.choix{display:flex;width:100%;gap:8px}
+.eqc{flex:1;min-height:76px;border-radius:11px;background:var(--cream);padding:10px 12px;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;
+  text-align:left;box-shadow:inset 0 0 0 2px var(--rule)}
+.eqc .tag{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  padding:1px 8px;border-radius:6px;color:var(--cream)}
+.eqc.nous .tag{background:var(--navy)}
+.eqc.eux .tag{background:var(--red)}
+.eqc .liste{font-size:.95rem;line-height:1.25;color:var(--ink-2)}
+.eqc .liste.mis{color:var(--navy);font-weight:600}
+
+/* l'écran des joueurs */
+.listej{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px;
+  padding:4px 14px 10px}
+.chip{min-height:60px;padding:0 18px;border-radius:12px;background:var(--cream);
+  box-shadow:inset 0 0 0 2px var(--rule);font-size:1.05rem;display:flex;align-items:center;gap:10px}
+.chip.nous{background:var(--navy);color:var(--cream);box-shadow:none}
+.chip.eux{background:var(--red);color:var(--cream);box-shadow:none}
+.chip[disabled]{opacity:.34}
+.chip .x{font-style:normal;font-size:1.4rem;line-height:1;color:var(--red);font-weight:600}
+.chip.nous .x,.chip.eux .x{color:var(--cream)}
+.videj{color:var(--ink-2);font-size:.95rem;line-height:1.5;margin:6px 2px}
+.ajout{flex:none;display:flex;gap:8px;padding:0 14px}
+.ajout input{flex:1;min-width:0;min-height:60px;border-radius:12px;border:0;padding:0 16px;
+  background:var(--cream);box-shadow:inset 0 0 0 2px var(--rule);font:inherit;font-size:1.05rem;
+  color:var(--navy)}
+.ajout input::placeholder{color:var(--ink-2);opacity:.7}
+.ajout input:focus-visible,.chip:focus-visible,.eqc:focus-visible,button:focus-visible{
+  outline:3px solid var(--sand);outline-offset:2px}
+.ajout button{min-height:60px;padding:0 20px;border-radius:12px;background:var(--navy);
+  color:var(--cream);font-weight:600;font-size:1rem}
+.basqui{flex:none;display:flex;flex-direction:column;gap:6px;padding:10px 10px
+  calc(10px + env(safe-area-inset-bottom))}
+#q-gerer{min-height:48px;font-size:.86rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-2);text-decoration:underline}
+#q-gerer[aria-pressed=true]{color:var(--red)}
+.basqui .retour{margin:0;width:100%;min-height:72px;background:var(--navy);color:var(--cream);
+  box-shadow:none;font-weight:600}
+.jour{width:100%;display:flex;flex-direction:column;gap:1px;background:var(--rule);
+  border-radius:10px;overflow:hidden}
+.jour div{background:var(--ground);padding:11px 13px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:10px;font-size:.95rem;text-align:left}
+.jour b{font-weight:600;font-variant-numeric:tabular-nums}
+.jour i{font-style:normal;color:var(--ink-2);font-size:.78rem;letter-spacing:.06em;
+  text-transform:uppercase}
+.note{font-size:.82rem;color:var(--ink-2);line-height:1.5;margin:-8px 0 0;text-align:left;
+  align-self:flex-start}
+.pied{font-size:.82rem;color:var(--ink-2);line-height:1.6;margin:auto 0 0;padding-top:14px}
+.pied a{color:var(--ink-2)}
+#poser{width:100%;background:var(--cream);box-shadow:inset 0 0 0 2px var(--sand);border-radius:11px;
+  padding:12px 14px;font-size:.9rem;line-height:1.45;text-align:left;display:flex;gap:10px;
+  align-items:center}
+#poser button{font-weight:600;text-decoration:underline;white-space:nowrap}
+
+/* ---------- la partie ---------- */
+.barre{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:10px 14px;font-size:.82rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-2);flex:none}
+.barre button{font-size:.82rem;letter-spacing:.09em;text-transform:uppercase;
+  padding:8px 4px;min-height:48px;display:flex;align-items:center}
+.camps{flex:1;display:flex;gap:10px;padding:0 10px;min-height:0}
+.camp{flex:1;border-radius:16px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;color:var(--cream);min-height:96px;position:relative}
+.camp.nous{background:var(--navy)}
+.camp.eux{background:var(--red)}
+.camp .nom{font-size:clamp(.78rem,3.2vw,1.05rem);letter-spacing:.1em;text-transform:uppercase;
+  opacity:.92;padding:0 8px;text-align:center;line-height:1.25;overflow-wrap:anywhere}
+.camp .pts{font-weight:600;font-size:clamp(4.5rem,26vw,9rem);line-height:.85;
+  font-variant-numeric:tabular-nums}
+.camp:active{filter:brightness(1.12)}
+.consigne{text-align:center;font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);padding:12px 14px 4px;flex:none}
+.derniere{flex:none;padding:6px 14px calc(10px + env(safe-area-inset-bottom));
+  display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px}
+.derniere p{margin:0;font-size:.95rem;color:var(--ink-2)}
+.derniere p b{color:var(--navy);font-weight:600}
+.corriger{min-height:60px;padding:0 16px;border-radius:10px;background:var(--cream);
+  box-shadow:inset 0 0 0 2px var(--rule);font-size:.95rem;font-weight:600;white-space:nowrap}
+
+/* ---------- combien ---------- */
+.entete{padding:16px 14px 10px;text-align:center;flex:none}
+.entete .qui{font-weight:600;font-size:1.6rem;letter-spacing:.01em}
+.entete .qui em{font-style:normal;padding:2px 12px;border-radius:8px;color:var(--cream)}
+.entete .qui em.nous{background:var(--navy)}
+.entete .qui em.eux{background:var(--red)}
+.entete .quoi{font-size:.86rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);
+  margin-top:6px}
+.boules{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 10px;min-height:0}
+.boules.trois{grid-template-columns:1fr}
+.boule{min-height:96px;border-radius:16px;background:var(--cream);
+  box-shadow:inset 0 0 0 3px var(--navy);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;padding:8px}
+.boule .n{font-weight:600;font-size:3.2rem;line-height:1;font-variant-numeric:tabular-nums}
+.boule .vers{font-size:.82rem;letter-spacing:.05em;color:var(--ink-2);line-height:1.2}
+.boule .vers b{font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums}
+.boule:active{background:#fff}
+.boule.gagne{box-shadow:inset 0 0 0 3px var(--sand)}
+.retour{flex:none;min-height:96px;margin:10px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-2);box-shadow:inset 0 0 0 2px var(--rule);
+  margin-bottom:calc(10px + env(safe-area-inset-bottom))}
+
+/* ---------- fin ---------- */
+#fin{overflow-y:auto;align-items:center;text-align:center;padding-top:calc(env(safe-area-inset-top) + 22px)}
+.verdict{font-weight:600;font-size:2.1rem;line-height:1.15;margin:0}
+.verdict em{font-style:normal;padding:1px 12px;border-radius:8px;color:var(--cream)}
+.verdict em.nous{background:var(--navy)}
+.verdict em.eux{background:var(--red)}
+.chiffre{font-weight:600;font-size:4.2rem;line-height:1;font-variant-numeric:tabular-nums;
+  letter-spacing:.02em;margin:0}
+.fanny{background:var(--red);color:var(--cream);border-radius:10px;padding:8px 16px;
+  font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.95rem}
+.feuille{width:100%;border-collapse:collapse;font-size:.95rem;font-variant-numeric:tabular-nums}
+.feuille th{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);
+  font-weight:400;text-align:right;padding:6px 8px;border-bottom:1px solid var(--rule)}
+.feuille th:first-child{text-align:left}
+.feuille td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--rule)}
+.feuille td:first-child{text-align:left;color:var(--ink-2)}
+.feuille td.track{width:98px;padding-right:0}
+.tr-in{display:flex;gap:3px;align-items:center;color:var(--navy)}
+.tr-in.eux{justify-content:flex-end;color:var(--red)}
+.tr-in .b{width:11px;height:11px;border-radius:50%;display:block;flex:none;
+  background:currentColor}
+.tr-in .b.vide{background:none;box-shadow:inset 0 0 0 1.5px currentColor;opacity:.4}
+.feuille td.gain{font-weight:600}
+.feuille td.gain.nous{color:var(--navy)}
+.feuille td.gain.eux{color:var(--red)}
+.feuille tr.nulle td{color:var(--ink-2);text-decoration:line-through}
+.feuille tr.nulle .tr-in{opacity:.4}
+.feuille tr.nulle td:last-child{text-decoration:none;font-size:.76rem;letter-spacing:.08em;
+  text-transform:uppercase}
+.feuille tr.nulle td.track{text-decoration:none}
+</style>
+</head>
+<body>
+
+<!-- ============ accueil ============ -->
+<section class="vue on" id="accueil">
+  <div class="topbar">
+    <span class="marque">Pétanquistes</span>
+    <button id="burger" aria-label="Ouvrir le menu"><i></i><i></i><i></i></button>
+  </div>
+  <div class="wrap">
+    <img class="blason" src="icons/blason.svg" alt="" width="118" height="118">
+    <h1 class="titre">Le compteur</h1>
+    <p class="sous">Pétanquistes</p>
+
+    <button class="gros reprise" id="reprendre" hidden></button>
+    <button class="gros" id="commencer">Commencer une partie</button>
+
+    <p class="legende">Le format de la partie</p>
+    <div class="format" id="format" role="group" aria-label="Format de la partie">
+      <button data-max="3" data-joueurs="1" aria-pressed="false"><b>Tête-à-tête</b><span>1 contre 1</span></button>
+      <button data-max="6" data-joueurs="2" aria-pressed="true"><b>Doublette</b><span>2 contre 2</span></button>
+      <button data-max="6" data-joueurs="3" aria-pressed="false"><b>Triplette</b><span>3 contre 3</span></button>
+    </div>
+    <p class="note">Le clavier suit : une équipe joue trois boules en tête-à-tête, six sinon —
+      c'est le maximum qu'une mène peut rapporter.</p>
+
+    <p class="legende">Les joueurs <em>facultatif</em></p>
+    <div class="choix">
+      <button class="eqc nous" data-camp="nous"><span class="tag">Nous</span>
+        <span class="liste" id="l-nous">Ajouter des prénoms</span></button>
+      <button class="eqc eux" data-camp="eux"><span class="tag">Eux</span>
+        <span class="liste" id="l-eux">Ajouter des prénoms</span></button>
+    </div>
+    <p class="note">Les prénoms restent sur ce téléphone. Écrits une fois, ils se touchent
+      ensuite — personne ne retape un clavier au bord du terrain.</p>
+
+    <div id="poser" hidden>
+      <span id="poser-txt"></span>
+      <button id="poser-go" hidden>Installer</button>
+    </div>
+
+    <div id="bloc-jour" hidden style="width:100%">
+      <p class="legende">Les parties du jour</p>
+      <div class="jour" id="jour"></div>
+    </div>
+
+    <p class="pied">Rien ne quitte ce téléphone : ni compte, ni adresse, ni suivi.
+      Le compteur fonctionne sans réseau.<br>
+      Un outil des <b>Pétanquistes</b> — <a href="https://github.com/IglesiaPaul/Petanquistes">le projet</a>.</p>
+  </div>
+</section>
+
+<!-- ============ la partie ============ -->
+<section class="vue" id="partie">
+  <div class="barre">
+    <span>13 points</span>
+    <span id="mene-n">Mène 1</span>
+    <button id="quitter">Terminer</button>
+  </div>
+  <div class="camps">
+    <button class="camp nous" id="camp-nous">
+      <span class="nom">Nous</span><span class="pts" id="pts-nous">0</span></button>
+    <button class="camp eux" id="camp-eux">
+      <span class="nom">Eux</span><span class="pts" id="pts-eux">0</span></button>
+  </div>
+  <p class="consigne">Touchez l'équipe qui vient de marquer</p>
+  <div class="derniere">
+    <p id="derniere-txt" aria-live="polite">La partie commence.</p>
+    <button class="corriger" id="corriger" hidden>Corriger</button>
+  </div>
+</section>
+
+<!-- ============ combien ============ -->
+<section class="vue" id="combien">
+  <div class="entete">
+    <div class="qui"><em id="c-qui" class="nous">Nous</em> marque</div>
+    <div class="quoi">Combien de boules devant&nbsp;?</div>
+  </div>
+  <div class="boules" id="boules"></div>
+  <button class="retour" id="retour">Ce n'est pas la bonne équipe</button>
+</section>
+
+<!-- ============ le menu ============ -->
+<section class="vue" id="menu">
+  <div class="pagebar"><button class="retourpage" data-va="accueil">Fermer</button>
+    <span>Le menu</span></div>
+  <nav class="menu">
+    <button data-va="accueil"><b>Le compteur</b><span>Tenir le score d'une partie</span></button>
+    <button data-va="installer"><b>Installer sur le téléphone</b>
+      <span>Pour l'ouvrir sans navigateur, et sans réseau</span></button>
+    <button data-va="apropos"><b>À propos</b><span>Ce que c'est, et qui le fait</span></button>
+  </nav>
+  <p class="bientot">L'histoire du club, la marque et les règles viendront ici, quand
+    l'association sera déclarée et qu'il y aura quelque chose d'officiel à raconter.</p>
+</section>
+
+<!-- ============ installer ============ -->
+<section class="vue page" id="installer">
+  <div class="pagebar"><button class="retourpage" data-va="menu">Retour</button>
+    <span>Installer</span></div>
+  <div class="prose">
+    <p class="chapo">Posé sur l'écran d'accueil, le compteur s'ouvre comme une application :
+      sans barre de navigateur, sans réseau, et il garde les parties du jour.</p>
+    <h3>Sur iPhone</h3>
+    <ol><li>Ouvrez <b>petanque.win</b> dans <b>Safari</b> — pas dans un autre navigateur.</li>
+      <li>Touchez <b>Partager</b>, le carré avec la flèche vers le haut.</li>
+      <li>Descendez jusqu'à <b>Sur l'écran d'accueil</b>, puis <b>Ajouter</b>.</li></ol>
+    <h3>Sur Android</h3>
+    <ol><li>Ouvrez <b>petanque.win</b> dans Chrome.</li>
+      <li>Chrome propose <b>Installer l'application</b> ; sinon, menu <b>⋮</b> puis
+        <b>Ajouter à l'écran d'accueil</b>.</li></ol>
+    <h3>Ensuite</h3>
+    <p>L'icône est le cercle de la marque. Le compteur fonctionne au fond d'un terrain sans
+      réseau : tout ce dont il a besoin est déjà dans le téléphone. Une nouvelle version
+      s'installe toute seule à la prochaine ouverture avec du réseau.</p>
+  </div>
+</section>
+
+<!-- ============ à propos ============ -->
+<section class="vue page" id="apropos">
+  <div class="pagebar"><button class="retourpage" data-va="menu">Retour</button>
+    <span>À propos</span></div>
+  <div class="prose">
+    <p class="chapo">La gêne la plus fréquente d'une partie n'a rien à voir avec le jeu :
+      personne ne sait le score. Le compteur ne fait que ça, et il le fait bien.</p>
+    <h3>Trois promesses</h3>
+    <ul>
+      <li><b>Sans compte.</b> Ni adresse, ni mot de passe, ni confirmation. On appuie sur
+        <i>Commencer une partie</i> et on compte.</li>
+      <li><b>Sans réseau.</b> Une fois ouvert, il fonctionne hors connexion. Les parties et les
+        prénoms restent sur ce téléphone : rien n'est envoyé nulle part.</li>
+      <li><b>Sans publicité.</b> Jamais, et rien qui mesure ce que vous faites.</li>
+    </ul>
+    <h3>Deux gestes par mène</h3>
+    <p>Une équipe joue six boules — trois en tête-à-tête. Une mène rapporte donc de 1 à 6 points
+      et jamais autre chose : on touche l'équipe qui a marqué, puis le nombre de boules. Chaque
+      bouton écrit d'avance où il mène, pour que les autres lisent l'annonce par-dessus l'épaule.</p>
+    <h3>Qui</h3>
+    <p>Un outil des <b>Pétanquistes</b>, club en formation à Croissy-sur-Seine. Il appartient à la
+      marque et non au club : n'importe quelle ville peut s'en servir, Croissy est simplement la
+      première.</p>
+    <p class="fin">Le code est ouvert —
+      <a href="https://github.com/IglesiaPaul/petanque-win">github.com/IglesiaPaul/petanque-win</a></p>
+  </div>
+</section>
+
+<!-- ============ qui joue ============ -->
+<section class="vue" id="qui">
+  <div class="entete">
+    <div class="qui">Qui joue chez <em id="q-camp" class="nous">Nous</em>&nbsp;?</div>
+    <div class="quoi" id="q-compte">Jusqu'à deux joueurs</div>
+  </div>
+  <div class="listej" id="roster"></div>
+  <div class="ajout">
+    <input id="q-nom" type="text" autocomplete="off" autocapitalize="words" spellcheck="false"
+           maxlength="18" placeholder="Un prénom" aria-label="Un prénom à ajouter">
+    <button id="q-add">Ajouter</button>
+  </div>
+  <div class="basqui">
+    <button id="q-gerer">Gérer la liste</button>
+    <button class="retour" id="q-ok">Terminé</button>
+  </div>
+</section>
+
+<!-- ============ fin ============ -->
+<section class="vue" id="fin">
+  <div class="wrap">
+    <p class="verdict" id="verdict"></p>
+    <p class="chiffre" id="score-final"></p>
+    <span class="fanny" id="fanny" hidden>Fanny</span>
+    <table class="feuille" id="feuille"></table>
+    <button class="gros" id="rejouer">Nouvelle partie</button>
+    <button class="retour" id="au-debut" style="width:100%;margin:0;min-height:60px">Accueil</button>
+  </div>
+</section>
+
+<script>
+"use strict";
+/* Le compteur — étage 0 : tout est local, rien ne part.
+   Une partie = une suite de mènes. Une mène rapporte de 1 à 6 points (1 à 3 en tête-à-tête),
+   à une seule équipe. La partie s'arrête à 13. */
+
+const $ = s => document.querySelector(s);
+const CLE = "petanquistes.compteur.v1";
+const BUT = 13;
+
+let etat = null;          // la partie en cours
+let maxBoules = 6;        // le format choisi : boules par équipe
+let nbJoueurs = 2;        // et joueurs par équipe
+
+/* Un joueur est { id, nom } et non un prénom seul. L'identité stable est ce qui permettra
+   plus tard d'attribuer les points d'une mène à un joueur précis (m.par = [id, ...]) et de
+   lui attacher ses boules — { genre, diametre, poids, modele }, où le genre distingue la
+   boule de compétition (agréée FIPJP : métal, 70,5 à 80 mm, 650 à 800 g), la boule de loisir
+   et la boule d'enfant, qui ne tiennent pas dans ces bornes et n'ont pas à y tenir.
+   Une partie enregistre une copie { id, nom } : effacer un joueur de la liste ne réécrit
+   jamais une feuille déjà jouée. */
+let roster = [];                        // les prénoms connus de ce téléphone
+let equipes = { nous: [], eux: [] };    // la composition de la prochaine partie
+let campEdit = null, gerer = false;
+let camp = null;          // l'équipe désignée, le temps de l'écran « combien »
+
+/* ---------- mémoire ---------- */
+const lire = () => { try { return JSON.parse(localStorage.getItem(CLE)) || {}; }
+                     catch (e) { return {}; } };
+const ecrire = d => { try { localStorage.setItem(CLE, JSON.stringify(d)); } catch (e) {} };
+
+function sauver() {
+  ecrire({ ...lire(), courante: etat });
+}
+
+function archiver(partie) {
+  const d = lire();
+  d.parties = (d.parties || []).filter(p => p.jour === jour()).concat([partie]).slice(-40);
+  d.courante = null;
+  ecrire(d);
+}
+
+const jour = () => new Date().toISOString().slice(0, 10);
+const autre = c => (c === "nous" ? "eux" : "nous");
+const echap = t => String(t).replace(/[&<>"]/g,
+  c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+/* Le nom d'un camp : ses joueurs s'il en a, sinon Nous ou Eux. Une partie archivée porte sa
+   propre composition, donc l'historique ne bouge pas quand la liste change. */
+function nomCamp(c, partie) {
+  const j = ((partie ? partie.equipes : equipes) || {})[c] || [];
+  return j.length ? j.map(x => x.nom).join(" · ") : (c === "nous" ? "Nous" : "Eux");
+}
+
+function sauverNoms() {
+  ecrire({ ...lire(), roster, equipes });
+}
+
+/* ---------- calcul ---------- */
+const total = (p, e) => p.menes.filter(m => !m.nulle && m.camp === e)
+                               .reduce((s, m) => s + m.pts, 0);
+
+function nouvelle() {
+  return { debut: Date.now(), jour: jour(), max: maxBoules, menes: [], fini: false,
+           equipes: { nous: equipes.nous.slice(), eux: equipes.eux.slice() } };
+}
+
+/* ---------- affichage ---------- */
+function montrer(id) {
+  document.querySelectorAll(".vue").forEach(v => v.classList.toggle("on", v.id === id));
+  document.documentElement.scrollTop = 0;
+}
+
+function peindrePartie() {
+  const n = total(etat, "nous"), e = total(etat, "eux");
+  $("#pts-nous").textContent = n;
+  $("#pts-eux").textContent = e;
+  $("#mene-n").textContent = "Mène " + (etat.menes.filter(m => !m.nulle).length + 1);
+  const derniere = [...etat.menes].reverse().find(m => !m.nulle);
+  $("#camp-nous").querySelector(".nom").textContent = nomCamp("nous", etat);
+  $("#camp-eux").querySelector(".nom").textContent = nomCamp("eux", etat);
+  $("#derniere-txt").innerHTML = derniere
+    ? `Mène ${derniere.no} : <b>${echap(nomCamp(derniere.camp, etat))} +${derniere.pts}</b>`
+      + ` — ${n} à ${e}`
+    : "La partie commence.";
+  $("#corriger").hidden = !derniere;
+}
+
+function peindreCombien() {
+  const acquis = total(etat, camp);
+  const nom = nomCamp(camp, etat);
+  $("#c-qui").textContent = nom;
+  $("#c-qui").className = camp;
+  const grille = $("#boules");
+  grille.classList.toggle("trois", etat.max === 3);
+  grille.innerHTML = "";
+  for (let b = 1; b <= etat.max; b++) {
+    const pts = Math.min(b, BUT - acquis);          // au-delà de 13 rien ne compte
+    const arrivee = acquis + pts;
+    const bouton = document.createElement("button");
+    bouton.className = "boule" + (arrivee === BUT ? " gagne" : "");
+    bouton.innerHTML = `<span class="n">${b}</span>`
+      + `<span class="vers">${arrivee === BUT ? nom + " gagne " : nom + " à "}<b>${arrivee}</b></span>`;
+    bouton.setAttribute("aria-label",
+      `${b} boule${b > 1 ? "s" : ""} : ${nom} passe à ${arrivee}${arrivee === BUT ? ", et gagne" : ""}`);
+    bouton.onclick = () => marquer(b, pts);
+    grille.appendChild(bouton);
+  }
+}
+
+/* Les boules d'une mène, dans la couleur de l'équipe qui les a placées : celles qui ont
+   compté sont pleines, celles jouées au-delà de 13 restent en creux — une mène peut valoir
+   six boules et ne rapporter que les deux qui manquaient. */
+function boules(m) {
+  const pleines = '<i class="b"></i>'.repeat(m.pts);
+  const creuses = '<i class="b vide"></i>'.repeat(Math.max(0, (m.boules || m.pts) - m.pts));
+  return `<span class="tr-in ${m.camp}">${pleines}${creuses}</span>`;
+}
+
+function peindreFin(partie) {
+  const n = total(partie, "nous"), e = total(partie, "eux");
+  const gagnant = nomCamp(n >= e ? "nous" : "eux", partie);
+  const perdant = Math.min(n, e);
+  $("#verdict").innerHTML = n === e ? "Partie arrêtée"
+    : `<em class="${n > e ? "nous" : "eux"}">${echap(gagnant)}</em> gagne`;
+  $("#score-final").textContent = Math.max(n, e) + " à " + perdant;
+  $("#fanny").hidden = !(Math.max(n, e) === BUT && perdant === 0);
+  let html = "<tr><th>Mène</th><th>Les boules</th><th>Points</th><th>Score</th></tr>";
+  let cn = 0, ce = 0;
+  partie.menes.forEach(m => {
+    if (m.nulle) {
+      html += `<tr class="nulle"><td>${m.no}</td>`
+            + `<td class="track">${boules(m)}</td>`
+            + `<td>+${m.pts}</td><td>corrigée</td></tr>`;
+      return;
+    }
+    if (m.camp === "nous") cn += m.pts; else ce += m.pts;
+    html += `<tr><td>${m.no}</td><td class="track">${boules(m)}</td>`
+          + `<td class="gain ${m.camp}">+${m.pts}</td><td>${cn} – ${ce}</td></tr>`;
+  });
+  $("#feuille").innerHTML = html;
+}
+
+function peindreAccueil() {
+  const d = lire();
+  const c = d.courante;
+  const bouton = $("#reprendre");
+  if (c && !c.fini && c.menes.length) {
+    bouton.hidden = false;
+    bouton.innerHTML = `Reprendre la partie<small>${total(c, "nous")} à ${total(c, "eux")}`
+      + ` · mène ${c.menes.filter(m => !m.nulle).length + 1}</small>`;
+  } else { bouton.hidden = true; }
+
+  const parties = (d.parties || []).filter(p => p.jour === jour()).reverse();
+  $("#bloc-jour").hidden = !parties.length;
+  $("#jour").innerHTML = parties.map(p => {
+    const n = total(p, "nous"), e = total(p, "eux");
+    const h = new Date(p.debut).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+    const q = n === e ? "Égalité" : echap(nomCamp(n > e ? "nous" : "eux", p));
+    return `<div><span>${q}</span><b>${n} – ${e}</b><i>${h}</i></div>`;
+  }).join("");
+  peindreChoix();
+}
+
+/* ---------- les joueurs ---------- */
+function peindreChoix() {
+  ["nous", "eux"].forEach(c => {
+    const el = $("#l-" + c);
+    el.textContent = equipes[c].length ? equipes[c].map(x => x.nom).join(", ")
+                                       : "Ajouter des prénoms";
+    el.classList.toggle("mis", equipes[c].length > 0);
+  });
+}
+
+function peindreQui() {
+  $("#q-camp").textContent = campEdit === "nous" ? "Nous" : "Eux";
+  $("#q-camp").className = campEdit;
+  const pris = equipes[campEdit];
+  $("#q-compte").textContent = gerer
+    ? "Touchez un prénom pour le retirer de la liste"
+    : (pris.length ? `${pris.map(x => x.nom).join(", ")} — ${pris.length} sur ${nbJoueurs}`
+                   : `Jusqu'à ${["un", "deux", "trois"][nbJoueurs - 1]} joueur${nbJoueurs > 1 ? "s" : ""}`);
+  $("#q-gerer").setAttribute("aria-pressed", String(gerer));
+  $("#roster").innerHTML = roster.length ? roster.map(j => {
+    const ici = pris.some(x => x.id === j.id);
+    const la = equipes[autre(campEdit)].some(x => x.id === j.id);
+    return `<button class="chip ${ici ? campEdit : ""}" data-id="${j.id}"`
+         + `${la && !gerer ? " disabled" : ""}><span>${echap(j.nom)}</span>`
+         + `${gerer ? '<i class="x">×</i>' : ""}</button>`;
+  }).join("") : '<p class="videj">Aucun prénom pour l\'instant. Écrivez-en un ci-dessous : '
+              + 'il restera dans la liste pour les parties suivantes.</p>';
+}
+
+function toucherJoueur(id) {
+  const j = roster.find(x => x.id === id);
+  if (!j) return;
+  if (gerer) {
+    roster = roster.filter(x => x.id !== id);
+    ["nous", "eux"].forEach(c => { equipes[c] = equipes[c].filter(x => x.id !== id); });
+  } else if (equipes[campEdit].some(x => x.id === id)) {
+    equipes[campEdit] = equipes[campEdit].filter(x => x.id !== id);
+  } else if (equipes[campEdit].length < nbJoueurs) {
+    equipes[campEdit] = equipes[campEdit].concat([j]);
+  } else {
+    return;                       // le camp est complet : on retire d'abord quelqu'un
+  }
+  sauverNoms(); peindreQui();
+}
+
+function ajouterJoueur() {
+  const champ = $("#q-nom");
+  const v = champ.value.trim().replace(/\s+/g, " ");
+  if (!v) return;
+  let j = roster.find(x => x.nom.toLowerCase() === v.toLowerCase());
+  if (!j) {
+    j = { id: "j" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), nom: v };
+    roster = roster.concat([j]).sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
+  }
+  const libre = equipes[campEdit].length < nbJoueurs
+    && !equipes[campEdit].some(x => x.id === j.id)
+    && !equipes[autre(campEdit)].some(x => x.id === j.id);
+  if (libre) equipes[campEdit] = equipes[campEdit].concat([j]);
+  champ.value = "";
+  sauverNoms(); peindreQui();
+}
+
+/* ---------- les gestes ---------- */
+function designer(e) {
+  camp = e;
+  peindreCombien();
+  montrer("combien");
+}
+
+function marquer(boules, pts) {
+  const no = etat.menes.filter(m => !m.nulle).length + 1;
+  etat.menes.push({ no, camp, boules, pts });
+  camp = null;
+  if (total(etat, "nous") >= BUT || total(etat, "eux") >= BUT) {
+    etat.fini = true;
+    archiver(etat);
+    peindreFin(etat);
+    montrer("fin");
+    veille(false);
+  } else {
+    sauver();
+    peindrePartie();
+    montrer("partie");
+  }
+}
+
+/* Corriger n'efface pas : la mène reste inscrite, barrée. On corrige, on ne cache pas
+   qu'on a corrigé. */
+function corriger() {
+  const i = etat.menes.map(m => !!m.nulle).lastIndexOf(false);
+  if (i < 0) return;
+  etat.menes[i].nulle = true;
+  etat.menes.forEach((m, k) => { if (!m.nulle) m.no = etat.menes.slice(0, k).filter(x => !x.nulle).length + 1; });
+  sauver();
+  peindrePartie();
+}
+
+function demarrer(partie) {
+  etat = partie;
+  maxBoules = etat.max;
+  sauver();
+  peindrePartie();
+  montrer("partie");
+  veille(true);
+}
+
+/* L'écran ne doit pas s'éteindre entre deux mènes : trois minutes de jeu, puis le code PIN
+   avec des mains pleines de sable, c'est ce qui fait abandonner l'outil. */
+let sentinelle = null;
+async function veille(on) {
+  try {
+    if (on && "wakeLock" in navigator) { sentinelle = await navigator.wakeLock.request("screen"); }
+    else if (sentinelle) { await sentinelle.release(); sentinelle = null; }
+  } catch (e) {}
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && $("#partie").classList.contains("on")) veille(true);
+});
+
+/* ---------- branchements ---------- */
+$("#commencer").onclick = () => demarrer(nouvelle());
+$("#reprendre").onclick = () => { const c = lire().courante; if (c) demarrer(c); };
+$("#camp-nous").onclick = () => designer("nous");
+$("#camp-eux").onclick = () => designer("eux");
+$("#retour").onclick = () => { camp = null; montrer("partie"); };
+$("#corriger").onclick = corriger;
+$("#quitter").onclick = () => {
+  if (!etat.menes.filter(m => !m.nulle).length) { etat = null; ecrire({ ...lire(), courante: null });
+    veille(false); peindreAccueil(); montrer("accueil"); return; }
+  etat.fini = true; archiver(etat); peindreFin(etat); montrer("fin"); veille(false);
+};
+$("#rejouer").onclick = () => demarrer(nouvelle());
+
+/* Le menu n'existe que sur l'accueil : la note interdit le menu à trois traits sur l'écran
+   de jeu, et cette interdiction tient. */
+$("#burger").onclick = () => montrer("menu");
+document.querySelectorAll("[data-va]").forEach(b => {
+  b.onclick = () => { if (b.dataset.va === "accueil") peindreAccueil(); montrer(b.dataset.va); };
+});
+
+$(".choix").onclick = ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  campEdit = b.dataset.camp; gerer = false;
+  peindreQui(); montrer("qui");
+};
+$("#roster").onclick = ev => {
+  const b = ev.target.closest(".chip"); if (b) toucherJoueur(b.dataset.id);
+};
+$("#q-add").onclick = ajouterJoueur;
+$("#q-nom").addEventListener("keydown", e => { if (e.key === "Enter") ajouterJoueur(); });
+$("#q-gerer").onclick = () => { gerer = !gerer; peindreQui(); };
+$("#q-ok").onclick = () => { peindreAccueil(); montrer("accueil"); };
+$("#au-debut").onclick = () => { peindreAccueil(); montrer("accueil"); };
+
+const formats = () => [...$("#format").children];
+function choisirFormat(i) {
+  formats().forEach((x, k) => x.setAttribute("aria-pressed", String(k === i)));
+  maxBoules = Number(formats()[i].dataset.max);
+  nbJoueurs = Number(formats()[i].dataset.joueurs);
+  // un camp plus étroit ne garde que les premiers inscrits
+  ["nous", "eux"].forEach(c => { equipes[c] = equipes[c].slice(0, nbJoueurs); });
+  ecrire({ ...lire(), formatIdx: i, equipes });
+  peindreChoix();
+}
+$("#format").onclick = ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  choisirFormat(formats().indexOf(b));
+};
+
+/* ---------- installation ---------- */
+let invite = null;
+addEventListener("beforeinstallprompt", e => {
+  e.preventDefault(); invite = e;
+  $("#poser").hidden = false;
+  $("#poser-txt").textContent = "Posez le compteur sur l'écran d'accueil : il s'ouvre plus vite et marche sans réseau.";
+  $("#poser-go").hidden = false;
+});
+$("#poser-go").onclick = async () => { if (invite) { invite.prompt(); invite = null; $("#poser").hidden = true; } };
+
+function conseilInstall() {
+  const stand = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (!stand && ios) {
+    $("#poser").hidden = false;
+    $("#poser-txt").innerHTML = "Sur iPhone : <b>Partager</b> puis <b>Sur l'écran d'accueil</b>."
+      + " Le compteur s'ouvre alors sans navigateur, et sans réseau.";
+  }
+}
+
+/* ---------- départ ---------- */
+(function () {
+  const d = lire();
+  roster = Array.isArray(d.roster) ? d.roster : [];
+  equipes = { nous: (d.equipes && d.equipes.nous) || [], eux: (d.equipes && d.equipes.eux) || [] };
+  choisirFormat(Number.isInteger(d.formatIdx) ? d.formatIdx : 1);   // doublette par défaut
+  peindreAccueil();
+  conseilInstall();
+  if ("serviceWorker" in navigator
+      && (location.protocol === "https:" || location.hostname === "localhost"))
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+})();
+</script>
+</body>
+</html>
