@@ -13,9 +13,12 @@ d'accueil, fonctionne sans réseau.
 - **Sans compte.** Ni adresse, ni mot de passe, ni confirmation. On appuie sur *Commencer une
   partie* et on compte. Un joueur de soixante-dix ans à qui l'on demande d'inventer un mot de
   passe debout sur du gravier ne revient pas.
-- **Sans réseau.** Une fois ouvert, tout fonctionne hors connexion. Parties et prénoms restent
-  sur le téléphone.
-- **Sans publicité,** et rien qui mesure ce que fait l'utilisateur.
+- **Sans réseau.** Une fois ouvert, tout fonctionne hors connexion. Parties, prénoms et chiffres
+  restent sur le téléphone.
+- **Sans publicité,** et rien qui identifie l'utilisateur ni qui le suive d'une fois sur l'autre.
+- **Une seule chose est envoyée**, à la fin d'une partie : qu'une partie a été finie, et dans
+  quel format. Ni score, ni prénom, ni identifiant d'appareil — un compteur agrégé, pour savoir
+  si l'outil sert avant d'y ajouter quoi que ce soit. Il se coupe depuis la page *Les chiffres*.
 
 ## Deux gestes par mène
 

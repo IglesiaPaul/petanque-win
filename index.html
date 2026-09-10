@@ -164,6 +164,16 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 .duel span:last-child{text-align:right}
 .duel span.mene{color:var(--navy);font-weight:600}
 .prose .cap{font-size:.88rem;color:var(--ink-2);margin-top:8px}
+.bascule{width:100%;min-height:64px;margin-top:6px;border-radius:12px;background:var(--cream);
+  box-shadow:inset 0 0 0 2px var(--rule);padding:0 16px;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;font-family:"Jost",sans-serif;font-size:1rem;
+  text-align:left}
+.bascule i{flex:none;width:52px;height:30px;border-radius:15px;background:var(--rule);
+  position:relative;transition:background .15s}
+.bascule i::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;
+  border-radius:50%;background:var(--paper,#FBF6EC);transition:transform .15s}
+.bascule[aria-pressed=true] i{background:var(--red)}
+.bascule[aria-pressed=true] i::after{transform:translateX(22px)}
 .wrap{width:100%;max-width:460px;padding:0 16px 28px;margin:0 auto;display:flex;
   flex-direction:column;align-items:center;gap:18px;flex:1}
 .jour{margin:0 14px 4px}
@@ -489,10 +499,21 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
     <ul>
       <li><b>Sans compte.</b> Ni adresse, ni mot de passe, ni confirmation. On appuie sur
         <i>Commencer une partie</i> et on compte.</li>
-      <li><b>Sans réseau.</b> Une fois ouvert, il fonctionne hors connexion. Les parties et les
-        prénoms restent sur ce téléphone : rien n'est envoyé nulle part.</li>
-      <li><b>Sans publicité.</b> Jamais, et rien qui mesure ce que vous faites.</li>
+      <li><b>Sans réseau.</b> Une fois ouvert, il fonctionne hors connexion. Les parties, les
+        prénoms et vos chiffres restent sur ce téléphone.</li>
+      <li><b>Sans publicité.</b> Jamais, et rien qui vous identifie ni qui vous suive d'une
+        fois sur l'autre.</li>
     </ul>
+    <h3>La seule chose qui est comptée</h3>
+    <p>Quand une partie se termine, l'application envoie un signal qui dit ceci et rien d'autre :
+      <i>une partie a été finie, en tête-à-tête, en doublette ou en triplette.</i> Pas de score,
+      pas de prénom, pas d'identifiant d'appareil, rien qui permette de vous reconnaître d'une
+      partie à l'autre ni de relier deux parties entre elles.</p>
+    <p>C'est là pour une seule raison : savoir si le compteur sert vraiment, avant d'y ajouter
+      quoi que ce soit. Le serveur qui reçoit ce signal voit votre adresse, comme tout site que
+      vous ouvrez ; nous n'en gardons rien. <b>Vous pouvez couper ce comptage</b> dans
+      <i>Les chiffres</i>, et le compteur fonctionne exactement pareil.</p>
+
     <h3>Deux gestes par mène</h3>
     <p>Une équipe joue six boules — trois en tête-à-tête. Une mène rapporte donc de 1 à 6 points
       et jamais autre chose : on touche l'équipe qui a marqué, puis le nombre de boules. Chaque
@@ -849,6 +870,31 @@ function ajouterJoueur() {
   sauverNoms(); peindreQui();
 }
 
+/* ---------- le comptage anonyme ----------
+   Le seul appel réseau de l'application. Il ne porte AUCUN identifiant : ni appareil, ni
+   session, ni score, ni prénom — juste « une partie a été finie, en doublette ». La date est
+   posée par le serveur. Il part après coup, n'attend rien, et son échec n'a aucune
+   conséquence : hors connexion, la partie se compte quand même, elle n'est simplement pas
+   comptabilisée. On peut le couper depuis la page Les chiffres.
+   La clé ci-dessous est publiable : elle est faite pour vivre dans un navigateur. Ce qui
+   protège la base, ce sont les règles côté serveur, pas le secret de cette clé. */
+const BASE = "https://wcivitpxrzggasxauckp.supabase.co";
+const CLE_PUBLIABLE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+  + "eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjaXZpdHB4cnpnZ2FzeGF1Y2twIiwicm9sZSI6ImFub24iLCJpYXQi"
+  + "OjE3ODg5ODAzNDAsImV4cCI6MjEwNDU1NjM0MH0.0TDNdvH1rGdpPnx-bPQ0Szhbb7qILm2rRr3084hGgm8";
+
+function compter(evenement, format) {
+  if (lire().sansCompteur) return;
+  try {
+    fetch(BASE + "/rest/v1/rpc/compter", {
+      method: "POST", mode: "cors", keepalive: true,
+      headers: { "Content-Type": "application/json",
+                 apikey: CLE_PUBLIABLE, Authorization: "Bearer " + CLE_PUBLIABLE },
+      body: JSON.stringify({ p_evenement: evenement, p_format: Number(format) || 0 }),
+    }).catch(() => {});
+  } catch (e) { /* rien à faire : un compte perdu n'est pas une panne */ }
+}
+
 /* ---------- les chiffres, tirés du seul contenu de ce téléphone ----------
    Rien n'est envoyé nulle part : ce sont les sept jours déjà stockés, relus autrement. */
 function peindreChiffres() {
@@ -931,9 +977,20 @@ function peindreChiffres() {
       + `${restants > 1 ? "s" : ""} qu'une fois.</p>`;
   }
 
-  html += `<p class="fin">Ces chiffres ne quittent pas ce téléphone et ne sont envoyés nulle
-    part. Ils portent sur les sept derniers jours, comme les parties.</p>`;
+  html += `<h3>Le comptage</h3>
+    <p>Les chiffres ci-dessus ne quittent pas ce téléphone : ils portent sur les sept derniers
+    jours, comme les parties. <b>Une seule chose est envoyée</b>, quand une partie se termine :
+    qu'une partie a été finie, et dans quel format. Ni score, ni prénom, ni rien qui vous
+    reconnaisse d'une fois sur l'autre. Cela sert à savoir si le compteur sert.</p>
+    <button class="bascule" id="bascule-compteur" aria-pressed="${lire().sansCompteur ? "true" : "false"}">
+      <span>Ne pas compter mes parties</span><i></i></button>`;
   corps.innerHTML = html;
+  $("#bascule-compteur").onclick = ev => {
+    const b = ev.currentTarget;
+    const coupe = b.getAttribute("aria-pressed") !== "true";
+    ecrire({ ...lire(), sansCompteur: coupe });
+    b.setAttribute("aria-pressed", String(coupe));
+  };
 }
 
 /* ---------- les gestes ---------- */
@@ -949,6 +1006,7 @@ function marquer(boules, pts) {
   camp = null;
   if (total(etat, "nous") >= BUT || total(etat, "eux") >= BUT) {
     etat.fini = true;
+    compter("partie_finie", etat.joueurs);
     archiver(etat);
     peindreFin(etat);
     montrer("fin");
@@ -1029,6 +1087,7 @@ $("#a-oui").onclick = () => {
     peindreAccueil(); montrer("accueil"); return;
   }
   etat.fini = true; etat.arretee = true;      // arrêtée n'est pas gagnée, et l'histoire le dira
+  compter("partie_arretee", etat.joueurs);
   archiver(etat); peindreFin(etat); montrer("fin");
 };
 $("#rejouer").onclick = () => demarrer(nouvelle());

@@ -38,12 +38,13 @@
   [headers.values]
     Cache-Control = "public, max-age=604800"
 
-# Rien de la page ne sort vers un tiers, et la politique le dit plutôt que de le promettre.
-# Quand Supabase arrivera, c'est « connect-src » qu'il faudra ouvrir — et lui seul.
+# La page ne sort que vers un seul hôte, et la politique le nomme. « connect-src » est ouvert
+# pour le projet Supabase et pour lui seul : tout autre appel réseau est refusé par le
+# navigateur, y compris un appel qu'un code fautif introduirait par accident.
 [[headers]]
   for = "/*"
   [headers.values]
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://wcivitpxrzggasxauckp.supabase.co; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "no-referrer"
     Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"
