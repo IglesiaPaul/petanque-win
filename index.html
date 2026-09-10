@@ -56,8 +56,15 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   touch-action:manipulation}
 [hidden]{display:none!important}
 
-/* une vue tient l'écran entier, jamais deux à la fois */
-.vue{display:none;flex-direction:column;height:100dvh;
+/* Une vue tient l'écran entier, jamais deux à la fois.
+   « svh » et non « dvh » : dvh vaut la fenêtre SANS les barres du navigateur, donc dans
+   Safari ou Chrome le bas de la vue passait dessous et le bouton devenait inatteignable.
+   svh est la hauteur quand les barres sont là — la plus petite, donc la seule sûre. En
+   application installée il n'y a pas de barres, et les deux valent la même chose.
+   Le défilement reste possible en dernier recours : sur un très petit écran, mieux vaut
+   une vue qui glisse qu'un bouton qu'on ne peut pas toucher. */
+.vue{display:none;flex-direction:column;height:100vh;height:100svh;
+  overflow-y:auto;overscroll-behavior:contain;
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .vue.on{display:flex}
 
@@ -80,16 +87,16 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 
 /* ---------- accueil : il tient l'écran, il ne se déroule pas ---------- */
 #accueil{align-items:center;text-align:center;padding-top:env(safe-area-inset-top)}
-.centre{flex:1;min-height:0;width:100%;max-width:460px;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:14px;padding:0 16px}
-.bas{flex:none;width:100%;max-width:460px;display:flex;flex-direction:column;gap:10px;
+.centre{flex:1 1 auto;min-height:180px;width:100%;max-width:460px;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 16px}
+.bas{flex:0 0 auto;width:100%;max-width:460px;display:flex;flex-direction:column;gap:10px;
   padding:0 16px calc(16px + env(safe-area-inset-bottom));margin:0 auto}
 .lien{min-height:52px;font-size:.92rem;letter-spacing:.06em;color:var(--ink-2);
   text-decoration:underline;text-underline-offset:4px}
 
 /* les trois formats, et les deux camps : un choix par écran */
-.voies{flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;
-  padding:0 14px calc(16px + env(safe-area-inset-bottom));min-height:0}
+.voies{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:12px;
+  padding:0 14px calc(16px + env(safe-area-inset-bottom))}
 .voies button{min-height:112px;border-radius:14px;background:var(--cream);
   box-shadow:inset 0 0 0 2px var(--rule);display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:4px;padding:12px}
@@ -212,7 +219,7 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
    plus grande, et c'est elle qu'un pouce trouve. */
 .rare{max-width:26rem;margin:12px auto 0;padding:0 20px;font-family:"Libre Franklin","Jost",sans-serif;
   font-size:.92rem;line-height:1.5;color:var(--ink-2);text-transform:none;letter-spacing:0}
-.deuxvoies{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:14px;
+.deuxvoies{flex:1 1 auto;display:flex;flex-direction:column;justify-content:flex-end;gap:14px;
   padding:0 14px calc(20px + env(safe-area-inset-bottom))}
 .deuxvoies .gros{min-height:132px}
 .deuxvoies .pale{background:var(--cream);color:var(--navy);box-shadow:inset 0 0 0 3px var(--rule);
@@ -240,7 +247,7 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   padding:8px 4px;min-height:48px;display:flex;align-items:center;color:var(--ink-2);
   opacity:.75}
 #quitter{margin-right:10px}
-.camps{flex:1;display:flex;gap:10px;padding:0 10px;min-height:0}
+.camps{flex:1 1 auto;display:flex;gap:10px;padding:0 10px;min-height:200px}
 .camp{flex:1;border-radius:16px;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;color:var(--cream);min-height:96px;position:relative}
 .camp.nous{background:var(--navy)}

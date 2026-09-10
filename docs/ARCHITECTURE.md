@@ -94,6 +94,20 @@ Ils viennent de la note de concept et ne se négocient pas à la légère.
 | Gestes | que des appuis — aucun glissement, aucun appui long, aucun double appui |
 | Délais | aucun : rien ne disparaît seul, rien ne se valide au bout de trois secondes |
 | Veille | l'écran reste allumé pendant une partie (`navigator.wakeLock`) |
+| Hauteur | `100svh` et non `100dvh` — voir ci-dessous |
+
+### Pourquoi `svh` et pas `dvh`
+
+`dvh` vaut la hauteur de fenêtre **sans** les barres du navigateur. Dans Safari ou Chrome sur
+iPhone, le bas d'une vue passait donc sous la barre d'outils, et comme aucune vue ne défilait, le
+bouton d'action devenait **inatteignable**. `svh` est la hauteur quand les barres sont présentes —
+la plus petite, donc la seule sûre. En application installée il n'y a pas de barres et les deux
+valeurs coïncident.
+
+Deux filets en plus : chaque vue peut défiler en dernier recours (mieux vaut une vue qui glisse
+qu'un bouton qu'on ne peut pas toucher), et les rangées de bas d'écran sont en `flex:0 0 auto`,
+donc jamais comprimées. Mesuré de 844 à 420 px de haut : le bouton d'action est atteignable
+partout, et l'accueil ne défile à aucune de ces hauteurs.
 
 ## Ce qui ne doit jamais régresser
 
