@@ -1,6 +1,6 @@
 /* Le compteur doit s'ouvrir sur un terrain sans réseau : tout tient dans ce cache.
    Changer VERSION à chaque mise en ligne — l'ancien cache est effacé à l'activation. */
-const VERSION = "compteur-2026-09-10-1";
+const VERSION = "compteur-2026-09-10-2";
 const COQUILLE = [
   ".", "index.html", "manifest.webmanifest",
   "type/jost-400.woff2", "type/jost-600.woff2", "type/franklin-400.woff2",
@@ -24,7 +24,9 @@ self.addEventListener("fetch", e => {
   if (e.request.method !== "GET" || new URL(e.request.url).origin !== location.origin) return;
   e.respondWith(caches.match(e.request).then(hit => {
     const frais = fetch(e.request).then(r => {
-      if (r && r.ok) caches.open(VERSION).then(c => c.put(e.request, r.clone()));
+      // `redirected` : depuis l'ancienne adresse Netlify, tout part désormais en 301 vers le
+      // domaine, et mettre en cache une réponse redirigée lève une exception.
+      if (r && r.ok && !r.redirected) caches.open(VERSION).then(c => c.put(e.request, r.clone()));
       return r;
     }).catch(() => hit);
     return hit || frais;

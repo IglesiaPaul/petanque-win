@@ -3,6 +3,17 @@
   publish = "."
   command = ""
 
+# Une seule origine, et une seule. Une application installée depuis l'adresse Netlify et une
+# installée depuis le domaine sont deux applications différentes pour le navigateur : deux
+# icônes, deux caches, et surtout deux historiques de parties qui ne se voient pas. Le motif
+# ne vise que le sous-domaine de production — les previews de branche, en
+# « <branche>--petanque-win.netlify.app », continuent de répondre chez elles.
+[[redirects]]
+  from = "https://petanque-win.netlify.app/*"
+  to = "https://petanque.win/:splat"
+  status = 301
+  force = true
+
 # Le service worker et la page ne doivent jamais venir du cache du navigateur : sinon une
 # nouvelle version ne s'installe pas et les téléphones gardent l'ancienne pendant des semaines.
 [[headers]]

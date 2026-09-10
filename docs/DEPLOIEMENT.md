@@ -36,6 +36,16 @@ Deux pièges, dans l'ordre où on les rencontre :
 À défaut de CNAME sur l'apex, un enregistrement A vers `75.2.60.5`
 ([documentation Netlify](https://docs.netlify.com/manage/domains/configure-domains/configure-external-dns/)).
 
+## Une seule origine
+
+`netlify.toml` renvoie `petanque-win.netlify.app` vers `petanque.win` en 301. Ce n'est pas de la
+cosmétique : pour un navigateur, une application installée depuis l'une et une installée depuis
+l'autre sont **deux applications**, avec deux caches et deux historiques de parties qui ne se
+voient pas. Une seule adresse circule, donc.
+
+La règle ne vise que le sous-domaine de production : les previews de branche, en
+`<branche>--petanque-win.netlify.app`, répondent toujours chez elles.
+
 ## Avant chaque mise en ligne
 
 1. **Changer `VERSION` dans `sw.js`.** Sans ça, les téléphones déjà installés gardent l'ancienne
