@@ -906,50 +906,68 @@ function compter(evenement, format) {
 }
 
 /* ---------- l'espace du club ----------
-   Les compteurs de tous les téléphones, contre une phrase de passe. La phrase n'est pas dans
-   ce fichier : elle est posée une fois dans la base par le propriétaire, comparée côté serveur
-   à son empreinte, et retenue ici seulement après avoir été acceptée. */
-async function demanderChiffres(cle) {
-  const r = await fetch(BASE + "/rest/v1/rpc/chiffres", {
+   Aucun secret partagé, aucune phrase de passe : une vraie authentification. Le compte est
+   créé une fois depuis le tableau de bord du projet, et la lecture des compteurs est une
+   règle de sécurité côté serveur — un compte qui n'est pas administrateur voit zéro ligne,
+   pas une erreur. Le jeton de rafraîchissement est le seul élément retenu ici ; il s'échange
+   contre un jeton d'accès valable une heure, et « Se déconnecter » l'efface. */
+async function authPost(chemin, corps) {
+  const r = await fetch(BASE + "/auth/v1/" + chemin, {
     method: "POST",
-    headers: { "Content-Type": "application/json",
-               apikey: CLE_PUBLIABLE, Authorization: "Bearer " + CLE_PUBLIABLE },
-    body: JSON.stringify({ p_cle: cle }),
+    headers: { "Content-Type": "application/json", apikey: CLE_PUBLIABLE },
+    body: JSON.stringify(corps),
   });
-  if (!r.ok) throw new Error(r.status === 400 || r.status === 404 ? "cle" : "reseau");
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.error_description || d.msg || d.error || "refus");
+  return d;
+}
+
+async function jetonAcces() {
+  const rafraichir = lire().jetonClub;
+  if (!rafraichir) return null;
+  const d = await authPost("token?grant_type=refresh_token", { refresh_token: rafraichir });
+  ecrire({ ...lire(), jetonClub: d.refresh_token });
+  return d.access_token;
+}
+
+async function lireCompteurs(acces) {
+  const depuis = new Date(); depuis.setDate(depuis.getDate() - 60);
+  const r = await fetch(BASE + "/rest/v1/usage_jour?select=jour,evenement,format,n"
+    + "&jour=gte." + jour(depuis) + "&order=jour.desc",
+    { headers: { apikey: CLE_PUBLIABLE, Authorization: "Bearer " + acces } });
+  if (!r.ok) throw new Error("lecture refusée");
   return r.json();
 }
 
 function porteAdmin(message) {
   $("#admin-corps").innerHTML = `<p class="chapo">Les chiffres du club.</p>
     <p>Combien de parties ont été comptées, tous téléphones confondus. Aucune donnée de joueur
-      n'existe ici : il n'y a que des compteurs.</p>
+      n'existe ici&nbsp;: il n'y a que des compteurs.</p>
     ${message ? `<p class="alerte">${echap(message)}</p>` : ""}
-    <div class="ajout" style="padding:0;margin-top:12px">
-      <input id="admin-cle" type="password" autocomplete="current-password"
-             placeholder="Phrase de passe" aria-label="Phrase de passe">
-      <button id="admin-ouvrir">Ouvrir</button>
+    <div class="ajout" style="padding:0;margin-top:12px;flex-direction:column">
+      <input id="admin-mail" type="email" autocomplete="username" inputmode="email"
+             placeholder="Adresse" aria-label="Adresse électronique" style="width:100%">
+      <input id="admin-mdp" type="password" autocomplete="current-password"
+             placeholder="Mot de passe" aria-label="Mot de passe" style="width:100%">
+      <button id="admin-ouvrir" style="width:100%">Se connecter</button>
     </div>`;
-  $("#admin-ouvrir").onclick = () => ouvrirAdmin($("#admin-cle").value.trim());
-  $("#admin-cle").addEventListener("keydown", e => {
-    if (e.key === "Enter") ouvrirAdmin($("#admin-cle").value.trim());
-  });
+  const aller = () => connecterAdmin($("#admin-mail").value.trim(), $("#admin-mdp").value);
+  $("#admin-ouvrir").onclick = aller;
+  $("#admin-mdp").addEventListener("keydown", e => { if (e.key === "Enter") aller(); });
 }
 
-async function ouvrirAdmin(cle) {
-  if (!cle) return;
+async function connecterAdmin(mail, mdp) {
+  if (!mail || !mdp) return;
   $("#admin-corps").innerHTML = `<p class="chapo">Un instant…</p>`;
-  let lignes;
   try {
-    lignes = await demanderChiffres(cle);
+    const d = await authPost("token?grant_type=password", { email: mail, password: mdp });
+    ecrire({ ...lire(), jetonClub: d.refresh_token });
+    peindreAdmin(await lireCompteurs(d.access_token));
   } catch (e) {
-    ecrire({ ...lire(), cleClub: null });
-    porteAdmin(e.message === "cle" ? "Phrase de passe refusée."
-      : "Le serveur n'a pas répondu. Réessayez avec du réseau.");
-    return;
+    ecrire({ ...lire(), jetonClub: null });
+    porteAdmin(/Invalid|credentials|refus/i.test(e.message)
+      ? "Adresse ou mot de passe refusé." : "Le serveur n'a pas répondu. Réessayez avec du réseau.");
   }
-  ecrire({ ...lire(), cleClub: cle });
-  peindreAdmin(lignes);
 }
 
 function peindreAdmin(lignes) {
@@ -989,17 +1007,23 @@ function peindreAdmin(lignes) {
        prochaine partie jouée sur un téléphone qui n'a pas coupé le comptage.</p>`;
 
   html += `<p class="fin">Ces compteurs ne contiennent ni prénom, ni score, ni identifiant
-    d'appareil : la base n'a aucune colonne pour en porter un.
-    <button class="lien" id="admin-fermer" style="min-height:44px;padding:0">Oublier la phrase
-    de passe sur ce téléphone</button></p>`;
+    d'appareil&nbsp;: la base n'a aucune colonne pour en porter un.
+    <button class="lien" id="admin-fermer" style="min-height:44px;padding:0">Se déconnecter de
+    ce téléphone</button></p>`;
   $("#admin-corps").innerHTML = html;
-  $("#admin-fermer").onclick = () => { ecrire({ ...lire(), cleClub: null }); porteAdmin(""); };
+  $("#admin-fermer").onclick = () => { ecrire({ ...lire(), jetonClub: null }); porteAdmin(""); };
 }
 
-function entrerAdmin() {
+async function entrerAdmin() {
   montrer("admin");
-  const cle = lire().cleClub;
-  if (cle) ouvrirAdmin(cle); else porteAdmin("");
+  if (!lire().jetonClub) { porteAdmin(""); return; }
+  $("#admin-corps").innerHTML = `<p class="chapo">Un instant…</p>`;
+  try {
+    peindreAdmin(await lireCompteurs(await jetonAcces()));
+  } catch (e) {
+    ecrire({ ...lire(), jetonClub: null });
+    porteAdmin("La session a expiré.");
+  }
 }
 
 /* ---------- les chiffres, tirés du seul contenu de ce téléphone ----------

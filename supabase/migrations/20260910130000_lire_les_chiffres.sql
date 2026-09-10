@@ -1,3 +1,7 @@
+-- REMPLACÉE le 10 septembre par 20260910133000_admins_par_authentification.sql : la phrase de
+-- passe devait être tapée dans l'éditeur SQL du projet, où elle restait dans l'historique des
+-- requêtes. Une vraie authentification l'a remplacée. Ce fichier reste pour l'histoire.
+
 -- Lire les compteurs depuis l'application, sans embarquer de secret dans le code.
 --
 -- La page /#admin du site appelle chiffres(phrase). Le serveur compare l'empreinte SHA-256 de
