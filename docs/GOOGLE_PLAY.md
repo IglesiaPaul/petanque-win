@@ -100,8 +100,8 @@ d'identifiants publicitaires — l'application ne demande aucune permission Andr
 | Politique de confidentialité | `https://petanque.win/confidentialite.html` |
 | Développeur affiché | HEMPIN — nom, adresse, courriel et téléphone publics |
 | Icône | 512 × 512 — `icons/icon-512.png` |
-| Captures | au moins 2, téléphone : l'accueil, l'écran de partie, la feuille de fin |
-| Bandeau | 1024 × 500 — à faire |
+| Captures | 7 captures prêtes, 1080 × 2340, dans `brand/play/` du dépôt de travail |
+| Bandeau | 1024 × 500 — `brand/play/banniere-1024x500.png` |
 
 **Classification du contenu** : questionnaire IARC, aucun contenu sensible, aucune publicité,
 aucun achat. Attendu : 3+ / PEGI 3.
@@ -121,6 +121,46 @@ crédibilité du dossier.
 - [ ] Le formulaire Sécurité des données dit la même chose que la page Confidentialité
 - [ ] La clé de signature est sauvegardée hors de l'ordinateur et hors du dépôt
 - [ ] La description de la fiche explique en une ligne le lien entre HEMPIN et Pétanquistes
+
+## Les textes de la fiche
+
+**Description courte** (80 signes maximum) :
+
+> Le score de votre partie de pétanque, en deux gestes par mène.
+
+**Description complète** — à coller telle quelle :
+
+> Personne ne sait jamais le score. À la troisième mène quelqu'un demande où on en est, deux
+> joueurs répondent des chiffres différents, et la partie s'arrête le temps de recompter.
+>
+> Le compteur ne fait que ça, et il le fait bien.
+>
+> DEUX GESTES PAR MÈNE
+> Une équipe joue six boules — trois en tête-à-tête. Une mène rapporte donc de 1 à 6 points et
+> jamais autre chose : on touche l'équipe qui a marqué, puis le nombre de boules. Chaque bouton
+> écrit d'avance où il mène, pour que l'annonce se lise par-dessus l'épaule.
+>
+> FAIT POUR LE TERRAIN
+> Écran clair qui se lit au soleil. Aucune cible de comptage sous 96 pixels. L'écran reste allumé
+> pendant la partie. Aucun glissement, aucun appui long : que des appuis.
+>
+> SANS COMPTE, SANS RÉSEAU
+> Aucune inscription, aucune adresse, aucun mot de passe. Tout fonctionne hors connexion, et les
+> parties comme les prénoms restent sur votre téléphone.
+>
+> LES FACE-À-FACE
+> Nommez les joueurs, et l'application compte qui a gagné le plus contre qui — quelles que soient
+> les équipes, même avec des coéquipiers différents à chaque partie.
+>
+> SANS PUBLICITÉ, JAMAIS
+> Pas de publicité, rien qui vous identifie, rien qui vous suive. Seul un compteur anonyme de
+> parties est envoyé, pour savoir si l'outil sert, et il se coupe d'un bouton.
+>
+> Le compteur est édité par HEMPIN, société de Croissy-sur-Seine, pour la marque Pétanquistes —
+> le club de la même commune. Il est gratuit et son code est ouvert.
+
+La dernière ligne est celle qui explique pourquoi une application de pétanque est publiée par une
+société de chanvre. Sans elle, la fiche pose une question à laquelle personne ne répond.
 
 ## Le chanvre et la politique Play
 
