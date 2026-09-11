@@ -36,3 +36,11 @@ th{font-family:"Jost",sans-serif;font-size:.76rem;letter-spacing:.09em;text-tran
 .encadre p:last-child{margin-bottom:0}
 .pied{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);font-size:.92rem;
   color:var(--ink-2);display:flex;flex-wrap:wrap;gap:6px 18px}
+.carton{background:#fff;border-radius:12px;padding:15px 17px;margin:20px 0;
+  box-shadow:inset 0 0 0 2px var(--red)}
+.carton .etiquette{display:flex;align-items:center;gap:11px;margin:0 0 9px}
+.carton .carte{flex:0 0 auto;width:21px;height:29px;border-radius:3px;background:var(--red);
+  transform:rotate(-8deg);box-shadow:0 2px 6px rgba(221,20,46,.35)}
+.carton h3{margin:0;color:var(--red)}
+.carton p:last-child{margin-bottom:0}
+.carton .cite{font-style:italic}

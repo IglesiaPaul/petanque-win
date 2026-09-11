@@ -1,6 +1,6 @@
 /* Le compteur doit s'ouvrir sur un terrain sans réseau : tout tient dans ce cache.
    Changer VERSION à chaque mise en ligne — l'ancien cache est effacé à l'activation. */
-const VERSION = "compteur-2026-09-11-3";
+const VERSION = "compteur-2026-09-11-4";
 const COQUILLE = [
   ".", "index.html", "manifest.webmanifest", "legal.css",
   "confidentialite.html", "conditions.html", "mentions-legales.html",
