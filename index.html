@@ -1305,6 +1305,16 @@ function quitterSplash() {
 }
 $("#splash-passer").onclick = quitterSplash;
 
+/* Les adresses qui ouvrent une vue précise : les raccourcis longs-appui sur l'icône, et
+   l'espace du club. Tout le reste ouvre l'accueil. */
+function routeDirecte() {
+  const h = location.hash;
+  if (h === "#admin") { entrerAdmin(); return true; }
+  if (h === "#commencer") { peindreFormats(); montrer("format"); return true; }
+  if (h === "#chiffres") { peindreChiffres(); montrer("chiffres"); return true; }
+  return false;
+}
+
 /* ---------- départ ---------- */
 (function () {
   const d = lire();
@@ -1313,9 +1323,11 @@ $("#splash-passer").onclick = quitterSplash;
   choisirFormat(Number.isInteger(d.formatIdx) ? d.formatIdx : 1);   // doublette par défaut
   peindreAccueil();
   peindreFormats();
-  if (location.hash === "#admin") { splashFait = true; $("#splash").classList.remove("on");
-    entrerAdmin(); } else { setTimeout(quitterSplash, 3000); }
-  addEventListener("hashchange", () => { if (location.hash === "#admin") entrerAdmin(); });
+  // Les raccourcis de l'icône, et l'espace du club, entrent directement : on a touché un
+  // raccourci, on sait déjà à quoi ressemble la marque.
+  if (routeDirecte()) { splashFait = true; $("#splash").classList.remove("on"); }
+  else { setTimeout(quitterSplash, 3000); }
+  addEventListener("hashchange", routeDirecte);
   if ("serviceWorker" in navigator
       && (location.protocol === "https:" || location.hostname === "localhost"))
     navigator.serviceWorker.register("sw.js").catch(() => {});

@@ -6,14 +6,89 @@
   "dir": "ltr",
   "start_url": ".",
   "scope": ".",
+  "id": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#F2EADA",
   "theme_color": "#092C64",
-  "categories": ["sports", "utilities"],
+  "categories": [
+    "sports",
+    "utilities"
+  ],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Commencer une partie",
+      "short_name": "Commencer",
+      "description": "Choisir le format et compter",
+      "url": "./#commencer",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Les chiffres",
+      "short_name": "Chiffres",
+      "description": "Les parties de la semaine et les face-à-face",
+      "url": "./#chiffres",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "captures/02-accueil.png",
+      "sizes": "1080x2340",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "L'accueil : un seul bouton"
+    },
+    {
+      "src": "captures/04-la-partie.png",
+      "sizes": "1080x2340",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "La partie : le score en très grand"
+    },
+    {
+      "src": "captures/05-combien.png",
+      "sizes": "1080x2340",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Combien de boules : chaque bouton dit où il mène"
+    },
+    {
+      "src": "captures/06-la-fin.png",
+      "sizes": "1080x2340",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "La feuille de mènes, avec les boules"
+    }
   ]
 }
