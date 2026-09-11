@@ -65,6 +65,18 @@ L'ordre importe plus que la liste : **chaque étage ne s'ouvre que si le précé
 | **1 · avec un compte** | historique d'un téléphone à l'autre, classements entre amis ou dans un club | une base — Supabase |
 | **2 · plus tard** | calendrier régional des concours, résultats de club | — |
 
+## Qui édite
+
+**HEMPIN**, SASU au capital de 1 €, SIREN 109 454 454, siège social 4 allée du Vieux Jardin,
+78290 Croissy-sur-Seine. Directeur de la publication : Paul Iglesia — paul@hempin.org.
+
+L'association *Les Pétanquistes*, en cours de constitution dans la même commune, utilise
+l'application ; elle n'en est ni l'éditeur ni le responsable de traitement.
+
+[Mentions légales](https://petanque.win/mentions-legales.html) ·
+[Confidentialité](https://petanque.win/confidentialite.html) ·
+[Conditions](https://petanque.win/conditions.html)
+
 ## Licence
 
 Code sous [licence MIT](LICENSE). Le nom **Pétanquistes** et le blason n'en font pas partie.

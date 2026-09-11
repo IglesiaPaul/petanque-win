@@ -6,20 +6,24 @@ navigateur. Le code publié reste celui de ce dépôt : il n'y a pas de seconde 
 
 ## Ce qui bloque le calendrier, et qu'on ne contourne pas
 
-**Douze testeurs, quatorze jours.** Tout compte développeur personnel ouvert après le
-13 novembre 2023 doit faire tourner un **test fermé avec au moins 12 testeurs inscrits pendant
-14 jours consécutifs** avant de pouvoir demander l'accès à la production. Le compte vient d'être
-créé, donc la règle s'applique : **la production ne peut pas ouvrir avant deux semaines**, quelle
-que soit la qualité du dossier. Le groupe WhatsApp fournit les douze sans difficulté ; le délai,
-lui, ne se négocie pas.
+**Les douze testeurs ne s'appliquent PAS.** La règle du test fermé — 12 testeurs inscrits
+pendant 14 jours consécutifs — ne vise que les comptes **personnels** ouverts après le
+13 novembre 2023. Le compte est un **compte professionnel** au nom de HEMPIN, donc exempt : la
+production peut s'ouvrir directement, sans délai imposé. Un test fermé reste une bonne idée pour
+attraper les défauts sur de vrais téléphones, mais c'est un choix, pas une obligation.
 
 **API 36.** Depuis le 31 août 2026, une nouvelle application doit viser **Android 16 (API 36)**.
 C'est un réglage de la coque, pas du site : `bubblewrap` le pose, il faut juste vérifier qu'il ne
 retombe pas sur une valeur plus basse.
 
-**Vérification d'identité.** Depuis septembre 2026, les nouveaux comptes personnels doivent la
-faire. Sur la fiche publique, Play affiche le **nom légal, le pays et l'adresse électronique** —
-pas l'adresse postale, sauf dans certaines régions qui l'exigent.
+**Ce que Play affiche publiquement.** Pour un compte professionnel : **nom légal, adresse
+légale, adresse électronique et numéro de téléphone**. C'est plus qu'un compte personnel, et ce
+n'est pas négociable. Ici cela ne révèle rien de neuf — le siège social d'une SASU figure déjà au
+registre du commerce et se trouve en une recherche.
+
+**Le nom affiché sera HEMPIN**, sur une application de pétanque. Ce n'est pas un problème de
+politique, mais c'est une surprise pour qui lit la fiche : une ligne de la description doit
+expliquer le lien, plutôt que de le laisser deviner.
 
 ## Fabriquer la coque
 
@@ -94,6 +98,7 @@ d'identifiants publicitaires — l'application ne demande aucune permission Andr
 | Description courte | Le score de votre partie de pétanque, en deux gestes par mène. |
 | Catégorie | Sports |
 | Politique de confidentialité | `https://petanque.win/confidentialite.html` |
+| Développeur affiché | HEMPIN — nom, adresse, courriel et téléphone publics |
 | Icône | 512 × 512 — `icons/icon-512.png` |
 | Captures | au moins 2, téléphone : l'accueil, l'écran de partie, la feuille de fin |
 | Bandeau | 1024 × 500 — à faire |
@@ -115,4 +120,18 @@ crédibilité du dossier.
 - [ ] La coque vise API 36
 - [ ] Le formulaire Sécurité des données dit la même chose que la page Confidentialité
 - [ ] La clé de signature est sauvegardée hors de l'ordinateur et hors du dépôt
-- [ ] Douze testeurs inscrits, et la date de début du test notée quelque part
+- [ ] La description de la fiche explique en une ligne le lien entre HEMPIN et Pétanquistes
+
+## Le chanvre et la politique Play
+
+HEMPIN est une société du chanvre, et la boutique de vêtements viendra. La politique de Play
+interdit les applications qui **facilitent la vente de marijuana ou de produits contenant du
+THC**, et cite nommément le panier d'achat intégré comme exemple de violation.
+
+- **Textile et vêtement en chanvre** : autorisé. Ce n'est pas un produit de marijuana, et une
+  boutique de vêtements dans l'application ne pose aucun problème.
+- **Huiles CBD, comestibles, tout ce qui contient du THC** : interdit, quelle que soit la légalité
+  locale. Cela devrait rester sur le web, hors de l'application Android.
+
+La distinction porte sur ce que l'application fait, pas sur le nom de l'éditeur : publier un
+compteur de pétanque sous le nom HEMPIN ne pose aucune question.
