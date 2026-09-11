@@ -26,6 +26,16 @@
   [headers.values]
     Cache-Control = "no-cache"
 
+# Android ne lit assetlinks.json que servi en « application/json », sans redirection. Netlify
+# le déduit de l'extension, mais la vérification échoue en silence si jamais il s'en écarte :
+# autant le dire. Sans cache, parce que l'empreinte de la clé de Google s'y ajoute après la
+# première mise en ligne et doit être visible tout de suite.
+[[headers]]
+  for = "/.well-known/assetlinks.json"
+  [headers.values]
+    Content-Type = "application/json"
+    Cache-Control = "no-cache"
+
 # Polices et icônes portent leur version dans le cache du service worker : le navigateur
 # peut les garder longtemps.
 [[headers]]
