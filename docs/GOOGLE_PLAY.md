@@ -114,10 +114,12 @@ crédibilité du dossier.
 
 ## Ce qui doit être vrai avant d'envoyer
 
-- [ ] `contact@petanque.win` existe et reçoit le courrier (Cloudflare Email Routing, gratuit)
-- [ ] Les trois pages légales sont en ligne et atteignables sans compte
-- [ ] `assetlinks.json` porte l'empreinte **de Play**, pas celle de la clé locale
-- [ ] La coque vise API 36
+- [x] `contact@petanque.win` existe et reçoit le courrier (Cloudflare Email Routing, gratuit)
+- [x] Les trois pages légales sont en ligne et atteignables sans compte
+- [x] `assetlinks.json` porte l'empreinte **de Play**, pas celle de la clé locale
+      — `82:99:B2…` (Google, installation depuis le Store) et `C2:A1:60…` (clé de dépôt,
+      APK installé à la main). Android accepte dès qu'une des deux correspond.
+- [x] La coque vise API 36
 - [ ] Le formulaire Sécurité des données dit la même chose que la page Confidentialité
 - [ ] La clé de signature est sauvegardée hors de l'ordinateur et hors du dépôt
 - [ ] La description de la fiche explique en une ligne le lien entre HEMPIN et Pétanquistes
