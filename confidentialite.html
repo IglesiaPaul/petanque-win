@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Confidentialité — Le compteur</title>
+<meta name="description" content="Ce que Le compteur garde, ce qu'il envoie, et ce qu'il ne fait jamais.">
+<meta name="theme-color" content="#092C64">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="legal.css">
+</head>
+<body>
+<div class="bandeau"><img src="icons/blason.svg" alt="" width="38" height="38">
+  <a href="./">Le compteur</a></div>
+<main>
+<h1>Confidentialité</h1>
+<p class="maj">Mise à jour du 11 septembre 2026</p>
+<div class="encadre">
+<p><b>En une phrase.</b> Tout ce que vous écrivez dans Le compteur — les parties, les prénoms,
+vos chiffres — reste sur votre téléphone. La seule chose qui en sort est un compteur anonyme de
+parties, que vous pouvez couper.</p>
+</div>
+
+<h2>Qui est responsable</h2>
+<p>Le compteur est édité par <b>Paul Iglesia</b>, à titre personnel, en attendant la déclaration
+de l'association <i>Les Pétanquistes</i> prévue le 3 octobre 2026. À cette date, l'association
+deviendra responsable du traitement et cette page sera mise à jour.</p>
+<p>Pour toute question ou pour exercer vos droits : <b>contact@petanque.win</b>.</p>
+
+<h2>Ce qui reste sur votre téléphone</h2>
+<p>Ces données ne sont <b>jamais</b> envoyées, ni à nous, ni à personne. Elles vivent dans le
+stockage local de votre navigateur et personne d'autre que vous n'y a accès.</p>
+<table>
+<tr><th>Donnée</th><th>À quoi elle sert</th><th>Combien de temps</th></tr>
+<tr><td>La partie en cours</td><td>La reprendre si l'application se ferme</td><td>Jusqu'à la partie suivante</td></tr>
+<tr><td>Les parties terminées</td><td>Les revoir, calculer vos chiffres et les face-à-face</td><td>7 jours, puis effacées</td></tr>
+<tr><td>Les prénoms que vous écrivez</td><td>Composer les équipes sans retaper au clavier</td><td>Jusqu'à ce que vous les effaciez</td></tr>
+<tr><td>Vos réglages</td><td>Format de jeu, comptage coupé ou non</td><td>Jusqu'à ce que vous les changiez</td></tr>
+</table>
+<p>Pour tout effacer d'un coup : désinstallez l'application, ou effacez les données du site dans
+les réglages de votre navigateur. Nous n'en avons aucune copie, donc nous ne pouvons ni vous les
+rendre ni les supprimer à votre place — elles ne nous sont jamais parvenues.</p>
+
+<h3>Les prénoms que vous écrivez sont ceux d'autres personnes</h3>
+<p>Quand vous notez « Léa » pour composer une équipe, vous écrivez le prénom de quelqu'un d'autre.
+Cela reste sur votre téléphone, comme une note sur un carnet, et nous ne le voyons jamais. Nous
+vous demandons simplement d'en user comme d'un carnet : n'y écrivez que ce que la personne
+accepterait d'y voir écrit, et effacez-le quand il ne sert plus.</p>
+
+<h2>Ce qui sort du téléphone</h2>
+<h3>Le compteur de parties</h3>
+<p>Quand une partie se termine, l'application envoie un message qui dit ceci, et rien d'autre :</p>
+<div class="encadre"><p><code>{"p_evenement":"partie_finie","p_format":2}</code></p>
+<p>C'est-à-dire : <i>une partie a été finie, en doublette.</i></p></div>
+<p>Pas de score. Pas de prénom. Pas d'identifiant d'appareil, pas de numéro de session, rien qui
+permette de vous reconnaître d'une partie à l'autre ni de relier deux parties entre elles. La date
+est ajoutée par le serveur, pas par votre téléphone.</p>
+<p><b>Pourquoi.</b> Pour savoir si l'outil sert vraiment, avant d'y ajouter quoi que ce soit. Ce
+sont des compteurs agrégés par jour, consultés par l'éditeur seul.</p>
+<p><b>Comment le couper.</b> Menu → <i>Les chiffres</i> → <i>Ne pas compter mes parties</i>.
+L'application fonctionne exactement pareil.</p>
+<p><b>Base légale.</b> Intérêt légitime (article 6.1.f du RGPD) : mesurer l'usage d'un outil sans
+identifier personne. Comme aucune donnée personnelle n'est enregistrée, il n'y a rien à consulter,
+corriger ou supprimer dans ces compteurs — mais l'opposition est immédiate et sans condition, par
+l'interrupteur ci-dessus.</p>
+
+<h3>Ce que voit l'hébergeur</h3>
+<p>Comme pour tout site que vous ouvrez, le serveur qui vous répond voit votre adresse IP et le
+type de votre navigateur, le temps de la requête. Nous n'en conservons rien et n'en faisons rien.
+Ces traces techniques sont celles de nos prestataires, listés plus bas.</p>
+
+<h3>Le compte d'administration</h3>
+<p>Une page réservée à l'éditeur (<i>petanque.win/#admin</i>) affiche les compteurs. S'y connecter
+demande une adresse électronique et un mot de passe. Ces identifiants ne concernent que l'éditeur
+et ses éventuels collaborateurs — <b>jamais les joueurs</b>. Aucun compte n'est proposé aux
+utilisateurs de l'application, et la création de compte est désactivée.</p>
+
+<h2>Ce que nous ne faisons jamais</h2>
+<ul>
+<li><b>Aucune publicité</b>, d'aucune sorte.</li>
+<li><b>Aucun traceur publicitaire</b>, aucun outil de mesure d'audience tiers, aucun bouton de
+réseau social, aucune police chargée depuis un autre site.</li>
+<li><b>Aucune vente, aucun partage, aucune cession</b> de quoi que ce soit à qui que ce soit.</li>
+<li><b>Aucune permission du téléphone</b> : ni position, ni contacts, ni micro, ni appareil photo,
+ni carnet d'adresses.</li>
+<li><b>Aucun cookie.</b> L'application utilise le stockage local du navigateur uniquement pour
+faire fonctionner ce que vous lui demandez — garder la partie que vous comptez. C'est un usage
+strictement nécessaire au service demandé, qui ne requiert pas de consentement.</li>
+</ul>
+
+<h2>Les prestataires</h2>
+<p>Trois entreprises interviennent techniquement. Aucune ne reçoit de donnée de joueur, puisque
+aucune ne sort du téléphone.</p>
+<table>
+<tr><th>Qui</th><th>Pour quoi</th><th>Où</th></tr>
+<tr><td>Netlify</td><td>Héberger le site et l'application</td><td>Réseau mondial ; journaux techniques temporaires</td></tr>
+<tr><td>Supabase</td><td>La base des compteurs anonymes et le compte d'administration</td><td><b>Paris, France</b> (région eu-west-3)</td></tr>
+<tr><td>Cloudflare</td><td>Résoudre le nom de domaine petanque.win</td><td>Réseau mondial ; ne voit pas le contenu des pages</td></tr>
+</table>
+
+<h2>Les enfants</h2>
+<p>L'application ne demande aucun compte, aucune adresse et aucun âge : un enfant peut s'en servir
+pour compter une partie comme il se servirait d'une calculatrice, sans que rien le concernant ne
+soit enregistré nulle part. Nous ne collectons sciemment aucune donnée d'un mineur.</p>
+<p>Si vous notez le prénom d'un enfant pour composer une équipe, il reste sur votre téléphone et
+relève de votre responsabilité, comme une note écrite sur un carnet.</p>
+
+<h2>Vos droits</h2>
+<p>Le RGPD vous donne un droit d'accès, de rectification, d'effacement, de limitation, d'opposition
+et de portabilité. Ici, ils s'exercent principalement tout seuls : <b>les données vous concernant
+ne quittent pas votre téléphone</b>, vous y accédez et les effacez directement, sans nous
+demander.</p>
+<p>Pour toute question : <b>contact@petanque.win</b>. Vous pouvez aussi introduire une réclamation
+auprès de la <a href="https://www.cnil.fr">CNIL</a>.</p>
+
+<h2>Les changements</h2>
+<p>Cette page porte sa date de mise à jour. Si le fonctionnement change — par exemple le jour où
+des comptes de joueurs apparaîtront — la page sera modifiée <b>avant</b> le changement, pas après,
+et l'application le signalera.</p>
+<div class="pied">
+  <a href="./">Le compteur</a>
+  <a href="conditions.html">Conditions</a>
+  <a href="mentions-legales.html">Mentions légales</a>
+</div>
+</main>
+</body>
+</html>

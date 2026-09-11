@@ -131,7 +131,12 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
   box-shadow:inset 0 0 0 2px var(--rule)}
 .menu button b{font-family:"Jost",sans-serif;font-weight:600;font-size:1.2rem}
 .menu button span{font-size:.92rem;color:var(--ink-2);line-height:1.35}
-.menu button:active{background:#fff}
+.menu button:active,.menulien:active{background:#fff}
+.menulien{min-height:84px;border-radius:13px;background:var(--cream);padding:14px 18px;
+  text-align:left;display:flex;flex-direction:column;gap:3px;justify-content:center;
+  box-shadow:inset 0 0 0 2px var(--rule);text-decoration:none;color:inherit}
+.menulien b{font-family:"Jost",sans-serif;font-weight:600;font-size:1.2rem}
+.menulien span{font-size:.92rem;color:var(--ink-2);line-height:1.35}
 .bientot{margin:0 18px;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
 .page{overflow-y:auto}
 .prose{padding:16px 18px calc(28px + env(safe-area-inset-bottom));max-width:34rem;
@@ -463,6 +468,8 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
     <button data-va="journee"><b>Les parties</b><span>Ce qui s'est joué cette semaine</span></button>
     <button data-va="chiffres"><b>Les chiffres</b><span>Ce que ce téléphone a compté, et les face-à-face</span></button>
     <button data-va="apropos"><b>À propos</b><span>Ce que c'est, et qui le fait</span></button>
+    <a class="menulien" href="confidentialite.html"><b>Confidentialité</b>
+      <span>Ce qui reste sur ce téléphone, et ce qui en sort</span></a>
   </nav>
   <p class="bientot">L'histoire du club, la marque et les règles viendront ici, quand
     l'association sera déclarée et qu'il y aura quelque chose d'officiel à raconter.</p>
@@ -525,7 +532,10 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
       marque et non au club : n'importe quelle ville peut s'en servir, Croissy est simplement la
       première.</p>
     <p class="fin">Le code est ouvert —
-      <a href="https://github.com/IglesiaPaul/petanque-win">github.com/IglesiaPaul/petanque-win</a></p>
+      <a href="https://github.com/IglesiaPaul/petanque-win">github.com/IglesiaPaul/petanque-win</a><br>
+      <a href="confidentialite.html">Confidentialité</a> ·
+      <a href="conditions.html">Conditions d'utilisation</a> ·
+      <a href="mentions-legales.html">Mentions légales</a></p>
   </div>
 </section>
 

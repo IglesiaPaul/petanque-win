@@ -1,0 +1,38 @@
+@font-face{font-family:"Jost";src:url(type/jost-400.woff2) format("woff2");
+  font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Jost";src:url(type/jost-600.woff2) format("woff2");
+  font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"Libre Franklin";src:url(type/franklin-400.woff2) format("woff2");
+  font-weight:400;font-style:normal;font-display:swap}
+:root{--navy:#092C64;--red:#DD142E;--cream:#FBF6EC;--sand:#C9A66B;--ground:#F2EADA;
+  --rule:#D6C7A8;--ink-2:#3F4D68;--terre:#B08A48;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--navy);
+  font-family:"Libre Franklin","Jost",system-ui,sans-serif;font-size:17px;line-height:1.6}
+.bandeau{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--rule)}
+.bandeau img{width:38px;height:38px}
+.bandeau a{font-family:"Jost",sans-serif;font-weight:600;font-size:.86rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--navy);text-decoration:none}
+main{max-width:40rem;margin:0 auto;padding:24px 18px 56px}
+h1{font-family:"Jost",sans-serif;font-weight:600;font-size:2rem;line-height:1.1;margin:0 0 4px;
+  text-wrap:balance}
+.maj{font-family:"Jost",sans-serif;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--terre);margin:0 0 22px}
+h2{font-family:"Jost",sans-serif;font-weight:600;font-size:1.3rem;line-height:1.2;
+  margin:34px 0 8px;text-wrap:balance}
+h3{font-family:"Jost",sans-serif;font-weight:600;font-size:.84rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--terre);margin:24px 0 6px}
+p,li{margin:0 0 11px}
+ul,ol{padding-left:1.25em;margin:0 0 12px}
+b,strong{font-weight:600}
+a{color:var(--navy)}
+table{width:100%;border-collapse:collapse;font-size:.95rem;margin:10px 0 16px;display:block;
+  overflow-x:auto}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:"Jost",sans-serif;font-size:.76rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-2);font-weight:400}
+.encadre{background:var(--cream);border-radius:12px;padding:14px 16px;margin:16px 0;
+  box-shadow:inset 0 0 0 2px var(--rule)}
+.encadre p:last-child{margin-bottom:0}
+.pied{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);font-size:.92rem;
+  color:var(--ink-2);display:flex;flex-wrap:wrap;gap:6px 18px}
