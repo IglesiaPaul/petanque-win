@@ -2,6 +2,41 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<script>
+/* La langue, avant le premier rendu — pour que le thaï se coupe aux bons endroits, que le
+   splash soit dans la bonne langue et qu'un raccourci ouvre la bonne vue sans clignoter.
+   Ordre : le choix enregistré > « ?langue=xx » dans l'adresse (un QR scanné est un acte
+   délibéré : il est enregistré, puis retiré de l'adresse sans toucher au #) > la langue du
+   téléphone (jamais enregistrée : un téléphone français garde son stockage intact) > fr.
+   LANGUES est la barrière : tant qu'elle ne contient que "fr", rien de tout cela n'agit. */
+(function () {
+  var LANGUES = ["fr"];
+  var CLE = "petanquistes.compteur.v1", langue = null, url = null, d = {};
+  try { d = JSON.parse(localStorage.getItem(CLE)) || {}; } catch (e) {}
+  if (LANGUES.indexOf(d.langue) >= 0) langue = d.langue;
+  try {
+    var q = new URLSearchParams(location.search).get("langue");
+    if (q) {
+      if (LANGUES.indexOf(q) >= 0) {
+        langue = url = q;
+        d.langue = q;
+        try { localStorage.setItem(CLE, JSON.stringify(d)); } catch (e) {}
+      }
+      history.replaceState(null, "", location.pathname + location.hash);
+    }
+  } catch (e) {}
+  if (!langue) {
+    var prefs = navigator.languages || [navigator.language || "fr"];
+    for (var i = 0; i < prefs.length && !langue; i++) {
+      var l = String(prefs[i]).slice(0, 2).toLowerCase();
+      if (LANGUES.indexOf(l) >= 0) langue = l;
+    }
+  }
+  langue = langue || "fr";
+  document.documentElement.lang = langue;
+  window.LANGUES = LANGUES; window.LANGUE = langue; window.LANGUE_URL = url;
+})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Le compteur — Pétanquistes</title>
 <meta name="description" content="Le score d'une partie de pétanque, en deux gestes par mène. Sans compte, sans réseau, sans publicité.">
@@ -38,6 +73,14 @@
   font-weight:600;font-style:normal;font-display:swap}
 @font-face{font-family:"Libre Franklin";src:url(type/franklin-400.woff2) format("woff2");
   font-weight:400;font-style:normal;font-display:swap}
+/* Noto Sans Thai, pour le seul bloc thaï. « unicode-range » fait que Jost et Libre Franklin
+   gardent les chiffres, le latin et la ponctuation — le 13 est le même dans toutes les
+   langues — et qu'un téléphone qui n'affiche pas de thaï ne télécharge jamais ces fichiers.
+   Le nom porte une version : /type/ est servi immuable un an. */
+@font-face{font-family:"Noto Sans Thai";src:url(type/notothai-400-v1.woff2) format("woff2");
+  font-weight:400;font-style:normal;font-display:swap;unicode-range:U+0E00-0E7F}
+@font-face{font-family:"Noto Sans Thai";src:url(type/notothai-600-v1.woff2) format("woff2");
+  font-weight:600;font-style:normal;font-display:swap;unicode-range:U+0E00-0E7F}
 
 :root{
   --navy:#092C64; --red:#DD142E; --cream:#FBF6EC; --sand:#C9A66B;
@@ -48,7 +91,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{margin:0;background:var(--ground);color:var(--navy);
-  font-family:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-family:"Jost","Noto Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;
   font-size:17px;line-height:1.45;
   -webkit-user-select:none;user-select:none;touch-action:manipulation;
   overscroll-behavior:none}
@@ -75,7 +118,7 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 .splashtap{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:14px;color:var(--cream)}
 .sblason{width:150px;height:150px;animation:poser .7s cubic-bezier(.16,1,.3,1) both}
-.stitre{font-family:"Jost",sans-serif;font-weight:600;font-size:2rem;letter-spacing:.02em;
+.stitre{font-family:"Jost","Noto Sans Thai",sans-serif;font-weight:600;font-size:2rem;letter-spacing:.02em;
   animation:monter .5s .28s cubic-bezier(.16,1,.3,1) both}
 .ssous{font-size:.82rem;letter-spacing:.28em;text-transform:uppercase;color:var(--sand);
   animation:monter .5s .4s cubic-bezier(.16,1,.3,1) both}
@@ -100,7 +143,7 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 .voies button{min-height:112px;border-radius:14px;background:var(--cream);
   box-shadow:inset 0 0 0 2px var(--rule);display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:4px;padding:12px}
-.voies button b{font-family:"Jost",sans-serif;font-weight:600;font-size:1.5rem}
+.voies button b{font-family:"Jost","Noto Sans Thai",sans-serif;font-weight:600;font-size:1.5rem}
 .voies button span{font-size:.88rem;color:var(--ink-2)}
 .voies button:active{background:#fff}
 #equipes .choix{padding:0 14px;margin-top:4px}
@@ -129,21 +172,21 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 .menu button{min-height:84px;border-radius:13px;background:var(--cream);padding:14px 18px;
   text-align:left;display:flex;flex-direction:column;gap:3px;
   box-shadow:inset 0 0 0 2px var(--rule)}
-.menu button b{font-family:"Jost",sans-serif;font-weight:600;font-size:1.2rem}
+.menu button b{font-family:"Jost","Noto Sans Thai",sans-serif;font-weight:600;font-size:1.2rem}
 .menu button span{font-size:.92rem;color:var(--ink-2);line-height:1.35}
 .menu button:active,.menulien:active{background:#fff}
 .menulien{min-height:84px;border-radius:13px;background:var(--cream);padding:14px 18px;
   text-align:left;display:flex;flex-direction:column;gap:3px;justify-content:center;
   box-shadow:inset 0 0 0 2px var(--rule);text-decoration:none;color:inherit}
-.menulien b{font-family:"Jost",sans-serif;font-weight:600;font-size:1.2rem}
+.menulien b{font-family:"Jost","Noto Sans Thai",sans-serif;font-weight:600;font-size:1.2rem}
 .menulien span{font-size:.92rem;color:var(--ink-2);line-height:1.35}
 .bientot{margin:0 18px;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
 .page{overflow-y:auto}
 .prose{padding:16px 18px calc(28px + env(safe-area-inset-bottom));max-width:34rem;
-  margin:0 auto;font-family:"Libre Franklin","Jost",system-ui,sans-serif;font-size:1rem;
+  margin:0 auto;font-family:"Libre Franklin","Jost","Noto Sans Thai",system-ui,sans-serif;font-size:1rem;
   line-height:1.6;text-align:left}
-.prose .chapo{font-family:"Jost",sans-serif;font-size:1.15rem;line-height:1.45;margin:0 0 4px}
-.prose h3{font-family:"Jost",sans-serif;font-weight:600;font-size:.82rem;letter-spacing:.12em;
+.prose .chapo{font-family:"Jost","Noto Sans Thai",sans-serif;font-size:1.15rem;line-height:1.45;margin:0 0 4px}
+.prose h3{font-family:"Jost","Noto Sans Thai",sans-serif;font-weight:600;font-size:.82rem;letter-spacing:.12em;
   text-transform:uppercase;color:var(--terre);margin:26px 0 6px}
 .prose p{margin:0 0 10px}
 .prose ul,.prose ol{margin:0 0 10px;padding-left:1.3em}
@@ -155,14 +198,14 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 .tuiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 4px}
 .tuile{background:var(--cream);border-radius:12px;padding:14px;display:flex;flex-direction:column;
   gap:1px;box-shadow:inset 0 0 0 2px var(--rule)}
-.tuile b{font-family:"Jost",sans-serif;font-weight:600;font-size:2.4rem;line-height:1;
+.tuile b{font-family:"Jost","Noto Sans Thai",sans-serif;font-weight:600;font-size:2.4rem;line-height:1;
   font-variant-numeric:tabular-nums;color:var(--navy)}
-.tuile span{font-family:"Jost",sans-serif;font-size:.86rem;letter-spacing:.05em;color:var(--ink-2)}
+.tuile span{font-family:"Jost","Noto Sans Thai",sans-serif;font-size:.86rem;letter-spacing:.05em;color:var(--ink-2)}
 .tuile i{font-style:normal;font-size:.78rem;color:var(--terre)}
 .rangees{display:flex;flex-direction:column;gap:1px;background:var(--rule);border-radius:10px;
   overflow:hidden;margin-bottom:6px}
 .rangee,.duel{background:var(--ground);padding:12px 14px;display:flex;align-items:baseline;
-  justify-content:space-between;gap:10px;font-family:"Jost",sans-serif}
+  justify-content:space-between;gap:10px;font-family:"Jost","Noto Sans Thai",sans-serif}
 .rangee b,.duel b{font-weight:600;font-variant-numeric:tabular-nums}
 .duel{justify-content:space-between}
 .duel span{flex:1;color:var(--ink-2)}
@@ -171,7 +214,7 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 .prose .cap{font-size:.88rem;color:var(--ink-2);margin-top:8px}
 .bascule{width:100%;min-height:64px;margin-top:6px;border-radius:12px;background:var(--cream);
   box-shadow:inset 0 0 0 2px var(--rule);padding:0 16px;display:flex;align-items:center;
-  justify-content:space-between;gap:12px;font-family:"Jost",sans-serif;font-size:1rem;
+  justify-content:space-between;gap:12px;font-family:"Jost","Noto Sans Thai",sans-serif;font-size:1rem;
   text-align:left}
 .bascule i{flex:none;width:52px;height:30px;border-radius:15px;background:var(--rule);
   position:relative;transition:background .15s}
@@ -252,14 +295,14 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 
 /* Arrêter une partie en cours ne se fait pas d'un appui : la sortie sûre est en premier,
    plus grande, et c'est elle qu'un pouce trouve. */
-.rare{max-width:26rem;margin:12px auto 0;padding:0 20px;font-family:"Libre Franklin","Jost",sans-serif;
+.rare{max-width:26rem;margin:12px auto 0;padding:0 20px;font-family:"Libre Franklin","Jost","Noto Sans Thai",sans-serif;
   font-size:.92rem;line-height:1.5;color:var(--ink-2);text-transform:none;letter-spacing:0}
 .deuxvoies{flex:1 1 auto;display:flex;flex-direction:column;justify-content:flex-end;gap:14px;
   padding:0 14px calc(20px + env(safe-area-inset-bottom))}
 .deuxvoies .gros{min-height:132px}
 .deuxvoies .pale{background:var(--cream);color:var(--navy);box-shadow:inset 0 0 0 3px var(--rule);
   min-height:104px;flex-direction:column;gap:5px;font-size:1.25rem}
-.deuxvoies .pale small{font-family:"Libre Franklin","Jost",sans-serif;font-weight:400;
+.deuxvoies .pale small{font-family:"Libre Franklin","Jost","Noto Sans Thai",sans-serif;font-weight:400;
   font-size:.86rem;letter-spacing:0;text-transform:none;color:var(--ink-2);line-height:1.35;
   max-width:24rem}
 .jour{width:100%;display:flex;flex-direction:column;gap:1px;background:var(--rule);
@@ -365,6 +408,40 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 .feuille tr.nulle td:last-child{text-decoration:none;font-size:.76rem;letter-spacing:.08em;
   text-transform:uppercase}
 .feuille tr.nulle td.track{text-decoration:none}
+
+/* ---------- thaï ---------- */
+/* Le thaï n'a ni majuscules ni espaces entre les mots, et ses voyelles hautes et marques de
+   ton montent à 1,45 em quand les capitales de Jost s'arrêtent à 0,94 : les libellés en
+   capitales espacées du compteur le rendent illisible, et une interligne serrée le rogne.
+   Ces règles ne touchent que les éléments dont la langue est le thaï — la marque, marquée
+   lang="fr", garde ses capitales et son espacement. La classe .thai est posée par le code
+   sur un prénom écrit en thaï dans une interface française ou anglaise : un prénom n'a pas
+   de langue, mais il a une écriture. */
+.ssous:lang(th),.lien:lang(th),.pagebar span:lang(th),.retourpage:lang(th),.prose h3:lang(th),
+.tuile span:lang(th),.sous:lang(th),.gros.reprise small:lang(th),.format button span:lang(th),
+.legende:lang(th),.legende em:lang(th),.eqc .tag:lang(th),#q-gerer:lang(th),.jour i:lang(th),
+.barre:lang(th),.barre button:lang(th),.camp .nom:lang(th),.consigne:lang(th),
+.entete .quoi:lang(th),.boule .vers:lang(th),.retour:lang(th),.feuille th:lang(th),
+.feuille tr.nulle td:last-child:lang(th),.thai{letter-spacing:0;text-transform:none}
+.camp .nom:lang(th),.boule .vers:lang(th),.entete .qui:lang(th),.entete .quoi:lang(th),
+.eqc .liste:lang(th),.chip:lang(th),.menu span:lang(th),.menulien span:lang(th),
+.consigne:lang(th),.barre:lang(th),.jour div:lang(th),.deuxvoies .pale small:lang(th),
+.gros.reprise small:lang(th),.rare:lang(th),.note:lang(th),.thai{line-height:1.4}
+.verdict:lang(th){line-height:1.35}
+/* Huit pour cent de plus sur les petits libellés, plancher 14 px : le thaï paraît d'un
+   cinquième plus petit que les capitales qu'il remplace. Les grands blocs ne bougent pas,
+   pour que l'accueil tienne toujours dans 100svh. */
+.pagebar span:lang(th),.legende:lang(th){font-size:max(14px,.86rem)}
+.format button span:lang(th),.eqc .tag:lang(th),.feuille th:lang(th){font-size:max(14px,.78rem)}
+.jour i:lang(th){font-size:max(14px,.84rem)}
+.barre:lang(th),.boule .vers:lang(th){font-size:max(14px,.89rem)}
+.barre button:lang(th),.feuille tr.nulle td:last-child:lang(th){font-size:max(14px,.82rem)}
+.tuile span:lang(th),.entete .quoi:lang(th),.retourpage:lang(th){font-size:.93rem}
+.gros.reprise small:lang(th){font-size:.92rem}
+.consigne:lang(th){font-size:.97rem}
+/* Un surnom thaï sans frontière de dictionnaire ne doit pas pousser le score hors de l'écran. */
+.chip:lang(th),.duel span:lang(th),.eqc .liste:lang(th),.thai{overflow-wrap:anywhere}
+a:lang(th){text-underline-offset:.35em}
 </style>
 </head>
 <body>
@@ -373,19 +450,19 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 <section class="vue on" id="splash" aria-label="Ouverture">
   <button class="splashtap" id="splash-passer" aria-label="Passer">
     <img class="sblason" src="icons/blason.svg" alt="" width="150" height="150">
-    <span class="stitre">Le compteur</span>
-    <span class="ssous">Pétanquistes</span>
+    <span class="stitre" lang="fr">Le compteur</span>
+    <span class="ssous" lang="fr">Pétanquistes</span>
   </button>
 </section>
 
 <section class="vue" id="accueil">
   <div class="topbar">
-    <span class="marque">Pétanquistes</span>
+    <span class="marque" lang="fr">Pétanquistes</span>
     <button id="burger" aria-label="Ouvrir le menu"><i></i><i></i><i></i></button>
   </div>
   <div class="centre">
     <img class="blason" src="icons/blason.svg" alt="" width="118" height="118">
-    <h1 class="titre">Le compteur</h1>
+    <h1 class="titre" lang="fr">Le compteur</h1>
     <p class="sous">Le score, en deux gestes par mène</p>
   </div>
   <div class="bas">
@@ -603,7 +680,7 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
     <img class="blason fanfare" id="blason-fin" src="icons/blason.svg" alt="" width="86" height="86">
     <p class="verdict" id="verdict"></p>
     <p class="chiffre" id="score-final"></p>
-    <span class="fanny" id="fanny" hidden>Fanny</span>
+    <span class="fanny" id="fanny" lang="fr" hidden>Fanny</span>
     <table class="feuille" id="feuille"></table>
     <button class="gros" id="rejouer">Nouvelle partie</button>
     <button class="retour" id="au-debut" style="width:100%;margin:0;min-height:60px">Accueil</button>
@@ -907,6 +984,9 @@ const CLE_PUBLIABLE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
 
 function compter(evenement, format) {
   if (lire().sansCompteur) return;
+  // Seul le site public compte : une préversion (staging, aperçu de branche) ou un poste
+  // de développement ne doit pas entrer dans les chiffres du club.
+  if (location.hostname !== "petanque.win") return;
   try {
     fetch(BASE + "/rest/v1/rpc/compter", {
       method: "POST", mode: "cors", keepalive: true,
