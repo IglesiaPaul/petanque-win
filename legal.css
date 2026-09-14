@@ -44,3 +44,26 @@ th{font-family:"Jost",sans-serif;font-size:.76rem;letter-spacing:.09em;text-tran
 .carton h3{margin:0;color:var(--red)}
 .carton p:last-child{margin-bottom:0}
 .carton .cite{font-style:italic}
+
+/* Les autres langues d'une page, à droite du bandeau ; la courante en terre. */
+.bandeau .langues{margin-left:auto;display:flex;gap:12px;font-family:"Jost",sans-serif;font-size:.8rem;
+  letter-spacing:.06em;text-transform:uppercase}
+.langues a{color:var(--ink-2);text-decoration:none}
+.langues a[aria-current]{color:var(--terre)}
+.langues a[lang="th"],[lang="th"]{letter-spacing:0;text-transform:none}
+.courtoisie{font-size:.95rem}
+.brouillon p{margin:0;font-weight:600;color:var(--red)}
+
+/* Comment jouer : les figures, le sommaire, les renvois au règlement */
+figure{margin:16px 0 22px}
+figure img{display:block;width:100%;height:auto;border-radius:12px;background:var(--ground);
+  box-shadow:inset 0 0 0 1px var(--rule)}
+figcaption{font-size:.9rem;line-height:1.5;color:var(--ink-2);margin-top:8px}
+.sommaire{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin:18px 0 8px;font-family:"Jost",sans-serif;
+  font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+.sommaire a{text-decoration:none;color:var(--ink-2);padding:4px 0;border-bottom:1px solid var(--rule)}
+.sommaire a:hover{color:var(--navy)}
+.regle .art{display:inline-block;margin-left:6px;font-family:"Jost",sans-serif;font-size:.72rem;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--terre);white-space:nowrap}
+h2[id]{scroll-margin-top:16px}
+@media (max-width:420px){.sommaire{grid-template-columns:1fr}}
