@@ -442,13 +442,15 @@ button{font:inherit;color:inherit;border:0;background:none;margin:0;cursor:point
 /* Un surnom thaï sans frontière de dictionnaire ne doit pas pousser le score hors de l'écran. */
 .chip:lang(th),.duel span:lang(th),.eqc .liste:lang(th),.thai{overflow-wrap:anywhere}
 a:lang(th){text-underline-offset:.35em}
+.sys{font-family:system-ui,sans-serif;font-style:normal}
+#langues button[aria-pressed="true"] b{color:var(--red)}
 </style>
 </head>
 <body>
 
 <!-- ============ accueil ============ -->
-<section class="vue on" id="splash" aria-label="Ouverture">
-  <button class="splashtap" id="splash-passer" aria-label="Passer">
+<section class="vue on" id="splash" aria-label="Ouverture" data-i18n-attr="aria-label:splash.ouverture">
+  <button class="splashtap" id="splash-passer" aria-label="Passer" data-i18n-attr="aria-label:splash.passer">
     <img class="sblason" src="icons/blason.svg" alt="" width="150" height="150">
     <span class="stitre" lang="fr">Le compteur</span>
     <span class="ssous" lang="fr">Pétanquistes</span>
@@ -458,117 +460,121 @@ a:lang(th){text-underline-offset:.35em}
 <section class="vue" id="accueil">
   <div class="topbar">
     <span class="marque" lang="fr">Pétanquistes</span>
-    <button id="burger" aria-label="Ouvrir le menu"><i></i><i></i><i></i></button>
+    <button id="burger" aria-label="Ouvrir le menu" data-i18n-attr="aria-label:accueil.menu"><i></i><i></i><i></i></button>
   </div>
   <div class="centre">
     <img class="blason" src="icons/blason.svg" alt="" width="118" height="118">
     <h1 class="titre" lang="fr">Le compteur</h1>
-    <p class="sous">Le score, en deux gestes par mène</p>
+    <p class="sous" data-i18n="accueil.sous">Le score, en deux gestes par mène</p>
   </div>
   <div class="bas">
-    <button class="gros reprise" id="reprendre" hidden></button>
-    <button class="gros" id="commencer">Commencer une partie</button>
+    <button class="gros reprise" id="reprendre" hidden><span></span><small></small></button>
+    <button class="gros" id="commencer" data-i18n="accueil.commencer">Commencer une partie</button>
     <button class="lien" id="voir-jour" hidden></button>
   </div>
 </section>
 
 <!-- ============ le format ============ -->
 <section class="vue" id="format">
-  <div class="pagebar"><button class="retourpage" data-va="accueil">Retour</button>
-    <span>1 sur 2</span></div>
-  <div class="entete"><div class="qui">Combien de joueurs&nbsp;?</div>
-    <div class="quoi">Le clavier s'y ajuste</div></div>
-  <div class="voies" id="formats" role="group" aria-label="Format de la partie">
-    <button data-max="3" data-joueurs="1"><b>Tête-à-tête</b><span>1 contre 1 · trois boules par équipe</span></button>
-    <button data-max="6" data-joueurs="2"><b>Doublette</b><span>2 contre 2 · six boules par équipe</span></button>
-    <button data-max="6" data-joueurs="3"><b>Triplette</b><span>3 contre 3 · six boules par équipe</span></button>
+  <div class="pagebar"><button class="retourpage" data-va="accueil" data-i18n="commun.retour">Retour</button>
+    <span data-i18n="format.etape">1 sur 2</span></div>
+  <div class="entete"><div class="qui" data-i18n="format.qui">Combien de joueurs&nbsp;?</div>
+    <div class="quoi" data-i18n="format.quoi">Le clavier s'y ajuste</div></div>
+  <div class="voies" id="formats" role="group" aria-label="Format de la partie" data-i18n-attr="aria-label:format.aria">
+    <button data-max="3" data-joueurs="1"><b data-i18n="format.tete">Tête-à-tête</b><span data-i18n="format.tete_detail">1 contre 1 · trois boules par équipe</span></button>
+    <button data-max="6" data-joueurs="2"><b data-i18n="format.doublette">Doublette</b><span data-i18n="format.doublette_detail">2 contre 2 · six boules par équipe</span></button>
+    <button data-max="6" data-joueurs="3"><b data-i18n="format.triplette">Triplette</b><span data-i18n="format.triplette_detail">3 contre 3 · six boules par équipe</span></button>
   </div>
 </section>
 
 <!-- ============ les équipes ============ -->
 <section class="vue" id="equipes">
-  <div class="pagebar"><button class="retourpage" data-va="format">Retour</button>
-    <span>2 sur 2</span></div>
-  <div class="entete"><div class="qui">Qui joue&nbsp;?</div>
-    <div class="quoi" id="e-quoi">Facultatif — on peut compter sans les noms</div></div>
+  <div class="pagebar"><button class="retourpage" data-va="format" data-i18n="commun.retour">Retour</button>
+    <span data-i18n="equipes.etape">2 sur 2</span></div>
+  <div class="entete"><div class="qui" data-i18n="equipes.qui">Qui joue&nbsp;?</div>
+    <div class="quoi" id="e-quoi" data-i18n="equipes.facultatif">Facultatif — on peut compter sans les noms</div></div>
   <div class="choix">
-    <button class="eqc nous" data-camp="nous"><span class="tag">Nous</span>
-      <span class="liste" id="l-nous">Ajouter des prénoms</span></button>
-    <button class="eqc eux" data-camp="eux"><span class="tag">Eux</span>
-      <span class="liste" id="l-eux">Ajouter des prénoms</span></button>
+    <button class="eqc nous" data-camp="nous"><span class="tag" data-i18n="commun.nous">Nous</span>
+      <span class="liste" id="l-nous" data-i18n="equipes.ajouter_prenoms">Ajouter des prénoms</span></button>
+    <button class="eqc eux" data-camp="eux"><span class="tag" data-i18n="commun.eux">Eux</span>
+      <span class="liste" id="l-eux" data-i18n="equipes.ajouter_prenoms">Ajouter des prénoms</span></button>
   </div>
-  <p class="note">Les prénoms restent sur ce téléphone. Écrits une fois, ils se touchent
+  <p class="note" data-i18n="equipes.note">Les prénoms restent sur ce téléphone. Écrits une fois, ils se touchent
     ensuite — personne ne retape un clavier au bord du terrain.</p>
   <div class="bas">
-    <button class="gros" id="lancer">Commencer</button>
+    <button class="gros" id="lancer" data-i18n="equipes.commencer">Commencer</button>
   </div>
 </section>
 
 <!-- ============ la partie ============ -->
 <section class="vue" id="partie">
   <div class="barre">
-    <span>13 points</span>
+    <span data-i18n="partie.points">13 points</span>
     <span id="mene-n">Mène 1</span>
-    <button id="quitter">Arrêter</button>
+    <button id="quitter" data-i18n="partie.arreter">Arrêter</button>
   </div>
   <div class="camps">
     <button class="camp nous" id="camp-nous">
-      <span class="nom">Nous</span><span class="pts" id="pts-nous">0</span></button>
+      <span class="nom" data-i18n="commun.nous">Nous</span><span class="pts" id="pts-nous">0</span></button>
     <button class="camp eux" id="camp-eux">
-      <span class="nom">Eux</span><span class="pts" id="pts-eux">0</span></button>
+      <span class="nom" data-i18n="commun.eux">Eux</span><span class="pts" id="pts-eux">0</span></button>
   </div>
-  <p class="consigne">Touchez l'équipe qui vient de marquer</p>
+  <p class="consigne" data-i18n="partie.consigne">Touchez l'équipe qui vient de marquer</p>
   <div class="derniere">
     <p id="derniere-txt" aria-live="polite">La partie commence.</p>
-    <button class="corriger" id="corriger" hidden>Corriger</button>
+    <button class="corriger" id="corriger" hidden data-i18n="partie.corriger">Corriger</button>
   </div>
 </section>
 
 <!-- ============ combien ============ -->
 <section class="vue" id="combien">
   <div class="entete">
-    <div class="qui"><em id="c-qui" class="nous">Nous</em> marque</div>
-    <div class="quoi">Combien de boules devant&nbsp;?</div>
+    <div class="qui" id="c-titre"><em id="c-qui" class="nous">Nous</em> marque</div>
+    <div class="quoi" data-i18n="combien.quoi">Combien de boules devant&nbsp;?</div>
   </div>
   <div class="boules" id="boules"></div>
-  <button class="retour" id="retour">Ce n'est pas la bonne équipe</button>
+  <button class="retour" id="retour" data-i18n="combien.retour">Ce n'est pas la bonne équipe</button>
 </section>
 
 <!-- ============ le menu ============ -->
 <section class="vue" id="menu">
-  <div class="pagebar"><button class="retourpage" data-va="accueil">Fermer</button>
-    <span>Le menu</span></div>
+  <div class="pagebar"><button class="retourpage" data-va="accueil" data-i18n="commun.fermer">Fermer</button>
+    <span data-i18n="menu.titre">Le menu</span></div>
   <nav class="menu">
-    <button data-va="accueil"><b>Le compteur</b><span>Tenir le score d'une partie</span></button>
-    <button data-va="installer"><b>Installer sur le téléphone</b>
-      <span>Pour l'ouvrir sans navigateur, et sans réseau</span></button>
-    <button data-va="journee"><b>Les parties</b><span>Ce qui s'est joué cette semaine</span></button>
-    <button data-va="chiffres"><b>Les chiffres</b><span>Ce que ce téléphone a compté, et les face-à-face</span></button>
-    <button data-va="apropos"><b>À propos</b><span>Ce que c'est, et qui le fait</span></button>
-    <a class="menulien" href="confidentialite.html"><b>Confidentialité</b>
-      <span>Ce qui reste sur ce téléphone, et ce qui en sort</span></a>
+    <button data-va="accueil"><b data-i18n="menu.compteur">Le compteur</b><span data-i18n="menu.compteur_detail">Tenir le score d'une partie</span></button>
+    <button data-va="installer"><b data-i18n="menu.installer">Installer sur le téléphone</b>
+      <span data-i18n="menu.installer_detail">Pour l'ouvrir sans navigateur, et sans réseau</span></button>
+    <button data-va="journee"><b data-i18n="menu.parties">Les parties</b><span data-i18n="menu.parties_detail">Ce qui s'est joué cette semaine</span></button>
+    <button data-va="chiffres"><b data-i18n="menu.chiffres">Les chiffres</b><span data-i18n="menu.chiffres_detail">Ce que ce téléphone a compté, et les face-à-face</span></button>
+    <a class="menulien" href="jouer.html" data-page="jouer" hidden><b data-i18n="menu.jouer">Comment jouer</b>
+      <span data-i18n="menu.jouer_detail">La prise, les pieds dans le cercle, et les règles</span></a>
+    <button data-va="apropos"><b data-i18n="menu.apropos">À propos</b><span data-i18n="menu.apropos_detail">Ce que c'est, et qui le fait</span></button>
+    <button data-va="langue" id="menu-langue" hidden><b data-i18n="menu.langue">Langue</b>
+      <span>Français · English · <i class="sys" lang="th">ไทย</i></span></button>
+    <a class="menulien" href="confidentialite.html" data-page="confidentialite"><b data-i18n="menu.confidentialite">Confidentialité</b>
+      <span data-i18n="menu.confidentialite_detail">Ce qui reste sur ce téléphone, et ce qui en sort</span></a>
   </nav>
-  <p class="bientot">L'histoire du club, la marque et les règles viendront ici, quand
+  <p class="bientot" data-i18n="menu.bientot">L'histoire du club, la marque et les règles viendront ici, quand
     l'association sera déclarée et qu'il y aura quelque chose d'officiel à raconter.</p>
 </section>
 
 <!-- ============ installer ============ -->
 <section class="vue page" id="installer">
-  <div class="pagebar"><button class="retourpage" data-va="menu">Retour</button>
-    <span>Installer</span></div>
+  <div class="pagebar"><button class="retourpage" data-va="menu" data-i18n="commun.retour">Retour</button>
+    <span data-i18n="installer.titre">Installer</span></div>
   <div class="prose">
-    <p class="chapo">Posé sur l'écran d'accueil, le compteur s'ouvre comme une application :
+    <p class="chapo" data-i18n="installer.chapo">Posé sur l'écran d'accueil, le compteur s'ouvre comme une application :
       sans barre de navigateur, sans réseau, et il garde les parties du jour.</p>
-    <h3>Sur iPhone</h3>
-    <ol><li>Ouvrez <b>petanque.win</b> dans <b>Safari</b> — pas dans un autre navigateur.</li>
+    <h3 data-i18n="installer.iphone">Sur iPhone</h3>
+    <ol data-i18n-html="installer.iphone_html"><li>Ouvrez <b>petanque.win</b> dans <b>Safari</b> — pas dans un autre navigateur.</li>
       <li>Touchez <b>Partager</b>, le carré avec la flèche vers le haut.</li>
       <li>Descendez jusqu'à <b>Sur l'écran d'accueil</b>, puis <b>Ajouter</b>.</li></ol>
-    <h3>Sur Android</h3>
-    <ol><li>Ouvrez <b>petanque.win</b> dans Chrome.</li>
+    <h3 data-i18n="installer.android">Sur Android</h3>
+    <ol data-i18n-html="installer.android_html"><li>Ouvrez <b>petanque.win</b> dans Chrome.</li>
       <li>Chrome propose <b>Installer l'application</b> ; sinon, menu <b>⋮</b> puis
         <b>Ajouter à l'écran d'accueil</b>.</li></ol>
-    <h3>Ensuite</h3>
-    <p>L'icône est le cercle de la marque. Le compteur fonctionne au fond d'un terrain sans
+    <h3 data-i18n="installer.ensuite">Ensuite</h3>
+    <p data-i18n="installer.ensuite_texte">L'icône est le cercle de la marque. Le compteur fonctionne au fond d'un terrain sans
       réseau : tout ce dont il a besoin est déjà dans le téléphone. Une nouvelle version
       s'installe toute seule à la prochaine ouverture avec du réseau.</p>
   </div>
@@ -576,13 +582,13 @@ a:lang(th){text-underline-offset:.35em}
 
 <!-- ============ à propos ============ -->
 <section class="vue page" id="apropos">
-  <div class="pagebar"><button class="retourpage" data-va="menu">Retour</button>
-    <span>À propos</span></div>
+  <div class="pagebar"><button class="retourpage" data-va="menu" data-i18n="commun.retour">Retour</button>
+    <span data-i18n="apropos.titre">À propos</span></div>
   <div class="prose">
-    <p class="chapo">La gêne la plus fréquente d'une partie n'a rien à voir avec le jeu :
+    <p class="chapo" data-i18n="apropos.chapo">La gêne la plus fréquente d'une partie n'a rien à voir avec le jeu :
       personne ne sait le score. Le compteur ne fait que ça, et il le fait bien.</p>
-    <h3>Trois promesses</h3>
-    <ul>
+    <h3 data-i18n="apropos.promesses">Trois promesses</h3>
+    <ul data-i18n-html="apropos.promesses_html">
       <li><b>Sans compte.</b> Ni adresse, ni mot de passe, ni confirmation. On appuie sur
         <i>Commencer une partie</i> et on compte.</li>
       <li><b>Sans réseau.</b> Une fois ouvert, il fonctionne hors connexion. Les parties, les
@@ -590,27 +596,27 @@ a:lang(th){text-underline-offset:.35em}
       <li><b>Sans publicité.</b> Jamais, et rien qui vous identifie ni qui vous suive d'une
         fois sur l'autre.</li>
     </ul>
-    <h3>La seule chose qui est comptée</h3>
-    <p>Quand une partie se termine, l'application envoie un signal qui dit ceci et rien d'autre :
+    <h3 data-i18n="apropos.comptage">La seule chose qui est comptée</h3>
+    <p data-i18n-html="apropos.comptage1_html">Quand une partie se termine, l'application envoie un signal qui dit ceci et rien d'autre :
       <i>une partie a été finie, en tête-à-tête, en doublette ou en triplette.</i> Pas de score,
       pas de prénom, pas d'identifiant d'appareil, rien qui permette de vous reconnaître d'une
       partie à l'autre ni de relier deux parties entre elles.</p>
-    <p>C'est là pour une seule raison : savoir si le compteur sert vraiment, avant d'y ajouter
+    <p data-i18n-html="apropos.comptage2_html">C'est là pour une seule raison : savoir si le compteur sert vraiment, avant d'y ajouter
       quoi que ce soit. Le serveur qui reçoit ce signal voit votre adresse, comme tout site que
       vous ouvrez ; nous n'en gardons rien. <b>Vous pouvez couper ce comptage</b> dans
       <i>Les chiffres</i>, et le compteur fonctionne exactement pareil.</p>
 
-    <h3>Deux gestes par mène</h3>
-    <p>Une équipe joue six boules — trois en tête-à-tête. Une mène rapporte donc de 1 à 6 points
+    <h3 data-i18n="apropos.gestes">Deux gestes par mène</h3>
+    <p data-i18n="apropos.gestes_texte">Une équipe joue six boules — trois en tête-à-tête. Une mène rapporte donc de 1 à 6 points
       et jamais autre chose : on touche l'équipe qui a marqué, puis le nombre de boules. Chaque
       bouton écrit d'avance où il mène, pour que les autres lisent l'annonce par-dessus l'épaule.</p>
-    <h3>Qui</h3>
-    <p>Un outil de la marque <b>Pétanquistes</b>, née avec le club en formation à
+    <h3 data-i18n="apropos.qui">Qui</h3>
+    <p data-i18n-html="apropos.qui1_html">Un outil de la marque <b>Pétanquistes</b>, née avec le club en formation à
       Croissy-sur-Seine. Il appartient à la marque et non au club : n'importe quelle ville peut
       s'en servir, Croissy est simplement la première.</p>
-    <p>L'application est éditée par <b>HEMPIN</b>, SASU dont le siège est à Croissy-sur-Seine —
+    <p data-i18n-html="apropos.qui2_html">L'application est éditée par <b>HEMPIN</b>, SASU dont le siège est à Croissy-sur-Seine —
       voir les <a href="mentions-legales.html">mentions légales</a>.</p>
-    <p class="fin">Le code est ouvert —
+    <p class="fin" data-i18n-html="apropos.fin_html">Le code est ouvert —
       <a href="https://github.com/IglesiaPaul/petanque-win">github.com/IglesiaPaul/petanque-win</a><br>
       <a href="confidentialite.html">Confidentialité</a> ·
       <a href="conditions.html">Conditions d'utilisation</a> ·
@@ -628,30 +634,30 @@ a:lang(th){text-underline-offset:.35em}
 
 <!-- ============ les chiffres ============ -->
 <section class="vue page" id="chiffres">
-  <div class="pagebar"><button class="retourpage" data-va="menu">Retour</button>
-    <span>Les chiffres</span></div>
+  <div class="pagebar"><button class="retourpage" data-va="menu" data-i18n="commun.retour">Retour</button>
+    <span data-i18n="chiffres.titre">Les chiffres</span></div>
   <div class="prose" id="chiffres-corps"></div>
 </section>
 
 <!-- ============ les parties du jour ============ -->
 <section class="vue page" id="journee">
-  <div class="pagebar"><button class="retourpage" data-va="accueil">Retour</button>
-    <span>Les parties du jour</span></div>
+  <div class="pagebar"><button class="retourpage" data-va="accueil" data-i18n="commun.retour">Retour</button>
+    <span data-i18n="journee.titre">Les parties du jour</span></div>
   <div id="jour"></div>
-  <p class="bientot" id="jour-vide" hidden>Aucune partie cette semaine. Les parties restent sur ce
+  <p class="bientot" id="jour-vide" hidden data-i18n="journee.vide">Aucune partie cette semaine. Les parties restent sur ce
     téléphone et s'effacent au bout de sept jours.</p>
 </section>
 
 <!-- ============ arrêter ============ -->
 <section class="vue" id="arreter">
   <div class="entete">
-    <div class="qui">Arrêter la partie&nbsp;?</div>
+    <div class="qui" data-i18n="arreter.qui">Arrêter la partie&nbsp;?</div>
     <div class="quoi" id="a-score"></div>
     <p class="rare" id="a-rare"></p>
   </div>
   <div class="deuxvoies">
-    <button class="gros" id="a-non">Reprendre la partie</button>
-    <button class="gros pale" id="a-oui">Arrêter là<small>Personne ne gagne : elle sera
+    <button class="gros" id="a-non" data-i18n="arreter.reprendre">Reprendre la partie</button>
+    <button class="gros pale" id="a-oui" data-i18n-html="arreter.la_html">Arrêter là<small>Personne ne gagne : elle sera
       inscrite comme arrêtée</small></button>
   </div>
 </section>
@@ -659,19 +665,28 @@ a:lang(th){text-underline-offset:.35em}
 <!-- ============ qui joue ============ -->
 <section class="vue" id="qui">
   <div class="entete">
-    <div class="qui">Qui joue chez <em id="q-camp" class="nous">Nous</em>&nbsp;?</div>
-    <div class="quoi" id="q-compte">Jusqu'à deux joueurs</div>
+    <div class="qui" id="q-titre">Qui joue chez <em id="q-camp" class="nous">Nous</em>&nbsp;?</div>
+    <div class="quoi" id="q-compte" data-i18n="qui.jusqua_2">Jusqu'à deux joueurs</div>
   </div>
   <div class="listej" id="roster"></div>
   <div class="ajout">
     <input id="q-nom" type="text" autocomplete="off" autocapitalize="words" spellcheck="false"
-           maxlength="18" placeholder="Un prénom" aria-label="Un prénom à ajouter">
-    <button id="q-add">Ajouter</button>
+           maxlength="18" placeholder="Un prénom" aria-label="Un prénom à ajouter"
+           data-i18n-attr="placeholder:qui.placeholder;aria-label:qui.aria_ajout">
+    <button id="q-add" data-i18n="qui.ajouter">Ajouter</button>
   </div>
   <div class="basqui">
-    <button id="q-gerer">Gérer la liste</button>
-    <button class="retour" id="q-ok">Terminé</button>
+    <button id="q-gerer" data-i18n="qui.gerer">Gérer la liste</button>
+    <button class="retour" id="q-ok" data-i18n="qui.termine">Terminé</button>
   </div>
+</section>
+
+<!-- ============ la langue ============ -->
+<!-- N'apparaît dans le menu que si LANGUES en ouvre plus d'une. -->
+<section class="vue page" id="langue">
+  <div class="pagebar"><button class="retourpage" data-va="menu" data-i18n="commun.retour">Retour</button>
+    <span data-i18n="langue.titre">Langue</span></div>
+  <nav class="menu" id="langues"></nav>
 </section>
 
 <!-- ============ fin ============ -->
@@ -682,8 +697,8 @@ a:lang(th){text-underline-offset:.35em}
     <p class="chiffre" id="score-final"></p>
     <span class="fanny" id="fanny" lang="fr" hidden>Fanny</span>
     <table class="feuille" id="feuille"></table>
-    <button class="gros" id="rejouer">Nouvelle partie</button>
-    <button class="retour" id="au-debut" style="width:100%;margin:0;min-height:60px">Accueil</button>
+    <button class="gros" id="rejouer" data-i18n="fin.rejouer">Nouvelle partie</button>
+    <button class="retour" id="au-debut" style="width:100%;margin:0;min-height:60px" data-i18n="fin.accueil">Accueil</button>
   </div>
 </section>
 
@@ -696,6 +711,85 @@ a:lang(th){text-underline-offset:.35em}
 const $ = s => document.querySelector(s);
 const CLE = "petanquistes.compteur.v1";
 const BUT = 13;
+
+/* ---------- les langues ----------
+   Le dictionnaire est fondu ici par tools/build_i18n.py : une chaîne de l'interface vit dans
+   app/i18n/<langue>.json, jamais dans ce fichier. En français, la passe de traduction ne
+   s'exécute pas : le balisage ci-dessus est ce qui s'affiche, et la construction a vérifié
+   qu'il vaut fr.json mot pour mot. Les peintres, eux, passent toujours par t() — avec les
+   mêmes mots. */
+/*i18n:debut*/
+const I18N = {"fr":{"$meta":{"langue":"fr","nom":"Français","intl":"fr-FR","statut":"publie"},"$court":["accueil.commencer","equipes.commencer_sans","combien.retour","partie.consigne","partie.corriger","arreter.reprendre"],"$dynamiques":["qui.jusqua_"],"commun.retour":"Retour","commun.fermer":"Fermer","commun.nous":"Nous","commun.eux":"Eux","commun.score":"{a} à {b}","commun.score_tiret":"{a} – {b}","accueil.reprendre":"Reprendre la partie","accueil.reprendre_detail":"{score} · mène {n}","accueil.parties_jour":{"one":"1 partie aujourd'hui","other":"{n} parties aujourd'hui"},"accueil.parties_semaine":"Les parties de la semaine","journee.aujourdhui":"Aujourd'hui","journee.hier":"Hier","journee.arretee":"Arrêtée","journee.egalite":"Égalité","equipes.ajouter_prenoms":"Ajouter des prénoms","equipes.nommes":{"one":"1 joueur nommé — on peut commencer","other":"{n} joueurs nommés — on peut commencer"},"equipes.facultatif":"Facultatif — on peut compter sans les noms","equipes.commencer":"Commencer","equipes.commencer_sans":"Commencer sans les noms","qui.titre_html":"Qui joue chez {equipe} ?","qui.gerer_consigne":"Touchez un prénom pour le retirer de la liste","qui.liste":"{noms} — {k} sur {n}","qui.jusqua_1":"Jusqu'à un joueur","qui.jusqua_2":"Jusqu'à deux joueurs","qui.jusqua_3":"Jusqu'à trois joueurs","qui.vide_html":"<p class=\"videj\">Aucun prénom pour l'instant. Écrivez-en un ci-dessous : il restera dans la liste pour les parties suivantes.<\/p>","partie.mene":"Mène {n}","partie.commence":"La partie commence.","partie.derniere_html":"Mène {no} : <b>{equipe} +{pts}<\/b> — {score}","combien.marque_html":"{equipe} marque","combien.vers_html":"{equipe} à {n}","combien.gagne_html":"{equipe} gagne {n}","combien.aria":{"one":"1 boule : {equipe} passe à {n}","other":"{b} boules : {equipe} passe à {n}"},"combien.aria_gagne":{"one":"1 boule : {equipe} passe à {n}, et gagne","other":"{b} boules : {equipe} passe à {n}, et gagne"},"arreter.score":"{nous} {n} — {e} {eux}","arreter.aucune_mene":"Aucune mène jouée pour l'instant","arreter.rare_jouee":"Une partie va presque toujours jusqu'à 13. Si vous n'avez rien demandé, c'est un appui de trop : reprenez.","arreter.rare_vierge":"La partie vient de commencer. Si vous n'avez rien demandé, c'est un appui de trop : reprenez.","fin.arretee":"Partie arrêtée","fin.gagne_html":"{equipe} gagne","fin.th_mene":"Mène","fin.th_boules":"Les boules","fin.th_points":"Points","fin.th_score":"Score","fin.corrigee":"corrigée","chiffres.rien":"Rien encore.","chiffres.rien_detail":"Les chiffres se remplissent tout seuls à mesure que des parties se terminent, et ne comptent que ce téléphone. Ils portent sur les sept derniers jours.","chiffres.chapo":"Sept jours, sur ce téléphone.","chiffres.parties_finies":{"one":"partie finie","other":"parties finies"},"chiffres.dont_arretees":{"one":"dont {n} arrêtée","other":"dont {n} arrêtées"},"chiffres.menes_jouees":"mènes jouées","chiffres.corrigees":{"one":"{n} corrigée","other":"{n} corrigées"},"chiffres.points_par_mene":"points par mène","chiffres.fannys":{"one":"fanny","other":"fannys"},"chiffres.h_formats":"Les formats","chiffres.h_duels":"Les face-à-face","chiffres.duels_aucun":"Aucun pour l'instant. Un face-à-face se compte dès que deux joueurs nommés se retrouvent dans des camps opposés — même avec des coéquipiers différents à chaque partie.","chiffres.duels_nommez":"Nommez les joueurs avant de commencer une partie.","chiffres.duels_intro":"Qui a gagné le plus, l'un contre l'autre, quelles que soient les équipes.","chiffres.duels_reste":{"one":"Et {n} autre paire qui ne s'est croisée qu'une fois.","other":"Et {n} autres paires qui ne se sont croisées qu'une fois."},"chiffres.h_comptage":"Le comptage","chiffres.comptage_html":"Les chiffres ci-dessus ne quittent pas ce téléphone : ils portent sur les sept derniers jours, comme les parties. <b>Une seule chose est envoyée<\/b>, quand une partie se termine : qu'une partie a été finie, et dans quel format. Ni score, ni prénom, ni rien qui vous reconnaisse d'une fois sur l'autre. Cela sert à savoir si le compteur sert.","chiffres.ne_pas_compter":"Ne pas compter mes parties","langue.titre":"Langue","langue.comme_telephone":"Comme le téléphone","splash.ouverture":"Ouverture","splash.passer":"Passer","accueil.menu":"Ouvrir le menu","accueil.sous":"Le score, en deux gestes par mène","accueil.commencer":"Commencer une partie","format.etape":"1 sur 2","format.qui":"Combien de joueurs ?","format.quoi":"Le clavier s'y ajuste","format.aria":"Format de la partie","format.tete":"Tête-à-tête","format.tete_detail":"1 contre 1 · trois boules par équipe","format.doublette":"Doublette","format.doublette_detail":"2 contre 2 · six boules par équipe","format.triplette":"Triplette","format.triplette_detail":"3 contre 3 · six boules par équipe","equipes.etape":"2 sur 2","equipes.qui":"Qui joue ?","equipes.note":"Les prénoms restent sur ce téléphone. Écrits une fois, ils se touchent ensuite — personne ne retape un clavier au bord du terrain.","partie.points":"13 points","partie.arreter":"Arrêter","partie.consigne":"Touchez l'équipe qui vient de marquer","partie.corriger":"Corriger","combien.quoi":"Combien de boules devant ?","combien.retour":"Ce n'est pas la bonne équipe","menu.titre":"Le menu","menu.compteur":"Le compteur","menu.compteur_detail":"Tenir le score d'une partie","menu.installer":"Installer sur le téléphone","menu.installer_detail":"Pour l'ouvrir sans navigateur, et sans réseau","menu.parties":"Les parties","menu.parties_detail":"Ce qui s'est joué cette semaine","menu.chiffres":"Les chiffres","menu.chiffres_detail":"Ce que ce téléphone a compté, et les face-à-face","menu.jouer":"Comment jouer","menu.jouer_detail":"La prise, les pieds dans le cercle, et les règles","menu.apropos":"À propos","menu.apropos_detail":"Ce que c'est, et qui le fait","menu.langue":"Langue","menu.confidentialite":"Confidentialité","menu.confidentialite_detail":"Ce qui reste sur ce téléphone, et ce qui en sort","menu.bientot":"L'histoire du club, la marque et les règles viendront ici, quand l'association sera déclarée et qu'il y aura quelque chose d'officiel à raconter.","installer.titre":"Installer","installer.chapo":"Posé sur l'écran d'accueil, le compteur s'ouvre comme une application : sans barre de navigateur, sans réseau, et il garde les parties du jour.","installer.iphone":"Sur iPhone","installer.iphone_html":"<li>Ouvrez <b>petanque.win<\/b> dans <b>Safari<\/b> — pas dans un autre navigateur.<\/li> <li>Touchez <b>Partager<\/b>, le carré avec la flèche vers le haut.<\/li> <li>Descendez jusqu'à <b>Sur l'écran d'accueil<\/b>, puis <b>Ajouter<\/b>.<\/li>","installer.android":"Sur Android","installer.android_html":"<li>Ouvrez <b>petanque.win<\/b> dans Chrome.<\/li> <li>Chrome propose <b>Installer l'application<\/b> ; sinon, menu <b>⋮<\/b> puis <b>Ajouter à l'écran d'accueil<\/b>.<\/li>","installer.ensuite":"Ensuite","installer.ensuite_texte":"L'icône est le cercle de la marque. Le compteur fonctionne au fond d'un terrain sans réseau : tout ce dont il a besoin est déjà dans le téléphone. Une nouvelle version s'installe toute seule à la prochaine ouverture avec du réseau.","apropos.titre":"À propos","apropos.chapo":"La gêne la plus fréquente d'une partie n'a rien à voir avec le jeu : personne ne sait le score. Le compteur ne fait que ça, et il le fait bien.","apropos.promesses":"Trois promesses","apropos.promesses_html":"<li><b>Sans compte.<\/b> Ni adresse, ni mot de passe, ni confirmation. On appuie sur <i>Commencer une partie<\/i> et on compte.<\/li> <li><b>Sans réseau.<\/b> Une fois ouvert, il fonctionne hors connexion. Les parties, les prénoms et vos chiffres restent sur ce téléphone.<\/li> <li><b>Sans publicité.<\/b> Jamais, et rien qui vous identifie ni qui vous suive d'une fois sur l'autre.<\/li>","apropos.comptage":"La seule chose qui est comptée","apropos.comptage1_html":"Quand une partie se termine, l'application envoie un signal qui dit ceci et rien d'autre : <i>une partie a été finie, en tête-à-tête, en doublette ou en triplette.<\/i> Pas de score, pas de prénom, pas d'identifiant d'appareil, rien qui permette de vous reconnaître d'une partie à l'autre ni de relier deux parties entre elles.","apropos.comptage2_html":"C'est là pour une seule raison : savoir si le compteur sert vraiment, avant d'y ajouter quoi que ce soit. Le serveur qui reçoit ce signal voit votre adresse, comme tout site que vous ouvrez ; nous n'en gardons rien. <b>Vous pouvez couper ce comptage<\/b> dans <i>Les chiffres<\/i>, et le compteur fonctionne exactement pareil.","apropos.gestes":"Deux gestes par mène","apropos.gestes_texte":"Une équipe joue six boules — trois en tête-à-tête. Une mène rapporte donc de 1 à 6 points et jamais autre chose : on touche l'équipe qui a marqué, puis le nombre de boules. Chaque bouton écrit d'avance où il mène, pour que les autres lisent l'annonce par-dessus l'épaule.","apropos.qui":"Qui","apropos.qui1_html":"Un outil de la marque <b>Pétanquistes<\/b>, née avec le club en formation à Croissy-sur-Seine. Il appartient à la marque et non au club : n'importe quelle ville peut s'en servir, Croissy est simplement la première.","apropos.qui2_html":"L'application est éditée par <b>HEMPIN<\/b>, SASU dont le siège est à Croissy-sur-Seine — voir les <a href=\"mentions-legales.html\">mentions légales<\/a>.","apropos.fin_html":"Le code est ouvert — <a href=\"https://github.com/IglesiaPaul/petanque-win\">github.com/IglesiaPaul/petanque-win<\/a><br> <a href=\"confidentialite.html\">Confidentialité<\/a> · <a href=\"conditions.html\">Conditions d'utilisation<\/a> · <a href=\"mentions-legales.html\">Mentions légales<\/a>","chiffres.titre":"Les chiffres","journee.titre":"Les parties du jour","journee.vide":"Aucune partie cette semaine. Les parties restent sur ce téléphone et s'effacent au bout de sept jours.","arreter.qui":"Arrêter la partie ?","arreter.reprendre":"Reprendre la partie","arreter.la_html":"Arrêter là<small>Personne ne gagne : elle sera inscrite comme arrêtée<\/small>","qui.placeholder":"Un prénom","qui.aria_ajout":"Un prénom à ajouter","qui.ajouter":"Ajouter","qui.gerer":"Gérer la liste","qui.termine":"Terminé","fin.rejouer":"Nouvelle partie","fin.accueil":"Accueil"}};
+/*i18n:fin*/
+const LANGUES = window.LANGUES || ["fr"];
+let LANGUE = window.LANGUE || "fr";
+let LOCALE = "fr-FR";
+const dico = () => I18N[LANGUE] || I18N.fr || {};
+const remplir = (s, p) => p ? String(s).replace(/\{(\w+)\}/g, (m, k) => (k in p ? p[k] : m)) : String(s);
+function brut(cle) {
+  const d = dico();
+  return cle in d ? d[cle] : (I18N.fr && cle in I18N.fr ? I18N.fr[cle] : cle);
+}
+/* t : du texte, pour textContent et les attributs ; les paramètres y entrent tels quels. */
+function t(cle, p) { return remplir(brut(cle), p); }
+/* tn : la variante de pluriel de la langue, choisie par Intl.PluralRules ; « other » est obligatoire. */
+function tn(cle, n, p) {
+  let v = brut(cle);
+  if (v && typeof v === "object") v = v[new Intl.PluralRules(LOCALE).select(n)] || v.other;
+  return remplir(v, Object.assign({ n }, p));
+}
+/* tHtml : un gabarit qui porte du balisage. Les fragments passés sont insérés tels quels :
+   c'est à l'appelant d'échapper ce qui vient du clavier — comme avant. */
+const tHtml = t;
+const decimale = x => new Intl.NumberFormat(LOCALE, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(x);
+/* La passe de traduction : les éléments marqués, et les liens vers les pages de la langue. */
+function traduire(racine) {
+  racine.querySelectorAll("[data-i18n]").forEach(e => { e.textContent = t(e.dataset.i18n); });
+  racine.querySelectorAll("[data-i18n-html]").forEach(e => { e.innerHTML = brut(e.dataset.i18nHtml); });
+  racine.querySelectorAll("[data-i18n-attr]").forEach(e => {
+    e.dataset.i18nAttr.split(";").forEach(paire => {
+      const [nom, cle] = paire.split(":"); e.setAttribute(nom.trim(), t(cle.trim()));
+    });
+  });
+  racine.querySelectorAll("[data-page]").forEach(a => {
+    a.setAttribute("href", (LANGUE === "fr" ? "" : LANGUE + "/") + a.dataset.page + ".html");
+  });
+}
+/* Un prénom n'a pas de langue, mais il a une écriture : en thaï, il ne doit être ni espacé
+   ni rogné, même dans une interface française. Posé après chaque peinture. */
+const THAI = /[\u0E00-\u0E7F]/;
+function marquerThai(racine) {
+  racine.querySelectorAll(".camp .nom, .chip > span, .duel > span, .verdict em, .jour div > span, "
+    + "#a-score, #q-compte, .eqc .liste, .boule .vers, #c-qui, #derniere-txt b, #reprendre small")
+    .forEach(e => e.classList.toggle("thai", THAI.test(e.textContent)));
+}
+function changerLangue(l) {
+  if (!LANGUES.includes(l)) return;
+  ecrire({ ...lire(), langue: l });
+  LANGUE = l; LOCALE = (dico().$meta && dico().$meta.intl) || "fr-FR";
+  document.documentElement.lang = l;
+  traduire(document);
+  peindreLangue(); peindreAccueil();
+}
+function peindreLangue() {
+  const nav = $("#langues");
+  nav.innerHTML = "";
+  const choix = lire().langue;
+  const ligne = (texte, lang, actif, action) => {
+    const b = document.createElement("button");
+    const gras = document.createElement("b");
+    gras.textContent = texte; b.appendChild(gras);
+    if (lang) b.lang = lang;
+    b.setAttribute("aria-pressed", String(actif));
+    b.onclick = action;
+    nav.appendChild(b);
+  };
+  LANGUES.forEach(l => ligne((I18N[l] && I18N[l].$meta.nom) || l, l, choix === l, () => changerLangue(l)));
+  // « Comme le téléphone » efface le choix : le script de tête redétecte au prochain chargement.
+  ligne(t("langue.comme_telephone"), null, !choix, () => {
+    const d = lire(); delete d.langue; ecrire(d); location.reload();
+  });
+}
 
 let etat = null;          // la partie en cours
 let maxBoules = 6;        // le format choisi : boules par équipe
@@ -738,6 +832,7 @@ function archiver(partie) {
 /* La date du téléphone, pas celle de Greenwich. « toISOString » découpe en UTC : une partie
    commencée à une heure du matin en France était classée à la veille, donc dans le mauvais lot
    un soir de concours. « sv-SE » est le format ISO au fuseau local. */
+// NE PAS LOCALISER : une clé de stockage au format ISO, jamais un affichage.
 const jour = (d) => (d || new Date()).toLocaleDateString("sv-SE");
 const JOURS_GARDES = 7;
 
@@ -752,14 +847,14 @@ function fenetre() {
   return out;
 }
 const autre = c => (c === "nous" ? "eux" : "nous");
-const echap = t => String(t).replace(/[&<>"]/g,
-  c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const echap = s => String(s).replace(/[&<>"']/g,
+  c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 /* Le nom d'un camp : ses joueurs s'il en a, sinon Nous ou Eux. Une partie archivée porte sa
    propre composition, donc l'historique ne bouge pas quand la liste change. */
 function nomCamp(c, partie) {
   const j = ((partie ? partie.equipes : equipes) || {})[c] || [];
-  return j.length ? j.map(x => x.nom).join(" · ") : (c === "nous" ? "Nous" : "Eux");
+  return j.length ? j.map(x => x.nom).join(" · ") : t(c === "nous" ? "commun.nous" : "commun.eux");
 }
 
 function sauverNoms() {
@@ -786,22 +881,23 @@ function peindrePartie() {
   const n = total(etat, "nous"), e = total(etat, "eux");
   $("#pts-nous").textContent = n;
   $("#pts-eux").textContent = e;
-  $("#mene-n").textContent = "Mène " + (etat.menes.filter(m => !m.nulle).length + 1);
+  $("#mene-n").textContent = t("partie.mene", { n: etat.menes.filter(m => !m.nulle).length + 1 });
   const derniere = [...etat.menes].reverse().find(m => !m.nulle);
   $("#camp-nous").querySelector(".nom").textContent = nomCamp("nous", etat);
   $("#camp-eux").querySelector(".nom").textContent = nomCamp("eux", etat);
   $("#derniere-txt").innerHTML = derniere
-    ? `Mène ${derniere.no} : <b>${echap(nomCamp(derniere.camp, etat))} +${derniere.pts}</b>`
-      + ` — ${n} à ${e}`
-    : "La partie commence.";
+    ? tHtml("partie.derniere_html", { no: derniere.no, equipe: echap(nomCamp(derniere.camp, etat)),
+                                      pts: derniere.pts, score: t("commun.score", { a: n, b: e }) })
+    : t("partie.commence");
   $("#corriger").hidden = !derniere;
+  marquerThai($("#partie"));
 }
 
 function peindreCombien() {
   const acquis = total(etat, camp);
   const nom = nomCamp(camp, etat);
-  $("#c-qui").textContent = nom;
-  $("#c-qui").className = camp;
+  $("#c-titre").innerHTML = tHtml("combien.marque_html",
+    { equipe: `<em id="c-qui" class="${camp}">${echap(nom)}</em>` });
   const grille = $("#boules");
   grille.classList.toggle("trois", etat.max === 3);
   grille.innerHTML = "";
@@ -811,14 +907,15 @@ function peindreCombien() {
     const bouton = document.createElement("button");
     bouton.className = "boule" + (arrivee === BUT ? " gagne" : "");
     // le prénom vient du clavier : il est échappé avant d'entrer dans du HTML
-    bouton.innerHTML = `<span class="n">${b}</span>`
-      + `<span class="vers">${echap(arrivee === BUT ? nom + " gagne " : nom + " à ")}`
-      + `<b>${arrivee}</b></span>`;
+    bouton.innerHTML = `<span class="n">${b}</span><span class="vers">`
+      + tHtml(arrivee === BUT ? "combien.gagne_html" : "combien.vers_html",
+              { equipe: echap(nom), n: `<b>${arrivee}</b>` }) + `</span>`;
     bouton.setAttribute("aria-label",
-      `${b} boule${b > 1 ? "s" : ""} : ${nom} passe à ${arrivee}${arrivee === BUT ? ", et gagne" : ""}`);
+      tn(arrivee === BUT ? "combien.aria_gagne" : "combien.aria", b, { b, equipe: nom, n: arrivee }));
     bouton.onclick = () => marquer(b, pts);
     grille.appendChild(bouton);
   }
+  marquerThai($("#combien"));
 }
 
 /* Les boules d'une mène, dans la couleur de l'équipe qui les a placées : celles qui ont
@@ -834,22 +931,23 @@ function peindreFin(partie) {
   const n = total(partie, "nous"), e = total(partie, "eux");
   const gagnant = nomCamp(n >= e ? "nous" : "eux", partie);
   const perdant = Math.min(n, e);
-  $("#verdict").innerHTML = (partie.arretee || n === e) ? "Partie arrêtée"
-    : `<em class="${n > e ? "nous" : "eux"}">${echap(gagnant)}</em> gagne`;
-  $("#score-final").textContent = Math.max(n, e) + " à " + perdant;
+  $("#verdict").innerHTML = (partie.arretee || n === e) ? t("fin.arretee")
+    : tHtml("fin.gagne_html", { equipe: `<em class="${n > e ? "nous" : "eux"}">${echap(gagnant)}</em>` });
+  $("#score-final").textContent = t("commun.score", { a: Math.max(n, e), b: perdant });
   $("#fanny").hidden = partie.arretee || !(Math.max(n, e) === BUT && perdant === 0);
-  let html = "<tr><th>Mène</th><th>Les boules</th><th>Points</th><th>Score</th></tr>";
+  let html = `<tr><th>${t("fin.th_mene")}</th><th>${t("fin.th_boules")}</th>`
+           + `<th>${t("fin.th_points")}</th><th>${t("fin.th_score")}</th></tr>`;
   let cn = 0, ce = 0;
   partie.menes.forEach(m => {
     if (m.nulle) {
       html += `<tr class="nulle"><td>${m.no}</td>`
             + `<td class="track">${boules(m)}</td>`
-            + `<td>+${m.pts}</td><td>corrigée</td></tr>`;
+            + `<td>+${m.pts}</td><td>${t("fin.corrigee")}</td></tr>`;
       return;
     }
     if (m.camp === "nous") cn += m.pts; else ce += m.pts;
     html += `<tr><td>${m.no}</td><td class="track">${boules(m)}</td>`
-          + `<td class="gain ${m.camp}">+${m.pts}</td><td>${cn} – ${ce}</td></tr>`;
+          + `<td class="gain ${m.camp}">+${m.pts}</td><td>${t("commun.score_tiret", { a: cn, b: ce })}</td></tr>`;
   });
   $("#feuille").innerHTML = html;
   // chaque ligne, puis chaque boule, entre à son tour : l'index nourrit le retard CSS
@@ -859,6 +957,7 @@ function peindreFin(partie) {
   // la fanfare rejoue à chaque fin de partie, pas seulement à la première
   const bl = $("#blason-fin");
   bl.classList.remove("fanfare"); void bl.offsetWidth; bl.classList.add("fanfare");
+  marquerThai($("#fin"));
 }
 
 function peindreAccueil() {
@@ -867,8 +966,10 @@ function peindreAccueil() {
   const bouton = $("#reprendre");
   if (c && !c.fini && c.menes.length) {
     bouton.hidden = false;
-    bouton.innerHTML = `Reprendre la partie<small>${total(c, "nous")} à ${total(c, "eux")}`
-      + ` · mène ${c.menes.filter(m => !m.nulle).length + 1}</small>`;
+    bouton.firstElementChild.textContent = t("accueil.reprendre");
+    bouton.lastElementChild.textContent = t("accueil.reprendre_detail",
+      { score: t("commun.score", { a: total(c, "nous"), b: total(c, "eux") }),
+        n: c.menes.filter(m => !m.nulle).length + 1 });
   } else { bouton.hidden = true; }
 
   const garde = fenetre();
@@ -877,16 +978,15 @@ function peindreAccueil() {
   const voir = $("#voir-jour");
   voir.hidden = !gardees.length;
   voir.textContent = aujourdhui.length
-    ? (aujourdhui.length === 1 ? "1 partie aujourd'hui" : `${aujourdhui.length} parties aujourd'hui`)
-    : "Les parties de la semaine";
+    ? tn("accueil.parties_jour", aujourdhui.length) : t("accueil.parties_semaine");
   $("#jour-vide").hidden = gardees.length > 0;
 
   const ligne = p => {
     const n = total(p, "nous"), e = total(p, "eux");
-    const h = new Date(p.debut).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
-    const q = p.arretee ? "Arrêtée"
-            : n === e ? "Égalité" : echap(nomCamp(n > e ? "nous" : "eux", p));
-    return `<div><span>${q}</span><b>${n} – ${e}</b><i>${h}</i></div>`;
+    const h = new Date(p.debut).toLocaleTimeString(LOCALE, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+    const q = p.arretee ? t("journee.arretee")
+            : n === e ? t("journee.egalite") : echap(nomCamp(n > e ? "nous" : "eux", p));
+    return `<div><span>${q}</span><b>${t("commun.score_tiret", { a: n, b: e })}</b><i>${h}</i></div>`;
   };
   $("#jour").innerHTML = garde.map(j => {
     const duJour = gardees.filter(p => p.jour === j).reverse();
@@ -895,16 +995,17 @@ function peindreAccueil() {
          + `<div class="jour">${duJour.map(ligne).join("")}</div>`;
   }).join("");
   peindreChoix();
+  marquerThai($("#accueil")); marquerThai($("#journee"));
 }
 
 /* « Aujourd'hui », « Hier », puis la date écrite. */
 function nomDuJour(j) {
   const garde = fenetre();
-  if (j === garde[0]) return "Aujourd'hui";
-  if (j === garde[1]) return "Hier";
+  if (j === garde[0]) return t("journee.aujourdhui");
+  if (j === garde[1]) return t("journee.hier");
   const [a, m, d] = j.split("-");
   return new Date(Number(a), Number(m) - 1, Number(d))
-    .toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+    .toLocaleDateString(LOCALE, { weekday: "long", day: "numeric", month: "long" });
 }
 
 /* ---------- les joueurs ---------- */
@@ -912,19 +1013,20 @@ function peindreChoix() {
   ["nous", "eux"].forEach(c => {
     const el = $("#l-" + c);
     el.textContent = equipes[c].length ? equipes[c].map(x => x.nom).join(", ")
-                                       : "Ajouter des prénoms";
+                                       : t("equipes.ajouter_prenoms");
     el.classList.toggle("mis", equipes[c].length > 0);
   });
+  marquerThai($("#equipes"));
 }
 
 function peindreQui() {
-  $("#q-camp").textContent = campEdit === "nous" ? "Nous" : "Eux";
-  $("#q-camp").className = campEdit;
+  $("#q-titre").innerHTML = tHtml("qui.titre_html",
+    { equipe: `<em id="q-camp" class="${campEdit}">${t(campEdit === "nous" ? "commun.nous" : "commun.eux")}</em>` });
   const pris = equipes[campEdit];
   $("#q-compte").textContent = gerer
-    ? "Touchez un prénom pour le retirer de la liste"
-    : (pris.length ? `${pris.map(x => x.nom).join(", ")} — ${pris.length} sur ${nbJoueurs}`
-                   : `Jusqu'à ${["un", "deux", "trois"][nbJoueurs - 1]} joueur${nbJoueurs > 1 ? "s" : ""}`);
+    ? t("qui.gerer_consigne")
+    : (pris.length ? t("qui.liste", { noms: pris.map(x => x.nom).join(", "), k: pris.length, n: nbJoueurs })
+                   : t("qui.jusqua_" + nbJoueurs));
   $("#q-gerer").setAttribute("aria-pressed", String(gerer));
   $("#roster").innerHTML = roster.length ? roster.map(j => {
     const ici = pris.some(x => x.id === j.id);
@@ -932,8 +1034,8 @@ function peindreQui() {
     return `<button class="chip ${ici ? campEdit : ""}" data-id="${j.id}"`
          + `${la && !gerer ? " disabled" : ""}><span>${echap(j.nom)}</span>`
          + `${gerer ? '<i class="x">×</i>' : ""}</button>`;
-  }).join("") : '<p class="videj">Aucun prénom pour l\'instant. Écrivez-en un ci-dessous : '
-              + 'il restera dans la liste pour les parties suivantes.</p>';
+  }).join("") : tHtml("qui.vide_html");
+  marquerThai($("#qui"));
 }
 
 function toucherJoueur(id) {
@@ -954,12 +1056,13 @@ function toucherJoueur(id) {
 
 function ajouterJoueur() {
   const champ = $("#q-nom");
-  const v = champ.value.trim().replace(/\s+/g, " ");
+  // Un prénom collé depuis une messagerie peut porter des espaces sans chasse : retirées.
+  const v = champ.value.replace(/[\u200b-\u200d\ufeff]/g, "").trim().replace(/\s+/g, " ");
   if (!v) return;
   let j = roster.find(x => x.nom.toLowerCase() === v.toLowerCase());
   if (!j) {
     j = { id: "j" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), nom: v };
-    roster = roster.concat([j]).sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
+    roster = roster.concat([j]).sort((a, b) => a.nom.localeCompare(b.nom, LANGUE));
   }
   const libre = equipes[campEdit].length < nbJoueurs
     && !equipes[campEdit].some(x => x.id === j.id)
@@ -1065,7 +1168,7 @@ async function connecterAdmin(mail, mdp) {
 function peindreAdmin(lignes) {
   const finies = lignes.filter(l => l.evenement === "partie_finie");
   const arretees = lignes.filter(l => l.evenement === "partie_arretee");
-  const somme = t => t.reduce((s, l) => s + l.n, 0);
+  const somme = xs => xs.reduce((s, l) => s + l.n, 0);
   const jours = [...new Set(lignes.map(l => l.jour))].sort().reverse();
   const parJour = j => somme(lignes.filter(l => l.jour === j));
   const nomFormat = { 1: "Tête-à-tête", 2: "Doublette", 3: "Triplette", 0: "Format inconnu" };
@@ -1125,9 +1228,7 @@ function peindreChiffres() {
   const parties = (lire().parties || []).filter(p => garde.includes(p.jour) && p.fini);
   const corps = $("#chiffres-corps");
   if (!parties.length) {
-    corps.innerHTML = `<p class="chapo">Rien encore.</p><p>Les chiffres se remplissent tout
-      seuls à mesure que des parties se terminent, et ne comptent que ce téléphone. Ils portent
-      sur les sept derniers jours.</p>`;
+    corps.innerHTML = `<p class="chapo">${t("chiffres.rien")}</p><p>${t("chiffres.rien_detail")}</p>`;
     return;
   }
   const menes = parties.reduce((s, p) => s + p.menes.filter(m => !m.nulle).length, 0);
@@ -1144,20 +1245,20 @@ function peindreChiffres() {
 
   const chiffre = (n, quoi, note) =>
     `<div class="tuile"><b>${n}</b><span>${quoi}</span>${note ? `<i>${note}</i>` : ""}</div>`;
-  const nomFormat = ["Tête-à-tête", "Doublette", "Triplette"];
+  const nomFormat = [t("format.tete"), t("format.doublette"), t("format.triplette")];
 
-  let html = `<p class="chapo">Sept jours, sur ce téléphone.</p><div class="tuiles">`
-    + chiffre(parties.length, parties.length > 1 ? "parties finies" : "partie finie",
-              arretees ? `dont ${arretees} arrêtée${arretees > 1 ? "s" : ""}` : "")
-    + chiffre(menes, "mènes jouées",
-              corrigees ? `${corrigees} corrigée${corrigees > 1 ? "s" : ""}` : "")
-    + chiffre(menes ? (points / menes).toFixed(1) : "—", "points par mène")
-    + chiffre(fannys, fannys > 1 ? "fannys" : "fanny")
+  let html = `<p class="chapo">${t("chiffres.chapo")}</p><div class="tuiles">`
+    + chiffre(parties.length, tn("chiffres.parties_finies", parties.length),
+              arretees ? tn("chiffres.dont_arretees", arretees) : "")
+    + chiffre(menes, t("chiffres.menes_jouees"),
+              corrigees ? tn("chiffres.corrigees", corrigees) : "")
+    + chiffre(menes ? decimale(points / menes) : "—", t("chiffres.points_par_mene"))
+    + chiffre(fannys, tn("chiffres.fannys", fannys))
     + `</div>`;
 
   const parFormat = [1, 2, 3].filter(k => formats[k]).map(k =>
     `<div class="rangee"><span>${nomFormat[k - 1]}</span><b>${formats[k]}</b></div>`).join("");
-  html += `<h3>Les formats</h3><div class="rangees">${parFormat}</div>`;
+  html += `<h3>${t("chiffres.h_formats")}</h3><div class="rangees">${parFormat}</div>`;
 
   // ---- le face-à-face : deux joueurs, quelles que soient leurs équipes ----
   const duels = new Map();
@@ -1181,13 +1282,11 @@ function peindreChiffres() {
   const liste = repetes.length ? repetes : tous.slice(0, 8);
   const restants = tous.length - liste.length;
 
-  html += `<h3>Les face-à-face</h3>`;
+  html += `<h3>${t("chiffres.h_duels")}</h3>`;
   if (!liste.length) {
-    html += `<p>Aucun pour l'instant. Un face-à-face se compte dès que deux joueurs nommés se
-      retrouvent dans des camps opposés — même avec des coéquipiers différents à chaque partie.
-      ${nommees ? "" : "Nommez les joueurs avant de commencer une partie."}</p>`;
+    html += `<p>${t("chiffres.duels_aucun")} ${nommees ? "" : t("chiffres.duels_nommez")}</p>`;
   } else {
-    html += `<p>Qui a gagné le plus, l'un contre l'autre, quelles que soient les équipes.</p>
+    html += `<p>${t("chiffres.duels_intro")}</p>
       <div class="rangees">` + liste.map(d => {
       const meneur = d.gx === d.gy ? "" : (d.gx > d.gy ? "x" : "y");
       return `<div class="duel">`
@@ -1195,19 +1294,15 @@ function peindreChiffres() {
         + `<b>${d.gx} – ${d.gy}</b>`
         + `<span class="${meneur === "y" ? "mene" : ""}">${echap(d.y.nom)}</span></div>`;
     }).join("") + `</div>`;
-    if (restants) html += `<p class="cap">Et ${restants} autre${restants > 1 ? "s" : ""} paire`
-      + `${restants > 1 ? "s" : ""} qui ne se ${restants > 1 ? "sont" : "s'est"} croisée`
-      + `${restants > 1 ? "s" : ""} qu'une fois.</p>`;
+    if (restants) html += `<p class="cap">${tn("chiffres.duels_reste", restants)}</p>`;
   }
 
-  html += `<h3>Le comptage</h3>
-    <p>Les chiffres ci-dessus ne quittent pas ce téléphone : ils portent sur les sept derniers
-    jours, comme les parties. <b>Une seule chose est envoyée</b>, quand une partie se termine :
-    qu'une partie a été finie, et dans quel format. Ni score, ni prénom, ni rien qui vous
-    reconnaisse d'une fois sur l'autre. Cela sert à savoir si le compteur sert.</p>
+  html += `<h3>${t("chiffres.h_comptage")}</h3>
+    <p>${tHtml("chiffres.comptage_html")}</p>
     <button class="bascule" id="bascule-compteur" aria-pressed="${lire().sansCompteur ? "true" : "false"}">
-      <span>Ne pas compter mes parties</span><i></i></button>`;
+      <span>${t("chiffres.ne_pas_compter")}</span><i></i></button>`;
   corps.innerHTML = html;
+  marquerThai(corps);
   $("#bascule-compteur").onclick = ev => {
     const b = ev.currentTarget;
     const coupe = b.getAttribute("aria-pressed") !== "true";
@@ -1295,11 +1390,11 @@ $("#corriger").onclick = corriger;
 $("#quitter").onclick = () => {
   const jouee = etat.menes.filter(m => !m.nulle).length;
   $("#a-score").textContent = jouee
-    ? `${nomCamp("nous", etat)} ${total(etat, "nous")} — ${total(etat, "eux")} ${nomCamp("eux", etat)}`
-    : "Aucune mène jouée pour l'instant";
-  $("#a-rare").textContent = jouee
-    ? "Une partie va presque toujours jusqu'à 13. Si vous n'avez rien demandé, c'est un appui de trop : reprenez."
-    : "La partie vient de commencer. Si vous n'avez rien demandé, c'est un appui de trop : reprenez.";
+    ? t("arreter.score", { nous: nomCamp("nous", etat), n: total(etat, "nous"),
+                           e: total(etat, "eux"), eux: nomCamp("eux", etat) })
+    : t("arreter.aucune_mene");
+  $("#a-rare").textContent = t(jouee ? "arreter.rare_jouee" : "arreter.rare_vierge");
+  marquerThai($("#arreter"));
   montrer("arreter");
 };
 $("#a-non").onclick = () => { peindrePartie(); montrer("partie"); };
@@ -1326,6 +1421,7 @@ document.querySelectorAll("[data-va]").forEach(b => {
   b.onclick = () => {
     if (b.dataset.va === "accueil") peindreAccueil();
     if (b.dataset.va === "chiffres") peindreChiffres();
+    if (b.dataset.va === "langue") peindreLangue();
     montrer(b.dataset.va);
   };
 });
@@ -1353,10 +1449,8 @@ function peindreFormats() {
 function peindreEquipes() {
   peindreChoix();
   const n = equipes.nous.length + equipes.eux.length;
-  $("#e-quoi").textContent = n
-    ? `${n} joueur${n > 1 ? "s" : ""} nommé${n > 1 ? "s" : ""} — on peut commencer`
-    : "Facultatif — on peut compter sans les noms";
-  $("#lancer").textContent = n ? "Commencer" : "Commencer sans les noms";
+  $("#e-quoi").textContent = n ? tn("equipes.nommes", n) : t("equipes.facultatif");
+  $("#lancer").textContent = t(n ? "equipes.commencer" : "equipes.commencer_sans");
 }
 let formatIdx = 1;
 
@@ -1397,6 +1491,10 @@ function routeDirecte() {
 
 /* ---------- départ ---------- */
 (function () {
+  // La langue d'abord : les peintres qui suivent parlent déjà la bonne.
+  LOCALE = (dico().$meta && dico().$meta.intl) || "fr-FR";
+  if (LANGUES.length > 1) $("#menu-langue").hidden = false;
+  if (LANGUE !== "fr") traduire(document);
   const d = lire();
   roster = Array.isArray(d.roster) ? d.roster : [];
   equipes = { nous: (d.equipes && d.equipes.nous) || [], eux: (d.equipes && d.equipes.eux) || [] };
