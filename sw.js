@@ -1,10 +1,13 @@
 /* Le compteur doit s'ouvrir sur un terrain sans réseau : tout tient dans ce cache.
    Changer VERSION à chaque mise en ligne — l'ancien cache est effacé à l'activation. */
-const VERSION = "compteur-2026-09-14-3";
+const VERSION = "compteur-2026-09-14-4";
+/* « . » n'y figure plus : la navigation vers / retombe déjà sur index.html quand le réseau
+   manque, et la même page comptait deux fois dans le téléchargement. */
 const COQUILLE = [
-  ".", "index.html", "manifest.webmanifest", "legal.css",
+  "index.html", "manifest.webmanifest", "legal.css",
   "confidentialite.html", "conditions.html", "mentions-legales.html",
   "jouer.html",
+  "en/jouer.html", "en/confidentialite.html", "en/conditions.html", "en/mentions-legales.html",
   "figures/materiel.svg", "figures/prise.svg", "figures/cercle.svg", "figures/pointer-tirer.svg", "figures/pointer.svg", "figures/tirer.svg", "figures/mene.svg", "figures/compter.svg", "figures/but-mort.svg", "figures/terrain.svg",
   "type/jost-400.woff2", "type/jost-600.woff2", "type/franklin-400.woff2",
   "type/notothai-400-v1.woff2", "type/notothai-600-v1.woff2",
