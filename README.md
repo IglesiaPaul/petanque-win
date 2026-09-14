@@ -29,6 +29,13 @@ du jeu qui dessine le clavier, pas l'inverse, et un score impossible ne peut pas
 Chaque bouton écrit d'avance où il mène — *« Nous à 11 »*, *« Nous gagne 13 »* — pour que
 l'annonce se lise par-dessus l'épaule avant d'être validée.
 
+## Trois langues, une adresse
+
+L'application parle français, anglais et thaï à la même adresse : elle suit la langue du
+téléphone, ou celle qu'on choisit dans le menu, ou celle d'un lien `petanque.win/en`. Les textes
+vivent dans des dictionnaires, dans le dépôt de travail ; ce dépôt reçoit l'application construite.
+Une langue n'est en ligne que publiée, jamais en brouillon.
+
 ## Faire tourner en local
 
 Aucune dépendance, aucune étape de construction. Un serveur statique suffit :
@@ -48,7 +55,9 @@ Le site publié, et rien d'autre.
 |---|---|
 | `index.html` | l'application entière — écrans, styles et logique |
 | `manifest.webmanifest`, `sw.js` | l'installation sur l'écran d'accueil, et le hors-connexion |
-| `icons/`, `type/` | le blason et les polices, découpées aux signes utilisés |
+| `icons/`, `type/` | le blason et les polices, découpées aux signes utilisés — Jost, Libre Franklin, Noto Sans Thai |
+| `jouer.html`, `figures/` | « Comment jouer à la pétanque », et ses figures, communes aux langues |
+| `en/`, `th/` | les mêmes pages en anglais et en thaï, et l'entrée `petanque.win/en` ou `/th` qui ouvre l'application dans la langue |
 | `netlify.toml` | publication, en-têtes de cache et politique de sécurité |
 | `docs/` | l'architecture, et la marche à suivre pour déployer |
 

@@ -26,6 +26,41 @@
   [headers.values]
     Cache-Control = "no-cache"
 
+# Les pages de contenu et les pages d'entrée par langue changent à chaque mise en ligne et ne
+# portent pas de version dans leur nom : le navigateur revalide à chaque fois. « Content-Language »
+# dit la langue d'un dossier avant même que la page soit lue.
+[[headers]]
+  for = "/jouer.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/confidentialite.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/conditions.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/mentions-legales.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/en/*"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Content-Language = "en"
+
+[[headers]]
+  for = "/th/*"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Content-Language = "th"
+
 # Android ne lit assetlinks.json que servi en « application/json », sans redirection. Netlify
 # le déduit de l'extension, mais la vérification échoue en silence si jamais il s'en écarte :
 # autant le dire. Sans cache, parce que l'empreinte de la clé de Google s'y ajoute après la

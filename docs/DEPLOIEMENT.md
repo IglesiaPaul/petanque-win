@@ -68,14 +68,53 @@ branche `avant-i18n`. Un correctif d'ici là est un *cherry-pick* de `avant-i18n
 dans une petite pull request, avec son propre `VERSION` — jamais une fusion de la branche des
 langues, même derrière sa barrière. La branche se rebase ensuite sur le correctif.
 
+## Construire, dans l'ordre
+
+Depuis les langues (septembre 2026), `index.html` et les pages de contenu sont en partie
+générés. Les commandes, dans le dépôt de travail, dans cet ordre :
+
+```bash
+python3 tools/build_app_fonts.py            # une fois, quand une police change : les sous-ensembles woff2
+python3 tools/build_i18n.py                 # les dictionnaires app/i18n/*.json → le bloc I18N et la barrière de index.html
+python3 tools/build_pages.py                # les fragments app/pages/<langue>/ → les pages, les entrées /en/ et /th/, sitemap.xml
+node tools/verif_i18n.mjs                   # l'oracle : le français, pas à pas, contre ../petanque-win (la production)
+node tools/verif_langue.mjs --langue en     # chaque langue ouverte : pas une fuite de français, rien qui déborde
+node tools/verif_langue.mjs --matrice       # la détection de la langue, dix cas
+node tools/verif_horsligne.mjs              # le hors-connexion joué dans un Chromium, et la mise à jour N+1
+python3 tools/publier_site.py ../petanque-win-staging   # relit tout (tools/verif_publication.py), puis recopie
+```
+
+Trois règles que ces outils font respecter :
+
+- **Un texte est une entrée de dictionnaire, jamais une retouche de `index.html`.** Le balisage
+  français porte le même texte que `fr.json`, et `build_i18n.py` refuse de construire si les deux
+  divergent. Changer une phrase, c'est changer le JSON, puis reconstruire.
+- **La barrière n'est pas tapée à la main.** `var LANGUES` dans `index.html` est écrite par
+  `build_i18n.py` d'après le `statut` de chaque dictionnaire : `publie` ouvre la langue,
+  `brouillon` la ferme. Ouvrir une langue, c'est un mot dans `th.json`, un `VERSION`, et les
+  suites qui repassent. `--ouvrir th` ouvre un brouillon **pour la prévisualisation seulement** :
+  `publier_site.py` refuse de recopier une barrière qui porte un brouillon, sauf avec
+  `--previsualisation`, qui n'a de sens que vers `staging`.
+- **Le hors-connexion se prouve, il ne se suppose pas.** `verif_horsligne.mjs` installe le
+  service worker, coupe le réseau, ouvre chaque adresse qu'un joueur peut avoir sous le pouce
+  (`/`, `/#commencer`, `/?langue=th`, les pages, les entrées `/en/` et `/th/`), puis simule une
+  mise en ligne N+1 : un rechargement en ligne suffit, l'ancien cache disparaît, en trois
+  secondes sur un Chromium.
+
 ## Avant chaque mise en ligne
 
 1. **Changer `VERSION` dans `sw.js`.** Sans ça, les téléphones déjà installés gardent l'ancienne
-   version. C'est l'oubli le plus coûteux du projet.
+   version. C'est l'oubli le plus coûteux du projet — `verif_publication.py` refuse désormais une
+   `VERSION` déjà en ligne, sur la cible comme en production.
 2. Vérifier qu'un fichier ajouté figure bien dans `COQUILLE`, sinon il manquera hors connexion.
+   Le plafond est de 400 ko ; la coquille en pèse 396 avec les pages thaïes et les deux entrées.
 3. Essayer une partie complète, puis recharger **réseau coupé** : l'application doit s'ouvrir et
-   la partie en cours revenir.
+   la partie en cours revenir. `verif_horsligne.mjs` le fait, un téléphone le confirme.
 4. Regarder `staging` sur un téléphone avant d'ouvrir la pull request.
+5. **Reconstruire sans `--ouvrir` et republier `staging` avant d'ouvrir la pull request** : la
+   prévisualisation d'un brouillon (le thaï, tant qu'un relecteur ne l'a pas signé) vit sur
+   `staging` entre deux mises en ligne ; la pull request `staging → main` doit montrer exactement
+   ce qui part, et rien d'autre.
 
 ## Quand la base arrivera
 

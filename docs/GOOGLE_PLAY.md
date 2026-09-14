@@ -108,11 +108,18 @@ d'identifiants publicitaires — l'application ne demande aucune permission Andr
 | Nom | Le compteur — Pétanquistes |
 | Description courte | Le score de votre partie de pétanque, en deux gestes par mène. |
 | Catégorie | Sports |
-| Politique de confidentialité | `https://petanque.win/confidentialite.html` |
+| Politique de confidentialité | `https://petanque.win/confidentialite.html` — la page française, toujours : sa rangée des langues mène un lecteur anglais ou thaï à sa traduction, Play n'a besoin que d'une adresse |
 | Développeur affiché | HEMPIN — nom, adresse, courriel et téléphone publics |
 | Icône | 512 × 512 — `icons/icon-512.png` |
 | Captures | 7 captures prêtes, 1080 × 2340, dans `brand/play/` du dépôt de travail |
 | Bandeau | 1024 × 500 — `brand/play/banniere-1024x500.png` |
+
+**Les langues de la fiche.** L'application n'a pas besoin d'être reconstruite pour parler
+anglais ou thaï : `/en/` et `/th/` sont dans l'origine vérifiée. La fiche, elle, se traduit après
+chaque mise en ligne web et jamais avant : `en-GB` et `en-US` quand `/en/` est en ligne, `th-TH`
+quand `/th/` l'est — avec un titre descriptif par langue (« Le compteur – Pétanque scores »,
+« Le compteur – นับแต้มเปตอง »), les captures de `brand/play/<langue>/`, et la Thaïlande ajoutée à
+la distribution seulement à ce moment-là. Le nom de l'application, lui, ne change pas.
 
 **Classification du contenu** : questionnaire IARC, aucun contenu sensible, aucune publicité,
 aucun achat. Attendu : 3+ / PEGI 3.

@@ -65,6 +65,39 @@ y tenir).
 > et la plus difficile à voir.
 
 Tout fichier ajouté à la coquille doit être ajouté à `COQUILLE`, sinon il manquera hors connexion.
+`addAll` est atomique : une seule entrée qui répond 404 et aucun téléphone ne change de version,
+sans un mot. `tools/verif_publication.py` relit la liste avant chaque recopie.
+
+## Les langues
+
+Une seule application, une seule adresse, un dictionnaire par langue. Le français est la source ;
+l'anglais et le thaï en sont des traductions, jamais l'inverse.
+
+- **Le dictionnaire** (`app/i18n/<langue>.json`, 140 clés) est embarqué dans `index.html` entre
+  `/*i18n:debut*/` et `/*i18n:fin*/` par `tools/build_i18n.py`, qui n'embarque que les langues
+  ouvertes. Le balisage français porte le même texte que `fr.json`, marqué `data-i18n`, et le
+  build refuse toute divergence : en français la passe de traduction ne s'exécute pas, et ce que
+  le joueur voit est prouvé égal au dictionnaire. Les pluriels sont des phrases entières choisies
+  par `Intl.PluralRules` ; les phrases dont le sujet est une équipe sont des gabarits (« Points
+  to Us »), pour ne rien conjuguer.
+- **La barrière** : `var LANGUES` dans le script de tête, écrite par le build d'après le
+  `statut` de chaque dictionnaire. Tant qu'une langue n'y est pas, ni un `?langue=xx`, ni un
+  téléphone réglé dans cette langue ne l'obtiennent. Ordre de détection : le choix enregistré,
+  puis `?langue=xx` (un QR scanné est un acte délibéré : enregistré, puis retiré de l'adresse
+  sans toucher au `#`), puis la langue du téléphone (jamais enregistrée), puis le français.
+- **Les pages de contenu** — le tutoriel et les trois pages légales — sont des fragments
+  (`app/pages/<langue>/`) habillés d'un gabarit par `tools/build_pages.py` : canonical,
+  `hreflang`, `og:locale`, la rangée des langues, la date dans la langue, et sur une page
+  juridique traduite l'encadré *traduction de courtoisie ; seule la version française fait foi*.
+  La page de confidentialité traduite doit dire ce que la fiche Sécurité des données a déclaré :
+  le build le vérifie mot à mot. `/en/` et `/th/` sont des pages d'entrée générées, avec leur
+  carte de partage dans la langue, qui renvoient vers `/?langue=xx` — imprimables sur un QR.
+- **Le thaï** est composé en Noto Sans Thai 400 et 600, découpée au bloc thaï seul (sans
+  chiffres : les scores restent en Jost), chargée après chaque police latine et sous
+  `unicode-range`. Sous `:lang(th)` : pas d'interlettrage, pas de capitales, l'interligne plus
+  haut pour les marques de ton. `verif_langue.mjs --langue th` audite chaque élément.
+- **Ce qui ne bouge pas** : le manifeste (un seul nom, « Le compteur », dans toutes les
+  langues), la clé de stockage, la charge du compteur anonyme, le format des dates stockées.
 
 ## Ce qu'un lien montre
 
