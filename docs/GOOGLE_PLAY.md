@@ -13,8 +13,8 @@ production peut s'ouvrir directement, sans délai imposé. Un test fermé reste 
 attraper les défauts sur de vrais téléphones, mais c'est un choix, pas une obligation.
 
 **API 36.** Depuis le 31 août 2026, une nouvelle application doit viser **Android 16 (API 36)**.
-C'est un réglage de la coque, pas du site : `bubblewrap` le pose, il faut juste vérifier qu'il ne
-retombe pas sur une valeur plus basse.
+C'est un réglage de la coque, pas du site : PWABuilder le pose (vérifié le 11 septembre : la coque vise
+bien API 36), il faut juste s'en assurer à chaque nouvelle coque.
 
 **Ce que Play affiche publiquement.** Pour un compte professionnel : **nom légal, adresse
 légale, adresse électronique et numéro de téléphone**. C'est plus qu'un compte personnel, et ce
@@ -27,17 +27,28 @@ expliquer le lien, plutôt que de le laisser deviner.
 
 ## Fabriquer la coque
 
-```bash
-npm i -g @bubblewrap/cli
-bubblewrap init --manifest https://petanque.win/manifest.webmanifest
-# nom du paquet : win.petanque.compteur
-# viser API 36
-bubblewrap build        # produit app-release-bundle.aab et la clé de signature
-```
+La coque a été faite le 11 septembre 2026 avec **PWABuilder** (pwabuilder.com → l'adresse du
+site → *Package for stores* → Android). Bubblewrap, l'outil en ligne de commande de Google, fait
+la même chose ; le projet Android est dans l'archive téléchargée, si un jour il faut y toucher
+(Wear OS, un widget).
 
-`bubblewrap` crée une **clé de signature**. Elle ne se remplace pas : perdue, on ne peut plus
-mettre à jour l'application. À sauvegarder ailleurs que sur l'ordinateur qui l'a créée, et
-**jamais dans ce dépôt**.
+Les réglages qui comptent, tels qu'ils ont été posés :
+
+| Réglage | Valeur | Pourquoi |
+|---|---|---|
+| Package ID | `win.petanque.compteur` | définitif, ne se change jamais |
+| App name / Short name | `Le compteur — Pétanquistes` / `Le compteur` | ceux du manifeste, dans toutes les langues |
+| Display mode | Standalone | comme le manifeste |
+| Fallback behavior | Custom Tabs | un WebView perdrait le service worker |
+| Notification delegation | **off** | l'application promet par écrit de ne suivre personne ; la permission n'apparaît pas sur la fiche |
+| Location delegation, Play billing | off | |
+| Include source code | on | le projet Android pour plus tard |
+| Signing key | New — alias `petanque-win`, HEMPIN, FR | la clé de dépôt ; Play resigne avec la sienne |
+| Version / code | `1.0.0.0` / `1` | le code monte de 1 à chaque envoi, toujours |
+
+L'archive contient `signing.keystore` et `signing-key-info.txt` : ensemble, c'est la clé de
+dépôt. Elle se sauvegarde ailleurs que sur l'ordinateur qui l'a créée et **jamais dans ce
+dépôt** — perdue, Google peut la réinitialiser sur demande, mais c'est des jours.
 
 Puis il faut prouver que le domaine et l'application vont ensemble, sinon la coque affiche une
 barre d'adresse. Récupérer l'empreinte :
