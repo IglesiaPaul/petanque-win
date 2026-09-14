@@ -4,41 +4,73 @@
     <url><loc>https://petanque.win/jouer.html</loc>
       <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/jouer.html"/>
       <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/jouer.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/jouer.html"/>
       <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/jouer.html"/>
     </url>
     <url><loc>https://petanque.win/en/jouer.html</loc>
       <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/jouer.html"/>
       <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/jouer.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/jouer.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/jouer.html"/>
+    </url>
+    <url><loc>https://petanque.win/th/jouer.html</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/jouer.html"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/jouer.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/jouer.html"/>
       <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/jouer.html"/>
     </url>
     <url><loc>https://petanque.win/confidentialite.html</loc>
       <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/confidentialite.html"/>
       <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/confidentialite.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/confidentialite.html"/>
       <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/confidentialite.html"/>
     </url>
     <url><loc>https://petanque.win/en/confidentialite.html</loc>
       <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/confidentialite.html"/>
       <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/confidentialite.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/confidentialite.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/confidentialite.html"/>
+    </url>
+    <url><loc>https://petanque.win/th/confidentialite.html</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/confidentialite.html"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/confidentialite.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/confidentialite.html"/>
       <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/confidentialite.html"/>
     </url>
     <url><loc>https://petanque.win/conditions.html</loc>
       <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/conditions.html"/>
       <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/conditions.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/conditions.html"/>
       <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/conditions.html"/>
     </url>
     <url><loc>https://petanque.win/en/conditions.html</loc>
       <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/conditions.html"/>
       <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/conditions.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/conditions.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/conditions.html"/>
+    </url>
+    <url><loc>https://petanque.win/th/conditions.html</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/conditions.html"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/conditions.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/conditions.html"/>
       <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/conditions.html"/>
     </url>
     <url><loc>https://petanque.win/mentions-legales.html</loc>
       <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/mentions-legales.html"/>
       <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/mentions-legales.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/mentions-legales.html"/>
       <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/mentions-legales.html"/>
     </url>
     <url><loc>https://petanque.win/en/mentions-legales.html</loc>
       <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/mentions-legales.html"/>
       <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/mentions-legales.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/mentions-legales.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/mentions-legales.html"/>
+    </url>
+    <url><loc>https://petanque.win/th/mentions-legales.html</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://petanque.win/mentions-legales.html"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://petanque.win/en/mentions-legales.html"/>
+      <xhtml:link rel="alternate" hreflang="th" href="https://petanque.win/th/mentions-legales.html"/>
       <xhtml:link rel="alternate" hreflang="x-default" href="https://petanque.win/mentions-legales.html"/>
     </url>
 </urlset>

@@ -4,11 +4,15 @@
   font-weight:600;font-style:normal;font-display:swap}
 @font-face{font-family:"Libre Franklin";src:url(type/franklin-400.woff2) format("woff2");
   font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Noto Sans Thai";src:url(type/notothai-400-v1.woff2) format("woff2");
+  font-weight:400;font-style:normal;font-display:swap;unicode-range:U+0E00-0E7F}
+@font-face{font-family:"Noto Sans Thai";src:url(type/notothai-600-v1.woff2) format("woff2");
+  font-weight:600;font-style:normal;font-display:swap;unicode-range:U+0E00-0E7F}
 :root{--navy:#092C64;--red:#DD142E;--cream:#FBF6EC;--sand:#C9A66B;--ground:#F2EADA;
   --rule:#D6C7A8;--ink-2:#3F4D68;--terre:#B08A48;color-scheme:light}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--navy);
-  font-family:"Libre Franklin","Jost",system-ui,sans-serif;font-size:17px;line-height:1.6}
+  font-family:"Libre Franklin","Noto Sans Thai","Jost",system-ui,sans-serif;font-size:17px;line-height:1.6}
 .bandeau{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--rule)}
 .bandeau img{width:38px;height:38px}
 .bandeau a{font-family:"Jost",sans-serif;font-weight:600;font-size:.86rem;letter-spacing:.1em;
@@ -67,3 +71,16 @@ figcaption{font-size:.9rem;line-height:1.5;color:var(--ink-2);margin-top:8px}
   text-transform:uppercase;color:var(--terre);white-space:nowrap}
 h2[id]{scroll-margin-top:16px}
 @media (max-width:420px){.sommaire{grid-template-columns:1fr}}
+
+/* Thaï : Noto Sans Thai après chaque police latine, jamais d'interlettrage ni de capitales sur
+   les marques de ton, l'interligne plus haut. La marque « Le compteur » reste latine. */
+:lang(th) h1,:lang(th) h2,:lang(th) h3,:lang(th) th,:lang(th) .maj,:lang(th) .bandeau a,
+.langues a:lang(th){font-family:"Jost","Noto Sans Thai",sans-serif}
+:lang(th) body,body:lang(th){line-height:1.75}
+:lang(th) h3,:lang(th) th,:lang(th) .maj,.langues a:lang(th){letter-spacing:0;text-transform:none}
+:lang(th) h3{font-size:max(14px,.95rem)}:lang(th) th{font-size:max(14px,.86rem)}
+:lang(th) .maj{font-size:max(14px,.9rem)}
+:lang(th) h1{line-height:1.35}:lang(th) h2{line-height:1.4}:lang(th) h3{line-height:1.4}
+:lang(th) .sommaire{font-family:"Jost","Noto Sans Thai",sans-serif;letter-spacing:0;text-transform:none;font-size:max(14px,.95rem)}
+:lang(th) a{text-underline-offset:.3em}
+:lang(th) p,:lang(th) li,:lang(th) td,:lang(th) figcaption{overflow-wrap:anywhere}
